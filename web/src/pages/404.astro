@@ -1,0 +1,52 @@
+---
+import Base from '../layouts/Base.astro';
+import Marca from '../components/Marca.astro';
+import Fletxa from '../components/Fletxa.astro';
+---
+
+<Base titol="No trobada">
+	<section class="contenidor error">
+		<Marca class="error-marca" />
+		<p class="xip" style="--c: var(--rosa)">Error 404</p>
+		<h1>Aquesta pàgina <mark>no existeix</mark>.</h1>
+		<p class="entrada">
+			O ha sortit del forn i del congelador alhora i no n’ha quedat res. Torna a l’inici o busca-ho
+			al phihub.
+		</p>
+		<p class="accions">
+			<a class="boto boto-ple" href="/">Inici <Fletxa /></a>
+			<a class="boto" href="/phihub">Phihub <Fletxa /></a>
+		</p>
+	</section>
+</Base>
+
+<style>
+	.error {
+		display: grid;
+		justify-items: center;
+		gap: 1rem;
+		padding-top: clamp(3rem, 10vw, 6rem);
+		text-align: center;
+	}
+	.error :global(.error-marca) {
+		width: 11rem;
+		height: auto;
+		margin-bottom: 1rem;
+		color: var(--marca-color);
+	}
+	h1 {
+		font-size: clamp(2rem, 5vw, 3rem);
+	}
+	.entrada {
+		max-width: 30rem;
+		color: var(--text-suau);
+		font-size: 1.2rem;
+	}
+	.accions {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.75rem;
+		margin-top: 1rem;
+	}
+</style>

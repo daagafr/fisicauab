@@ -1,0 +1,235 @@
+---
+// Els Instagram dels clubs, en un sol banner que recrea la safata d'històries
+// d'Instagram: cada compte amb el seu logo dins de l'anell de colors, el nom
+// d'usuari i el botó blau de «Segueix». Cada compte és un enllaç propi.
+import type { Entrada } from '../../data/phihub';
+
+interface Props {
+	entrada: Entrada;
+}
+const { entrada: e } = Astro.props;
+const comptes = e.comptes ?? [];
+---
+
+<div class="ig">
+	<div class="ig-dins">
+	<div class="ig-cap">
+		<svg class="ig-glif" viewBox="0 0 24 24" aria-hidden="true">
+			<defs>
+				<linearGradient id="ig-degradat" x1="0" y1="1" x2="1" y2="0">
+					<stop offset="0" stop-color="#feda75" />
+					<stop offset=".3" stop-color="#fa7e1e" />
+					<stop offset=".55" stop-color="#d62976" />
+					<stop offset=".8" stop-color="#962fbf" />
+					<stop offset="1" stop-color="#4f5bd5" />
+				</linearGradient>
+			</defs>
+			<rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+			<circle cx="12" cy="12" r="4.3" />
+			<circle class="punt" cx="17.3" cy="6.7" r="1.1" />
+		</svg>
+		<div>
+			<h3 class="ig-titol">{e.nom}</h3>
+			<p class="ig-desc">{e.descripcio}</p>
+		</div>
+	</div>
+
+	<ul class="ig-comptes">
+		{
+			comptes.map((c) => (
+				<li>
+					<a class="ig-compte" href={`https://www.instagram.com/${c.usuari}/`} target="_blank" rel="noopener">
+						<span class="ig-anell">
+							<span class:list={['ig-avatar', { 'amb-fons': c.fons }]} style={c.fons ? `background:${c.fons}` : undefined}>
+								<img src={c.logo} alt="" loading="lazy" />
+							</span>
+						</span>
+						<span class="ig-nom">{c.nom}</span>
+						<span class="ig-usuari">@{c.usuari}</span>
+						<span class="ig-segueix">Segueix</span>
+						<span class="visualment-amagat">(Instagram, s’obre en una pestanya nova)</span>
+					</a>
+				</li>
+			))
+		}
+	</ul>
+	</div>
+</div>
+
+<style>
+	.ig {
+		--fons: #ffffff;
+		--text: #000000;
+		--suau: #737373;
+		--filet: #dbdbdb;
+		--blau: #0095f6;
+		--blau-hover: #1877f2;
+		--anell: linear-gradient(45deg, #feda75, #fa7e1e 30%, #d62976 55%, #962fbf 80%, #4f5bd5);
+
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		height: 100%;
+		container-type: inline-size;
+		padding: clamp(1.25rem, 5cqi, 1.75rem) clamp(1.25rem, 5cqi, 2.25rem);
+		border: 1px solid var(--filet);
+		border-radius: 12px;
+		background: var(--fons);
+		color: var(--text);
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+	}
+	@media (prefers-color-scheme: dark) {
+		:global(:root:not([data-theme='light'])) .ig {
+			--fons: #000000;
+			--text: #f5f5f5;
+			--suau: #a8a8a8;
+			--filet: #262626;
+		}
+	}
+
+	.ig-dins {
+		display: grid;
+		gap: 1.5rem;
+	}
+	.ig-cap {
+		display: flex;
+		align-items: center;
+		gap: 0.85rem;
+	}
+	/* Amb tota la fila: el títol a l'esquerra i els comptes a la dreta. */
+	@container (min-width: 46rem) {
+		.ig-dins {
+			display: grid;
+			grid-template-columns: minmax(14rem, 1fr) 2fr;
+			gap: 2rem;
+			align-items: center;
+		}
+		.ig-titol {
+			font-size: 1.6rem;
+			letter-spacing: -0.02em;
+		}
+		.ig-desc {
+			font-size: 1rem;
+		}
+		.ig-glif {
+			width: 3rem;
+			height: 3rem;
+		}
+	}
+	.ig-glif {
+		flex: none;
+		width: 2.25rem;
+		height: 2.25rem;
+		fill: none;
+		stroke: url(#ig-degradat);
+		stroke-width: 2;
+	}
+	.ig-glif .punt {
+		fill: url(#ig-degradat);
+		stroke: none;
+	}
+	.ig-titol {
+		font-size: 1rem;
+		font-weight: 700;
+		line-height: 1.25;
+	}
+	.ig-desc {
+		margin-top: 0.15rem;
+		color: var(--suau);
+		font-size: 0.85rem;
+		line-height: 1.35;
+	}
+
+	.ig-comptes {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(5.25rem, 1fr));
+		gap: 1rem 0.35rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.ig-compte {
+		display: grid;
+		justify-items: center;
+		gap: 0.2rem;
+		min-width: 0;
+		color: var(--text);
+		text-align: center;
+		text-decoration: none;
+	}
+	.ig-compte:hover {
+		color: var(--text);
+	}
+
+	/* L'anell de les històries, amb el buit del color del fons. */
+	.ig-anell {
+		display: grid;
+		place-items: center;
+		width: clamp(3.9rem, 20cqi, 4.6rem);
+		height: clamp(3.9rem, 20cqi, 4.6rem);
+		margin-bottom: 0.35rem;
+		padding: 3px;
+		border-radius: 50%;
+		background: var(--anell);
+		transition: transform 0.25s cubic-bezier(0.3, 1.5, 0.5, 1);
+	}
+	.ig-compte:hover .ig-anell {
+		transform: scale(1.06);
+	}
+	.ig-avatar {
+		display: grid;
+		place-items: center;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		border: 3px solid var(--fons);
+		border-radius: 50%;
+		background: var(--fons);
+	}
+	.ig-avatar img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	/* Logos amb marge propi (transparents o dins d'un cercle): sencers, amb aire. */
+	.ig-avatar.amb-fons img {
+		padding: 8%;
+		object-fit: contain;
+	}
+
+	.ig-nom {
+		max-width: 100%;
+		font-size: 0.82rem;
+		font-weight: 600;
+		line-height: 1.25;
+	}
+	.ig-usuari {
+		max-width: 100%;
+		overflow: hidden;
+		color: var(--suau);
+		font-size: 0.75rem;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.ig-segueix {
+		margin-top: 0.5rem;
+		padding: 0.35rem 1rem;
+		border-radius: 8px;
+		background: var(--blau);
+		color: #fff;
+		font-size: 0.8rem;
+		font-weight: 600;
+		transition: background-color 0.15s;
+	}
+	.ig-compte:hover .ig-segueix {
+		background: var(--blau-hover);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.ig *,
+		.ig-compte:hover .ig-anell {
+			transition: none !important;
+			transform: none !important;
+		}
+	}
+</style>

@@ -1,0 +1,82 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { data, dataIso } from '../../utils';
+
+const avisos = (await getCollection('avisos', (a) => !a.data.esborrany)).sort(
+	(a, b) => b.data.data.valueOf() - a.data.data.valueOf(),
+);
+---
+
+<Base titol="Tauler" descripcio="Avisos, novetats i convocatòries de la comunitat de Física UAB.">
+	<header class="pagina-cap">
+		<div class="contenidor">
+			<p class="xip" style="--c: var(--taronja)">Avisos i novetats</p>
+			<h1>Tauler</h1>
+			<p class="entrada">
+				Què es cou a Física UAB: convocatòries, estrenes, xerrades i coses que val la pena saber.
+			</p>
+		</div>
+	</header>
+
+	<div class="contenidor">
+		<ol class="llista">
+			{
+				avisos.map((a) => (
+					<li>
+						<a href={`/tauler/${a.id}`}>
+							<span class="meta">
+								<time class="mono" datetime={dataIso(a.data.data)}>
+									{data(a.data.data)}
+								</time>
+								<span class="xip" style="--c: var(--rosa)">{a.data.etiqueta}</span>
+							</span>
+							<span class="titol">{a.data.titol}</span>
+							<span class="resum">{a.data.resum}</span>
+						</a>
+					</li>
+				))
+			}
+		</ol>
+	</div>
+</Base>
+
+<style>
+	.llista {
+		max-width: 50rem;
+		margin: clamp(2rem, 5vw, 3rem) 0 0;
+		padding: 0;
+		list-style: none;
+	}
+	.llista a {
+		display: grid;
+		gap: 0.4rem;
+		padding-block: 1.75rem;
+		border-bottom: 1.5px solid var(--linia);
+		color: var(--text);
+		text-decoration: none;
+	}
+	.meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.5rem 1.25rem;
+		color: var(--text-suau);
+	}
+	.meta .xip {
+		font-size: 0.75rem;
+	}
+	.titol {
+		font-size: clamp(1.4rem, 3vw, 1.85rem);
+		font-weight: 700;
+		line-height: 1.2;
+		transition: color 0.2s;
+	}
+	.llista a:hover .titol {
+		color: var(--accent);
+	}
+	.resum {
+		max-width: 38rem;
+		color: var(--text-suau);
+	}
+</style>

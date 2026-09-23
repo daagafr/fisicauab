@@ -1,0 +1,182 @@
+---
+import Base from '../layouts/Base.astro';
+import Seccio from '../components/Seccio.astro';
+import Banner from '../components/Banner.astro';
+import Fletxa from '../components/Fletxa.astro';
+import Icona from '../components/Icona.astro';
+import { categories, entradesDe, entrades, esAviat } from '../data/phihub';
+
+// Dins de cada calaix: primer els de tota la fila, després els destacats, després
+// la resta, i al final els que surten «Aviat».
+const ordre = (e: (typeof entrades)[number]) =>
+	esAviat(e) ? 3 : e.ample && e.destacat ? 0 : e.ample ? 1 : e.destacat ? 1.5 : 2;
+const calaixos = categories
+	.map((c) => ({ ...c, entrades: entradesDe(c.id).sort((a, b) => ordre(a) - ordre(b)) }))
+	.filter((c) => c.entrades.length > 0);
+---
+
+<Base
+	titol="Phihub"
+	descripcio="Tot el que surt de Física UAB en un sol lloc: el OneDrive, els clubs, els projectes d’estudiants i l’hemeroteca de la carrera."
+>
+	<header class="pagina-cap">
+		<div class="contenidor">
+			<h1>Phihub</h1>
+			<p class="entrada">
+				Tot el que surt de Física UAB, en un sol lloc: el OneDrive, els clubs, els projectes que fa la
+				gent de la carrera i la memòria col·lectiva. Si ho ha fet algú de física, hi cap.
+			</p>
+		</div>
+	</header>
+
+	<nav class="index" aria-label="Calaixos del phihub">
+		<div class="contenidor">
+			<ul>
+				{
+					calaixos.map((c) => (
+						<li>
+							<a href={`#${c.id}`} style={`--c: var(--${c.color})`}>
+								<Icona nom={c.icona} /> {c.nom}
+								<span class="index-compte">{c.entrades.length}</span>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</nav>
+
+	{
+		calaixos.map((c) => (
+			<section class="contenidor calaix">
+				<Seccio id={c.id} icona={c.icona} color={c.color}>
+					{c.nom}
+				</Seccio>
+				<p class="calaix-desc">{c.descripcio}</p>
+				<div class="graella">
+					{c.entrades.map((e) => (
+						<div class:list={['cel', { doble: e.destacat && !esAviat(e), plena: e.ample }]}>
+							<Banner entrada={e} />
+						</div>
+					))}
+				</div>
+			</section>
+		))
+	}
+
+	<section class="contenidor calaix">
+		<div class="falta">
+			<h2>Hi falta alguna cosa?</h2>
+			<p class="falta-text">
+				Si ho has fet tu, o ho fa algú de física, hi cap. Envia’ns el nom, dues frases i l’enllaç.
+			</p>
+			<a class="boto boto-ple" href="/comunitat#participa">Afegeix-hi un projecte <Fletxa /></a>
+		</div>
+	</section>
+</Base>
+
+<style>
+	/* L’índex de calaixos, enganxat sota la capçalera mentre baixes. */
+	.index {
+		position: sticky;
+		top: 4.5rem;
+		z-index: 10;
+		background: color-mix(in srgb, var(--fons) 92%, transparent);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
+		border-bottom: 1px solid var(--linia);
+	}
+	.index ul {
+		display: flex;
+		gap: 0.6rem;
+		margin: 0;
+		padding: 0.8rem 0;
+		overflow-x: auto;
+		list-style: none;
+		scrollbar-width: none;
+	}
+	.index a {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		padding: 0.45rem 0.95rem;
+		border-radius: 999px;
+		background: var(--c);
+		color: var(--tinta);
+		font-size: 0.95rem;
+		font-weight: 600;
+		text-decoration: none;
+		white-space: nowrap;
+		transition: transform 0.15s;
+	}
+	.index a:hover {
+		transform: translateY(-2px);
+		color: var(--tinta);
+	}
+	.index-compte {
+		display: grid;
+		place-items: center;
+		min-width: 1.4rem;
+		height: 1.4rem;
+		padding: 0 0.3rem;
+		border-radius: 999px;
+		background: rgb(255 255 255 / 0.6);
+		font-size: 0.75rem;
+		font-weight: 700;
+	}
+
+	.calaix {
+		margin-top: clamp(3.5rem, 7vw, 5rem);
+	}
+	.calaix :global(.seccio-cap) {
+		scroll-margin-top: 9rem;
+		margin-bottom: 0.5rem;
+	}
+	.calaix-desc {
+		max-width: 38rem;
+		margin-bottom: 2rem;
+		color: var(--text-suau);
+		font-size: 1.1rem;
+	}
+
+	.graella {
+		display: grid;
+		gap: 1.75rem 1.5rem;
+	}
+	@media (min-width: 42rem) {
+		.graella {
+			grid-template-columns: repeat(2, 1fr);
+		}
+		/* Els destacats ocupen dues columnes; `ample` o sols al calaix, tota la fila. */
+		.doble {
+			grid-column: span 2;
+		}
+		.plena,
+		.doble:only-child {
+			grid-column: 1 / -1;
+		}
+	}
+	@media (min-width: 64rem) {
+		.graella {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+
+	.falta {
+		display: grid;
+		justify-items: center;
+		gap: 0.9rem;
+		padding: clamp(2rem, 5vw, 3.5rem) 1.25rem;
+		border: 1.5px dashed var(--linia-forta);
+		border-radius: 24px;
+		text-align: center;
+	}
+	.falta h2 {
+		font-size: clamp(1.7rem, 3.4vw, 2.3rem);
+	}
+	.falta-text {
+		max-width: 30rem;
+		color: var(--text-suau);
+		font-size: 1.15rem;
+	}
+</style>

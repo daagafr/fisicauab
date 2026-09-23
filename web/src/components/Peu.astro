@@ -1,0 +1,143 @@
+---
+// Peu de pàgina en negatiu: la marca en os sobre borgonya.
+import { lloc, navegacio } from '../config/lloc';
+import { categories } from '../data/phihub';
+import Marca from './Marca.astro';
+
+const any = new Date().getFullYear();
+---
+
+<footer class="peu">
+	<div class="contenidor">
+		<div class="graella">
+			<div class="signatura">
+				<Marca class="peu-marca" />
+				<p class="peu-nom">{lloc.nom}</p>
+			</div>
+
+			<nav aria-label="Peu de pàgina">
+				<p class="peu-titol">El web</p>
+				<ul>
+					<li><a href="/">Inici</a></li>
+					{
+						navegacio.map((n) => (
+							<li>
+								<a href={n.href}>{n.text}</a>
+							</li>
+						))
+					}
+				</ul>
+			</nav>
+
+			<nav aria-label="Phihub">
+				<p class="peu-titol">Phihub</p>
+				<ul>
+					{
+						categories.map((c) => (
+							<li>
+								<a href={`/phihub#${c.id}`}>{c.nom}</a>
+							</li>
+						))
+					}
+				</ul>
+			</nav>
+
+			<div>
+				<p class="peu-titol">Parlem</p>
+				<ul>
+					<li><a href={`mailto:${lloc.correu}`}>{lloc.correu}</a></li>
+					{
+						lloc.xarxes.map((x) => (
+							<li>
+								<a href={x.url} target="_blank" rel="noopener">
+									{x.nom}
+								</a>
+							</li>
+						))
+					}
+					<li><a href="/comunitat#participa">Afegeix-hi el teu projecte</a></li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="baix">
+			<p>{lloc.avis}</p>
+			<p>© {any} {lloc.nom}</p>
+		</div>
+	</div>
+</footer>
+
+<style>
+	.peu {
+		margin-top: var(--espai);
+		padding-block: clamp(3rem, 7vw, 4.5rem) 1.75rem;
+		background: var(--ple);
+		color: var(--sobre-ple);
+	}
+	.graella {
+		display: grid;
+		gap: 2.5rem 2rem;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+	}
+	.signatura {
+		grid-column: 1 / -1;
+	}
+	@media (min-width: 60rem) {
+		.graella {
+			grid-template-columns: 1.6fr 1fr 1.2fr 1.3fr;
+		}
+		.signatura {
+			grid-column: auto;
+		}
+	}
+
+	.peu :global(.peu-marca) {
+		width: 7rem;
+		height: auto;
+		color: var(--os);
+	}
+	.peu-nom {
+		margin-top: 1rem;
+		font-family: var(--lletra-marca);
+		font-size: 1.3rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	.peu-titol {
+		margin-bottom: 0.9rem;
+		color: var(--groc);
+		font-weight: 700;
+	}
+	ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	li + li {
+		margin-top: 0.45rem;
+	}
+	a {
+		color: var(--sobre-ple);
+		text-decoration: none;
+		overflow-wrap: anywhere;
+	}
+	a:hover {
+		color: var(--sobre-ple);
+		text-decoration: underline;
+		text-decoration-color: var(--groc);
+	}
+
+	.baix {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 0.5rem 2rem;
+		margin-top: clamp(2.5rem, 6vw, 4rem);
+		padding-top: 1.25rem;
+		border-top: 1px solid rgb(244 239 230 / 0.25);
+		font-size: 0.85rem;
+		opacity: 0.8;
+	}
+</style>

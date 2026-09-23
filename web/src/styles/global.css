@@ -1,0 +1,367 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Física UAB — estils globals
+   Net i amb color: paper quadriculat de llibreta de fons, el borgonya de la marca
+   com a tinta principal i quatre colors de marcador (groc, blau, taronja, rosa),
+   un per a cada calaix del phihub.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:root {
+	/* La marca (marca/LLEGEIX-ME.md) */
+	--borgonya: #70143d;
+	--borgonya-fosc: #4a0c28;
+	--os: #f4efe6;
+	--tinta: #1a1416;
+
+	/* Els marcadors. Sempre amb text en --tinta a sobre. */
+	--groc: #ffd23f;
+	--blau: #8ccfff;
+	--taronja: #ffa062;
+	--rosa: #ff9cc2;
+
+	/* Tokens del tema clar */
+	--fons: var(--os);
+	--superficie: #fffdf8;
+	--text: var(--tinta);
+	--text-suau: #5e5157;
+	--accent: var(--borgonya);
+	--accent-fort: var(--borgonya-fosc);
+	--marca-color: var(--borgonya);
+	--ple: var(--borgonya);
+	--sobre-ple: var(--os);
+	--linia: rgb(26 20 22 / 0.12);
+	--linia-forta: rgb(26 20 22 / 0.4);
+	--quadricula: rgb(60 130 210 / 0.13); /* llibreta quadriculada, en blau */
+	--ombra: 0 1px 2px rgb(26 20 22 / 0.06), 0 12px 28px -14px rgb(26 20 22 / 0.28);
+	--ombra-forta: 0 2px 4px rgb(26 20 22 / 0.08), 0 24px 40px -16px rgb(26 20 22 / 0.4);
+
+	/* Tipografia */
+	--lletra: 'Rubik Variable', Rubik, system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--lletra-marca: 'Palatino Linotype', Palatino, 'Book Antiqua', 'EB Garamond', Georgia, serif;
+	--mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, monospace;
+
+	/* Mides */
+	--ample: 74rem;
+	--ample-text: 40rem;
+	--marge: clamp(1rem, 4vw, 2.5rem);
+	--espai: clamp(4.5rem, 10vw, 7.5rem); /* entre seccions */
+	--radi: 16px;
+
+	color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme='light']) {
+		--fons: #161013;
+		--superficie: #221a1e;
+		--text: var(--os);
+		--text-suau: #c4b5bb;
+		--accent: #ff9cc2;
+		--accent-fort: #ffc4db;
+		--marca-color: var(--os);
+		--linia: rgb(244 239 230 / 0.12);
+		--linia-forta: rgb(244 239 230 / 0.4);
+		--quadricula: rgb(140 207 255 / 0.07);
+		--ombra: 0 12px 28px -14px rgb(0 0 0 / 0.7);
+		--ombra-forta: 0 24px 40px -16px rgb(0 0 0 / 0.8);
+		color-scheme: dark;
+	}
+}
+:root[data-theme='dark'] {
+	--fons: #161013;
+	--superficie: #221a1e;
+	--text: var(--os);
+	--text-suau: #c4b5bb;
+	--accent: #ff9cc2;
+	--accent-fort: #ffc4db;
+	--marca-color: var(--os);
+	--linia: rgb(244 239 230 / 0.12);
+	--linia-forta: rgb(244 239 230 / 0.4);
+	--quadricula: rgb(140 207 255 / 0.07);
+	--ombra: 0 12px 28px -14px rgb(0 0 0 / 0.7);
+	--ombra-forta: 0 24px 40px -16px rgb(0 0 0 / 0.8);
+	color-scheme: dark;
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+	scroll-padding-top: 6rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+	html {
+		scroll-behavior: smooth;
+	}
+}
+
+body {
+	margin: 0;
+	background: var(--fons);
+	color: var(--text);
+	font-family: var(--lletra);
+	font-size: 1.0625rem;
+	line-height: 1.6;
+	-webkit-font-smoothing: antialiased;
+	overflow-x: clip;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	margin: 0;
+	font-weight: 700;
+	line-height: 1.12;
+	letter-spacing: -0.02em;
+	text-wrap: balance;
+}
+
+p {
+	margin: 0;
+	text-wrap: pretty;
+}
+
+a {
+	color: var(--accent);
+	text-decoration-thickness: 2px;
+	text-underline-offset: 0.2em;
+}
+a:hover {
+	color: var(--accent-fort);
+}
+
+img,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+:focus-visible {
+	outline: 3px solid var(--blau);
+	outline-offset: 3px;
+}
+
+::selection {
+	background: var(--groc);
+	color: var(--tinta);
+}
+
+/* El marcador: una franja de color sota la paraula.
+   Amb --m es canvia de color: <mark style="--m: var(--rosa)"> */
+mark {
+	--m: var(--groc);
+	padding: 0 0.08em;
+	background: linear-gradient(transparent 58%, var(--m) 58%, var(--m) 92%, transparent 92%);
+	color: inherit;
+	-webkit-box-decoration-break: clone;
+	box-decoration-break: clone;
+}
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme='light']) mark {
+		background: linear-gradient(transparent 58%, color-mix(in srgb, var(--m) 55%, transparent) 58%, color-mix(in srgb, var(--m) 55%, transparent) 92%, transparent 92%);
+	}
+}
+
+/* ── Utilitats ────────────────────────────────────────────────────────────── */
+
+.contenidor {
+	width: 100%;
+	max-width: var(--ample);
+	margin-inline: auto;
+	padding-inline: var(--marge);
+}
+
+.visualment-amagat {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+}
+
+.salta {
+	position: absolute;
+	left: var(--marge);
+	top: -4rem;
+	z-index: 100;
+	padding: 0.6rem 1rem;
+	border-radius: 999px;
+	background: var(--groc);
+	color: var(--tinta);
+	font-weight: 700;
+}
+.salta:focus {
+	top: 0.75rem;
+}
+
+/* Etiqueta petita, en negreta i del color d'accent. */
+.etiqueta {
+	color: var(--accent);
+	font-size: 0.9rem;
+	font-weight: 700;
+}
+
+/* Xip de color: <span class="xip" style="--c: var(--blau)">…</span> */
+.xip {
+	--c: var(--groc);
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4em;
+	padding: 0.3em 0.8em;
+	border-radius: 999px;
+	background: var(--c);
+	color: var(--tinta);
+	font-size: 0.85rem;
+	font-weight: 600;
+	line-height: 1.3;
+}
+
+.mono {
+	font-family: var(--mono);
+	font-size: 0.8rem;
+	font-variant-numeric: tabular-nums;
+}
+
+/* Paper de llibreta quadriculada. */
+.llibreta {
+	background-image:
+		linear-gradient(var(--quadricula) 1px, transparent 1px),
+		linear-gradient(90deg, var(--quadricula) 1px, transparent 1px);
+	background-size: 26px 26px;
+	background-position: -1px -1px;
+}
+
+/* ── Botons ───────────────────────────────────────────────────────────────── */
+
+.boto {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5em;
+	padding: 0.75em 1.3em;
+	border: 1.5px solid var(--linia-forta);
+	border-radius: 999px;
+	background: var(--superficie);
+	color: var(--text);
+	font: 600 1rem/1.1 var(--lletra);
+	text-decoration: none;
+	white-space: nowrap;
+	transition:
+		transform 0.15s,
+		box-shadow 0.15s,
+		background-color 0.15s,
+		border-color 0.15s;
+}
+.boto:hover {
+	border-color: var(--text);
+	box-shadow: var(--ombra);
+	transform: translateY(-1px);
+	color: var(--text);
+}
+.boto:active {
+	transform: translateY(1px);
+	box-shadow: none;
+}
+.boto-ple {
+	border-color: var(--borgonya);
+	background: var(--borgonya);
+	color: var(--os);
+}
+.boto-ple:hover {
+	border-color: var(--borgonya-fosc);
+	background: var(--borgonya-fosc);
+	color: var(--os);
+}
+.boto-groc {
+	border-color: var(--groc);
+	background: var(--groc);
+	color: var(--tinta);
+}
+.boto-groc:hover {
+	border-color: #f5c21a;
+	background: #f5c21a;
+	color: var(--tinta);
+}
+.boto-petit {
+	padding: 0.55em 1em;
+	font-size: 0.9rem;
+}
+.boto svg {
+	width: 1em;
+	height: 1em;
+	flex: none;
+}
+
+/* ── Capçalera de pàgina (les pàgines que no són la portada) ─────────────── */
+
+.pagina-cap {
+	position: relative;
+	isolation: isolate;
+	padding-block: clamp(3rem, 8vw, 5rem) clamp(2.5rem, 6vw, 3.5rem);
+}
+.pagina-cap::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background-image:
+		linear-gradient(var(--quadricula) 1px, transparent 1px),
+		linear-gradient(90deg, var(--quadricula) 1px, transparent 1px);
+	background-size: 26px 26px;
+	mask-image: linear-gradient(to bottom, #000 40%, transparent);
+}
+.pagina-cap h1 {
+	margin-top: 1rem;
+	font-size: clamp(2.6rem, 7vw, 4.4rem);
+	letter-spacing: -0.03em;
+}
+.pagina-cap .entrada {
+	max-width: 38rem;
+	margin-top: 1rem;
+	color: var(--text-suau);
+	font-size: clamp(1.1rem, 2vw, 1.3rem);
+}
+
+/* ── Prosa (avisos, textos llargs) ───────────────────────────────────────── */
+
+.prosa {
+	max-width: var(--ample-text);
+}
+.prosa > * + * {
+	margin-top: 1.1em;
+}
+.prosa h2 {
+	margin-top: 2em;
+	font-size: 1.5rem;
+}
+.prosa h3 {
+	margin-top: 1.6em;
+	font-size: 1.2rem;
+}
+.prosa ul,
+.prosa ol {
+	padding-left: 1.3em;
+}
+.prosa li + li {
+	margin-top: 0.4em;
+}
+.prosa li::marker {
+	color: var(--accent);
+	font-weight: 700;
+}
+.prosa blockquote {
+	margin-inline: 0;
+	padding-left: 1.2em;
+	border-left: 4px solid var(--groc);
+	color: var(--text-suau);
+}
+.prosa strong {
+	font-weight: 700;
+}

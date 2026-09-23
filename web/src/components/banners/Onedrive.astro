@@ -1,0 +1,284 @@
+---
+// Drive d'apunts — recrea una carpeta compartida d'OneDrive: barra blava de
+// l'aplicació, ruta, carpetes grogues i el botó blau de Fluent (el sistema de
+// disseny de Microsoft). Les carpetes que es veuen són il·lustratives.
+import type { Entrada } from '../../data/phihub';
+
+interface Props {
+	entrada: Entrada;
+}
+const { entrada: e } = Astro.props;
+
+// Només les que sabem segur que hi són; la tercera fila diu que n'hi ha més.
+const carpetes = ['Apunts', 'Exàmens'];
+---
+
+<a class="od" href={e.url} target="_blank" rel="noopener">
+	<div class="od-barra" aria-hidden="true">
+		<svg class="od-waffle" viewBox="0 0 16 16"><path d="M2 2h3v3H2zM6.5 2h3v3h-3zM11 2h3v3h-3zM2 6.5h3v3H2zM6.5 6.5h3v3h-3zM11 6.5h3v3h-3zM2 11h3v3H2zM6.5 11h3v3h-3zM11 11h3v3h-3z" /></svg>
+		<svg class="od-nuvol" viewBox="0 0 32 20"><path d="M25.5 8.1A8.5 8.5 0 0 0 9.4 5.6 6.5 6.5 0 0 0 6.5 18h18.2a5 5 0 0 0 .8-9.9Z" /></svg>
+		<span>OneDrive</span>
+	</div>
+
+	<div class="od-cos">
+		<div class="od-cap">
+			<p class="od-ruta">
+				Compartit
+				<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3.5 4.5 4.5L6 12.5" /></svg>
+				<strong>{e.nom}</strong>
+			</p>
+			<h3 class="od-titol">
+				<svg class="od-carpeta gran" viewBox="0 0 32 32" aria-hidden="true"><path class="d" d="M3 7.5A2.5 2.5 0 0 1 5.5 5h6.8l3 3h11.2A2.5 2.5 0 0 1 29 10.5v14a2.5 2.5 0 0 1-2.5 2.5h-21A2.5 2.5 0 0 1 3 24.5v-17Z" /><path class="f" d="M3 12a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2v12.5a2.5 2.5 0 0 1-2.5 2.5h-21A2.5 2.5 0 0 1 3 24.5V12Z" /></svg>
+				{e.nom}
+			</h3>
+			<p class="od-desc">{e.descripcio}</p>
+			<span class="od-boto">
+				{e.cta ?? 'Obre la carpeta'}
+				<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10" /></svg>
+			</span>
+		</div>
+
+		<ul class="od-llista" aria-hidden="true">
+			<li class="od-fila od-fila-cap"><span>Nom</span><span>Tipus</span></li>
+			{
+				carpetes.map((c) => (
+					<li class="od-fila">
+						<span class="od-nom">
+							<svg class="od-carpeta" viewBox="0 0 32 32"><path class="d" d="M3 7.5A2.5 2.5 0 0 1 5.5 5h6.8l3 3h11.2A2.5 2.5 0 0 1 29 10.5v14a2.5 2.5 0 0 1-2.5 2.5h-21A2.5 2.5 0 0 1 3 24.5v-17Z" /><path class="f" d="M3 12a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2v12.5a2.5 2.5 0 0 1-2.5 2.5h-21A2.5 2.5 0 0 1 3 24.5V12Z" /></svg>
+							{c}
+						</span>
+						<span class="od-meta">Carpeta</span>
+					</li>
+				))
+			}
+			<li class="od-fila od-mes"><span class="od-nom">i molt més…</span></li>
+		</ul>
+	</div>
+	<span class="visualment-amagat">(OneDrive, s’obre en una pestanya nova)</span>
+</a>
+
+<style>
+	.od {
+		--blau: #0f6cbd;
+		--blau-hover: #115ea3;
+		--barra: #0364b8;
+		--fons: #ffffff;
+		--text: #242424;
+		--suau: #616161;
+		--filet: #e0e0e0;
+		--fila-hover: #f5f5f5;
+		--carpeta-d: #ffb900;
+		--carpeta-f: #ffd75e;
+		--ombra: 0 1.6px 3.6px rgba(0, 0, 0, 0.13), 0 0.3px 0.9px rgba(0, 0, 0, 0.11);
+		--ombra-hover: 0 6.4px 14.4px rgba(0, 0, 0, 0.13), 0 1.2px 3.6px rgba(0, 0, 0, 0.11);
+
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		container-type: inline-size;
+		overflow: hidden;
+		border-radius: 8px;
+		background: var(--fons);
+		box-shadow: var(--ombra);
+		color: var(--text);
+		font-family: 'Segoe UI Variable Text', 'Segoe UI', -apple-system, system-ui, Roboto, 'Helvetica Neue', sans-serif;
+		text-decoration: none;
+		transition:
+			box-shadow 0.2s,
+			transform 0.2s;
+	}
+	@media (prefers-color-scheme: dark) {
+		:global(:root:not([data-theme='light'])) .od {
+			--blau: #479ef5;
+			--blau-hover: #62abf5;
+			--barra: #0f548c;
+			--fons: #292929;
+			--text: #ffffff;
+			--suau: #adadad;
+			--filet: #3d3d3d;
+			--fila-hover: #333333;
+			--ombra: 0 1.6px 3.6px rgba(0, 0, 0, 0.4);
+			--ombra-hover: 0 6.4px 14.4px rgba(0, 0, 0, 0.5);
+		}
+		:global(:root:not([data-theme='light'])) .od-boto {
+			color: #0a0a0a;
+		}
+	}
+	.od:hover {
+		box-shadow: var(--ombra-hover);
+		transform: translateY(-2px);
+		color: var(--text);
+	}
+
+	/* ── Barra de l'aplicació ── */
+	.od-barra {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		height: 2.75rem;
+		padding: 0 1rem;
+		background: var(--barra);
+		color: #fff;
+		font-size: 0.95rem;
+		font-weight: 600;
+	}
+	.od-barra svg {
+		fill: currentColor;
+	}
+	.od-waffle {
+		width: 1rem;
+		height: 1rem;
+		margin-right: 0.35rem;
+		opacity: 0.9;
+	}
+	.od-nuvol {
+		width: 1.6rem;
+		height: 1rem;
+	}
+
+	/* ── Cos ── */
+	.od-cos {
+		display: grid;
+		flex: 1;
+		gap: 1.5rem;
+		align-items: center;
+		padding: clamp(1.25rem, 5cqi, 2rem);
+	}
+	@container (min-width: 44rem) {
+		.od-cos {
+			grid-template-columns: 1fr 1fr;
+			gap: 2.5rem;
+		}
+	}
+	.od-ruta {
+		display: flex;
+		align-items: center;
+		gap: 0.35rem;
+		color: var(--suau);
+		font-size: 0.85rem;
+	}
+	.od-ruta strong {
+		color: var(--text);
+		font-weight: 600;
+	}
+	.od-ruta svg {
+		width: 0.8rem;
+		height: 0.8rem;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 1.5;
+	}
+	.od-titol {
+		display: flex;
+		align-items: center;
+		gap: 0.65rem;
+		margin-top: 0.6rem;
+		font-size: clamp(1.4rem, 5cqi, 1.75rem);
+		font-weight: 600;
+		line-height: 1.2;
+		letter-spacing: -0.01em;
+	}
+	.od-desc {
+		max-width: 30rem;
+		margin-top: 0.6rem;
+		color: var(--suau);
+		font-size: 0.95rem;
+		line-height: 1.5;
+	}
+	.od-boto {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		margin-top: 1.25rem;
+		padding: 0.45rem 1rem;
+		border-radius: 4px;
+		background: var(--blau);
+		color: #fff;
+		font-size: 0.9rem;
+		font-weight: 600;
+		transition: background-color 0.15s;
+	}
+	.od-boto svg {
+		width: 0.9rem;
+		height: 0.9rem;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 1.8;
+	}
+	.od:hover .od-boto {
+		background: var(--blau-hover);
+	}
+
+	/* Les icones de carpeta de Fluent: dos grocs. */
+	.od-carpeta {
+		flex: none;
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+	.od-carpeta.gran {
+		width: 2rem;
+		height: 2rem;
+	}
+	.od-carpeta .d {
+		fill: var(--carpeta-d);
+	}
+	.od-carpeta .f {
+		fill: var(--carpeta-f);
+	}
+
+	/* ── Llista de fitxers ── */
+	.od-llista {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		font-size: 0.9rem;
+	}
+	.od-fila {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 0.6rem 0.5rem;
+		border-bottom: 1px solid var(--filet);
+		border-radius: 4px 4px 0 0;
+	}
+	.od-fila-cap {
+		color: var(--suau);
+		font-size: 0.8rem;
+		font-weight: 600;
+	}
+	.od-fila:not(.od-fila-cap):not(.od-mes) {
+		transition: background-color 0.15s;
+	}
+	.od:hover .od-fila:nth-child(2) {
+		background: var(--fila-hover);
+	}
+	.od-nom {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		font-weight: 600;
+	}
+	.od-meta {
+		color: var(--suau);
+	}
+	.od-mes {
+		border-bottom: 0;
+		color: var(--suau);
+		font-style: italic;
+	}
+	.od-mes .od-nom {
+		font-weight: 400;
+		padding-left: 1.85rem;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.od,
+		.od * {
+			transition: none !important;
+		}
+		.od:hover {
+			transform: none;
+		}
+	}
+</style>

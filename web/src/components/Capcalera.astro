@@ -1,0 +1,232 @@
+---
+// Capçalera fixa: el dibuix i el nom (el lockup de la marca) i la navegació.
+// A mòbil, la navegació es plega en un <details>: funciona sense JavaScript.
+import { lloc, navegacio } from '../config/lloc';
+import { entrades } from '../data/phihub';
+import Marca from './Marca.astro';
+import Fletxa from './Fletxa.astro';
+
+const actual = Astro.url.pathname.replace(/\/$/, '') || '/';
+const esActual = (href: string) => actual === href || actual.startsWith(href + '/');
+
+// El OneDrive és el que més es fa servir: sempre a mà.
+const onedrive = entrades.find((e) => e.id === 'drive');
+---
+
+<header class="capcalera">
+	<div class="contenidor fila">
+		<a class="lockup" href="/" aria-label={`${lloc.nom}, inici`}>
+			<Marca class="lockup-marca" />
+			<span class="lockup-nom" aria-hidden="true">{lloc.nom}</span>
+		</a>
+
+		<nav class="nav-ample" aria-label="Principal">
+			<ul>
+				{
+					navegacio.map((n) => (
+						<li>
+							<a href={n.href} aria-current={esActual(n.href) ? 'page' : undefined}>
+								{n.text}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+			{
+				onedrive?.url && (
+					<a class="boto boto-groc boto-petit" href={onedrive.url} target="_blank" rel="noopener">
+						OneDrive <Fletxa sortida />
+					</a>
+				)
+			}
+		</nav>
+
+		<details class="nav-mobil">
+			<summary aria-label="Menú">
+				<span class="hamburguesa" aria-hidden="true"><span></span></span>
+			</summary>
+			<nav aria-label="Principal">
+				<ul>
+					{
+						navegacio.map((n) => (
+							<li>
+								<a href={n.href} aria-current={esActual(n.href) ? 'page' : undefined}>
+									{n.text}
+								</a>
+							</li>
+						))
+					}
+				</ul>
+				{
+					onedrive?.url && (
+						<a class="boto boto-groc" href={onedrive.url} target="_blank" rel="noopener">
+							OneDrive <Fletxa sortida />
+						</a>
+					)
+				}
+			</nav>
+		</details>
+	</div>
+</header>
+
+<style>
+	.capcalera {
+		position: sticky;
+		top: 0;
+		z-index: 50;
+		background: color-mix(in srgb, var(--fons) 90%, transparent);
+		backdrop-filter: blur(10px) saturate(1.2);
+		-webkit-backdrop-filter: blur(10px) saturate(1.2);
+		border-bottom: 1px solid var(--linia);
+	}
+	.fila {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.5rem;
+		min-height: 4.5rem;
+	}
+
+	/* ── Lockup: el dibuix i el nom, en la lletra de la marca ── */
+	.lockup {
+		display: flex;
+		align-items: center;
+		gap: 0.65rem;
+		color: var(--marca-color);
+		text-decoration: none;
+	}
+	.lockup:hover {
+		color: var(--marca-color);
+	}
+	.lockup :global(.lockup-marca) {
+		width: auto;
+		height: 2.6rem;
+	}
+	.lockup-nom {
+		font-family: var(--lletra-marca);
+		font-size: 1.15rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		line-height: 1;
+		text-transform: uppercase;
+	}
+
+	/* ── Navegació ── */
+	ul {
+		display: flex;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.nav-ample {
+		display: none;
+		align-items: center;
+		gap: 1.25rem;
+	}
+	.nav-ample ul {
+		gap: 0.35rem;
+	}
+	.nav-ample a:not(.boto) {
+		display: block;
+		padding: 0.4rem 0.85rem;
+		border-radius: 999px;
+		color: var(--text);
+		font-weight: 600;
+		text-decoration: none;
+		transition: background-color 0.15s;
+	}
+	.nav-ample a:not(.boto):hover {
+		background: color-mix(in srgb, var(--groc) 45%, transparent);
+	}
+	.nav-ample a[aria-current='page'] {
+		background: var(--groc);
+		color: var(--tinta);
+	}
+
+	/* ── Mòbil ── */
+	.nav-mobil summary {
+		display: grid;
+		place-items: center;
+		width: 2.75rem;
+		height: 2.75rem;
+		margin-right: -0.5rem;
+		cursor: pointer;
+		list-style: none;
+		color: var(--text);
+	}
+	.nav-mobil summary::-webkit-details-marker {
+		display: none;
+	}
+	.hamburguesa,
+	.hamburguesa span,
+	.hamburguesa::before,
+	.hamburguesa::after {
+		display: block;
+		width: 1.45rem;
+		height: 2.5px;
+		border-radius: 2px;
+		background: currentColor;
+		transition:
+			transform 0.25s,
+			opacity 0.2s;
+	}
+	.hamburguesa {
+		position: relative;
+		background: none;
+	}
+	.hamburguesa::before,
+	.hamburguesa::after {
+		content: '';
+		position: absolute;
+	}
+	.hamburguesa::before {
+		top: -7px;
+	}
+	.hamburguesa::after {
+		top: 7px;
+	}
+	.nav-mobil[open] .hamburguesa span {
+		opacity: 0;
+	}
+	.nav-mobil[open] .hamburguesa::before {
+		transform: translateY(7px) rotate(45deg);
+	}
+	.nav-mobil[open] .hamburguesa::after {
+		transform: translateY(-7px) rotate(-45deg);
+	}
+	.nav-mobil nav {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 100%;
+		padding: 0.75rem var(--marge) 1.5rem;
+		background: var(--fons);
+		border-bottom: 2px solid var(--linia);
+		box-shadow: var(--ombra);
+	}
+	.nav-mobil ul {
+		flex-direction: column;
+		margin-bottom: 1.25rem;
+	}
+	.nav-mobil a:not(.boto) {
+		display: block;
+		padding: 0.8rem 0;
+		border-bottom: 1px solid var(--linia);
+		color: var(--text);
+		font-size: 1.15rem;
+		font-weight: 700;
+		text-decoration: none;
+	}
+	.nav-mobil a[aria-current='page'] {
+		color: var(--accent);
+	}
+
+	@media (min-width: 52rem) {
+		.nav-ample {
+			display: flex;
+		}
+		.nav-mobil {
+			display: none;
+		}
+	}
+</style>

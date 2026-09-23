@@ -1,0 +1,71 @@
+---
+import Base from '../../layouts/Base.astro';
+import Fletxa from '../../components/Fletxa.astro';
+import { getCollection, render } from 'astro:content';
+import { data, dataIso } from '../../utils';
+
+export async function getStaticPaths() {
+	const avisos = await getCollection('avisos', (a) => !a.data.esborrany);
+	return avisos.map((avis) => ({ params: { id: avis.id }, props: { avis } }));
+}
+
+const { avis } = Astro.props;
+const { Content } = await render(avis);
+---
+
+<Base titol={avis.data.titol} descripcio={avis.data.resum}>
+	<article>
+		<header class="pagina-cap">
+			<div class="contenidor">
+				<p class="meta">
+					<a class="xip" style="--c: var(--taronja)" href="/tauler">Tauler</a>
+					<span class="xip" style="--c: var(--rosa)">{avis.data.etiqueta}</span>
+					<time class="mono" datetime={dataIso(avis.data.data)}>{data(avis.data.data)}</time>
+				</p>
+				<h1 class="titol">{avis.data.titol}</h1>
+				<p class="entrada">{avis.data.resum}</p>
+			</div>
+		</header>
+
+		<div class="contenidor">
+			<div class="prosa cos">
+				<Content />
+			</div>
+			<a class="torna" href="/tauler"><span class="gira"><Fletxa /></span> Tots els avisos</a>
+		</div>
+	</article>
+</Base>
+
+<style>
+	.meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.4rem 0.75rem;
+		color: var(--text-suau);
+	}
+	.meta a {
+		text-decoration: none;
+	}
+	.titol {
+		max-width: 20ch;
+		font-size: clamp(2.2rem, 6vw, 3.6rem) !important;
+	}
+	.cos {
+		margin-top: clamp(2rem, 5vw, 3rem);
+		font-size: 1.2rem;
+	}
+	.torna {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-top: 3rem;
+		font-weight: 600;
+		text-decoration: none;
+	}
+	.gira {
+		display: inline-flex;
+		width: 0.9rem;
+		transform: scaleX(-1);
+	}
+</style>

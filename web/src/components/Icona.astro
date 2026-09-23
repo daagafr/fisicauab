@@ -1,0 +1,33 @@
+---
+// Icones de línia per als calaixos del phihub. Hereten el color del text.
+interface Props {
+	nom: 'nuvol' | 'persones' | 'eina' | 'diari';
+	class?: string;
+}
+const { nom, class: classe } = Astro.props;
+
+const camins = {
+	nuvol: 'M7 18.5h10.5a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.6 9.1 4.75 4.75 0 0 0 7 18.5Z',
+	persones:
+		'M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm-6 9a6 6 0 0 1 12 0M16 4.3a3.5 3.5 0 0 1 0 6.4M18 14.4A6 6 0 0 1 21 20',
+	eina: 'm8 7-5 5 5 5M16 7l5 5-5 5M13.5 4.5l-3 15',
+	diari:
+		'M4 5.5h13v13a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2v-13Zm13 4h3v9a2 2 0 0 1-4 0M7.5 9h6M7.5 12.5h6M7.5 16h3.5',
+};
+---
+
+<svg class:list={['icona', classe]} viewBox="0 0 24 24" aria-hidden="true">
+	<path d={camins[nom]} />
+</svg>
+
+<style>
+	.icona {
+		width: 1.25em;
+		height: 1.25em;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+</style>

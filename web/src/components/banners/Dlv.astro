@@ -1,0 +1,220 @@
+---
+// Diccionari de la Llengua Vespertina — recrea la capçalera del diccionari: paper
+// blanc, el segell de la RAV de filigrana, el logo DLV, el títol en Alice amb
+// «vespertina» en groc i la franja groga i blava a sota. Colors de dlv.css.
+import '@fontsource/alice/400.css';
+import '@fontsource/pt-serif/400.css';
+import '@fontsource/pt-serif/400-italic.css';
+import type { Entrada } from '../../data/phihub';
+
+interface Props {
+	entrada: Entrada;
+}
+const { entrada: e } = Astro.props;
+---
+
+<a class="dlv" href={e.url} target="_blank" rel="noopener">
+	<img class="dlv-filigrana" src="/phihub/dlv-rav.png" alt="" loading="lazy" />
+	<div class="dlv-dins">
+		<img class="dlv-logo" src="/phihub/dlv-logo.png" alt="" width="180" height="255" loading="lazy" />
+		<div class="dlv-text">
+			<p class="dlv-edicio">Segona edició · Edició del bienni</p>
+			<h3 class="dlv-titol">Diccionari de la llengua <span>vespertina</span></h3>
+			<p class="dlv-desc">{e.descripcio}</p>
+			<div class="dlv-accions">
+				<span class="dlv-boto primari">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 5.5c3-1.4 6.5-1.2 9.5 1 3-2.2 6.5-2.4 9.5-1v13c-3-1.4-6.5-1.2-9.5 1-3-2.2-6.5-2.4-9.5-1v-13ZM12 6.5v13" /></svg>
+					{e.cta ?? 'Obre el diccionari'}
+				</span>
+			</div>
+		</div>
+	</div>
+	<span class="visualment-amagat">(s’obre en una pestanya nova)</span>
+</a>
+
+<style>
+	.dlv {
+		--blau: #032860;
+		--groc: #fbc306;
+		--paper: #ffffff;
+		--tinta: #1e2026;
+		--gris: #5c616e;
+		--filet: #dde1e8;
+		--accent: var(--blau);
+		--accent-fort: #021c45;
+		--groc-text: #e0a800;
+		--primari: var(--blau);
+		--primari-hover: var(--accent-fort);
+		--ombra: 0 1px 2px rgba(3, 40, 96, 0.06), 0 8px 24px rgba(3, 40, 96, 0.06);
+		--ombra-hover: 0 2px 4px rgba(3, 40, 96, 0.08), 0 18px 40px -8px rgba(3, 40, 96, 0.22);
+		--f-text: 'PT Serif', Georgia, 'Times New Roman', serif;
+		--f-titol: 'Alice', 'PT Serif', Georgia, serif;
+		--f-ui: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+		position: relative;
+		isolation: isolate;
+		display: block;
+		height: 100%;
+		container-type: inline-size;
+		overflow: hidden;
+		border: 1px solid var(--filet);
+		border-radius: 10px;
+		background: var(--paper);
+		box-shadow: var(--ombra);
+		color: var(--tinta);
+		font: 17px/1.6 var(--f-text);
+		text-decoration: none;
+		transition:
+			border-color 0.2s,
+			box-shadow 0.25s,
+			transform 0.25s;
+	}
+	/* El diccionari té mode fosc propi; el banner el segueix. */
+	@media (prefers-color-scheme: dark) {
+		:global(:root:not([data-theme='light'])) .dlv {
+			--paper: #151d2e;
+			--tinta: #e4e7ee;
+			--gris: #9aa3b5;
+			--filet: #28324a;
+			--accent: #a9c2f0;
+			--accent-fort: #d3e0fa;
+			--groc-text: var(--groc);
+			--primari: #2f5fb3;
+			--primari-hover: #3c70c9;
+			--ombra: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+			--ombra-hover: 0 18px 40px -8px rgba(0, 0, 0, 0.6);
+		}
+		:global(:root:not([data-theme='light'])) .dlv-logo {
+			box-sizing: content-box;
+			padding: 8px 10px;
+			border-radius: 14px;
+			background: #f7f6f2;
+		}
+		:global(:root:not([data-theme='light'])) .dlv-filigrana {
+			filter: invert(1);
+			opacity: 0.06;
+		}
+	}
+	.dlv:hover {
+		border-color: var(--accent);
+		box-shadow: var(--ombra-hover);
+		transform: translateY(-3px);
+		color: var(--tinta);
+	}
+	/* La franja groga i blava de la portada. */
+	.dlv::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 5px;
+		background: linear-gradient(var(--groc) 0 40%, var(--blau) 40%);
+	}
+
+	.dlv-filigrana {
+		position: absolute;
+		right: -50px;
+		top: -40px;
+		z-index: -1;
+		width: min(340px, 70%);
+		opacity: 0.06;
+		pointer-events: none;
+		transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+	}
+	.dlv:hover .dlv-filigrana {
+		transform: rotate(-6deg);
+	}
+
+	.dlv-dins {
+		display: grid;
+		gap: 1.25rem;
+		align-content: center;
+		height: 100%;
+		padding: clamp(1.5rem, 6cqi, 2.5rem) clamp(1.5rem, 6cqi, 2.5rem) calc(clamp(1.5rem, 6cqi, 2.5rem) + 5px);
+	}
+	@container (min-width: 30rem) {
+		.dlv-dins {
+			grid-template-columns: auto 1fr;
+			gap: 1.75rem;
+			align-items: center;
+		}
+	}
+	.dlv-logo {
+		display: block;
+		width: clamp(56px, 16cqi, 86px);
+		height: auto;
+	}
+
+	.dlv-edicio {
+		margin: 0 0 6px;
+		color: var(--gris);
+		font: italic 0.76rem/1.3 var(--f-text);
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+	}
+	.dlv-titol {
+		color: var(--accent);
+		font: 400 clamp(1.8rem, 7cqi, 2.6rem) / 1.08 var(--f-titol);
+	}
+	.dlv-titol span {
+		color: var(--groc-text);
+	}
+	.dlv-desc {
+		max-width: 32rem;
+		margin-top: 0.75rem;
+		color: var(--gris);
+		font-size: 0.98rem;
+		line-height: 1.55;
+	}
+
+	.dlv-accions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-top: 1.25rem;
+	}
+	.dlv-boto {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5em;
+		padding: 0.55em 1em;
+		border: 1px solid var(--filet);
+		border-radius: 999px;
+		background: var(--paper);
+		color: var(--tinta);
+		font: 500 0.88rem/1.2 var(--f-ui);
+		white-space: nowrap;
+		transition:
+			background-color 0.15s,
+			border-color 0.15s;
+	}
+	.dlv-boto svg {
+		width: 1.05em;
+		height: 1.05em;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 1.8;
+		stroke-linejoin: round;
+	}
+	.dlv-boto.primari {
+		border-color: var(--primari);
+		background: var(--primari);
+		color: #fff;
+	}
+	.dlv:hover .dlv-boto.primari {
+		border-color: var(--primari-hover);
+		background: var(--primari-hover);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.dlv,
+		.dlv * {
+			transition: none !important;
+		}
+		.dlv:hover,
+		.dlv:hover .dlv-filigrana {
+			transform: none;
+		}
+	}
+</style>

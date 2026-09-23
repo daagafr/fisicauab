@@ -1,0 +1,80 @@
+---
+// Capçalera de secció: un títol (el que va dins; pot portar <mark>), una icona
+// opcional del color del calaix i, si cal, un enllaç a la dreta.
+//   <Seccio enllac={{ text: 'Tot el phihub', href: '/phihub' }}>Què hi <mark>trobaràs</mark></Seccio>
+import Fletxa from './Fletxa.astro';
+import Icona from './Icona.astro';
+
+interface Props {
+	id?: string;
+	icona?: 'nuvol' | 'persones' | 'eina' | 'diari';
+	color?: string; // un color de marcador: 'groc', 'blau'…
+	enllac?: { text: string; href: string };
+}
+const { id, icona, color, enllac } = Astro.props;
+---
+
+<header class="seccio-cap" id={id} style={color ? `--c: var(--${color})` : undefined}>
+	<div class="seccio-titol">
+		{
+			icona && (
+				<span class="seccio-icona">
+					<Icona nom={icona} />
+				</span>
+			)
+		}
+		<h2><slot /></h2>
+	</div>
+	{
+		enllac && (
+			<a class="seccio-enllac" href={enllac.href}>
+				{enllac.text} <Fletxa />
+			</a>
+		)
+	}
+</header>
+
+<style>
+	.seccio-cap {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 0.75rem 2rem;
+		margin-bottom: clamp(1.5rem, 3vw, 2rem);
+	}
+	.seccio-titol {
+		display: flex;
+		align-items: center;
+		gap: 0.85rem;
+	}
+	h2 {
+		font-size: clamp(1.8rem, 3.8vw, 2.5rem);
+		letter-spacing: -0.025em;
+	}
+	.seccio-icona {
+		display: grid;
+		place-items: center;
+		flex: none;
+		width: 2.75rem;
+		height: 2.75rem;
+		border-radius: 12px;
+		background: var(--c, var(--groc));
+		color: var(--tinta);
+		font-size: 1.15rem;
+	}
+	.seccio-enllac {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-weight: 600;
+		text-decoration: none;
+	}
+	.seccio-enllac :global(.fletxa) {
+		width: 1rem;
+		transition: transform 0.2s;
+	}
+	.seccio-enllac:hover :global(.fletxa) {
+		transform: translateX(3px);
+	}
+</style>

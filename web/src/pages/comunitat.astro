@@ -1,0 +1,192 @@
+---
+import Base from '../layouts/Base.astro';
+import Seccio from '../components/Seccio.astro';
+import Marca from '../components/Marca.astro';
+import Fletxa from '../components/Fletxa.astro';
+import { lloc } from '../config/lloc';
+---
+
+<Base
+	titol="Comunitat"
+	descripcio="Qui som, la història de la gallina de Física UAB i com afegir el teu projecte al phihub."
+>
+	<header class="pagina-cap">
+		<div class="contenidor">
+			<p class="xip" style="--c: var(--rosa)">Qui som</p>
+			<h1>Comunitat</h1>
+			<p class="entrada">
+				Física UAB som la gent que estudia, ha estudiat o fa física a la Universitat Autònoma de
+				Barcelona. Aquest web és nostre, i no és oficial.
+			</p>
+		</div>
+	</header>
+
+	<!-- ── Què és això ───────────────────────────────────────────────── -->
+	<section class="contenidor seccio">
+		<Seccio>Què és <mark>això</mark>?</Seccio>
+		<div class="dues">
+			<p class="gran">Un lloc per a tot el que la carrera fa fora de l’horari de classe.</p>
+			<div class="prosa">
+				<p>
+					Cada promoció deixa alguna cosa: uns apunts que passen de mà en mà, un club que algú va
+					muntar, una app, un servidor, una paraula que ja només s’entén a física. Fins ara tot això
+					estava escampat en grups de WhatsApp i perfils d’Instagram.
+				</p>
+				<p>
+					<strong>fisicauab.com</strong> ho reuneix. La peça principal és el <a href="/phihub"
+						>phihub</a
+					>, i la resta anirà creixent amb el que la comunitat hi vulgui posar.
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- ── La mascota ────────────────────────────────────────────────── -->
+	<section class="contenidor seccio">
+		<Seccio id="mascota">La <mark style="--m: var(--taronja)">mascota</mark></Seccio>
+		<div class="mascota">
+			<Marca class="mascota-marca" titol="La gallina de Física UAB, en flames i glaçada, amb la pinya" />
+			<div>
+				<p class="gran">Una gallina morta, un forn i un congelador.</p>
+				<div class="prosa">
+					<p>
+						Tot va començar en unes Maxwell, les colònies de física, quan algú es va trobar una
+						gallina morta. La van tocar i estava molt freda, així que cap al forn. Al cap d’una estona
+						la van treure i, és clar, ara estava calenta: cap al congelador. I quan la van treure del
+						congelador… efectivament, massa freda. Cap al forn una altra vegada.
+					</p>
+					<p>
+						Un cicle termodinàmic de manual: sense final, amb un rendiment dubtós i amb tota la
+						colònia fent de focus calent i de focus fred.
+					</p>
+					<p>
+						Diu la llegenda que, en algun moment, algú la va deixar a les vies del tren perquè
+						pogués descansar en pau. Ningú sap on és ara, però s’ha quedat amb nosaltres: és la
+						gallina de Física UAB, en flames i glaçada alhora, i amb una creu a l’ull.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ── Participa ─────────────────────────────────────────────────── -->
+	<section class="contenidor seccio">
+		<Seccio id="participa">Afegeix-hi el <mark style="--m: var(--rosa)">teu projecte</mark></Seccio>
+		<div class="participa">
+			<div>
+				<p class="gran">El phihub és de tothom qui estudia o ha estudiat física a la UAB.</p>
+				<p class="participa-entrada">Per entrar-hi, envia’ns:</p>
+			</div>
+			<ol class="passos">
+				<li><strong>El nom</strong>, tal com vols que surti.</li>
+				<li><strong>Una o dues frases</strong> que expliquin què és.</li>
+				<li><strong>L’enllaç</strong>. Si encara no n’hi ha, surt com a «Aviat».</li>
+				<li><strong>Un logo quadrat</strong>, si en tens. Si no, fem servir les sigles.</li>
+			</ol>
+			<a class="boto boto-ple" href={`mailto:${lloc.correu}?subject=Phihub%3A%20nou%20projecte`}>
+				Escriu-nos <Fletxa />
+			</a>
+		</div>
+	</section>
+</Base>
+
+<style>
+	.seccio {
+		margin-top: var(--espai);
+	}
+	.seccio :global(.seccio-cap) {
+		scroll-margin-top: 6rem;
+	}
+	.gran {
+		font-size: clamp(1.35rem, 2.6vw, 1.8rem);
+		font-weight: 700;
+		letter-spacing: -0.02em;
+		line-height: 1.25;
+	}
+	.dues {
+		display: grid;
+		gap: 1.25rem 4rem;
+	}
+	@media (min-width: 56rem) {
+		.dues {
+			grid-template-columns: 1fr 1.1fr;
+		}
+	}
+	.prosa p {
+		color: var(--text-suau);
+	}
+
+	/* ── La mascota ── */
+	.mascota {
+		display: grid;
+		gap: 2rem 4rem;
+		align-items: center;
+	}
+	.mascota :global(.mascota-marca) {
+		width: min(100%, 24rem);
+		height: auto;
+		justify-self: center;
+		color: var(--marca-color);
+	}
+	.mascota .prosa {
+		margin-top: 1.25rem;
+		font-size: 1.1rem;
+	}
+	@media (min-width: 56rem) {
+		.mascota {
+			grid-template-columns: 1fr 1.25fr;
+		}
+	}
+
+	/* ── Participa ── */
+	.participa {
+		display: grid;
+		gap: 1.5rem 4rem;
+		padding: clamp(1.75rem, 5vw, 3rem);
+		border-radius: 24px;
+		background: var(--groc);
+		color: var(--tinta);
+	}
+	@media (min-width: 56rem) {
+		.participa {
+			grid-template-columns: 1fr 1.1fr;
+		}
+	}
+	.participa-entrada {
+		margin-top: 0.8rem;
+	}
+	.passos {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		counter-reset: pas;
+	}
+	.passos li {
+		counter-increment: pas;
+		position: relative;
+		padding: 0.75rem 0 0.75rem 2.6rem;
+		border-bottom: 1px solid rgb(26 20 22 / 0.15);
+	}
+	.passos li::before {
+		content: counter(pas);
+		position: absolute;
+		left: 0;
+		top: 0.7rem;
+		display: grid;
+		place-items: center;
+		width: 1.8rem;
+		height: 1.8rem;
+		border-radius: 50%;
+		background: rgb(255 255 255 / 0.7);
+		font-size: 0.85rem;
+		font-weight: 700;
+	}
+	.participa .boto {
+		justify-self: start;
+	}
+	@media (min-width: 56rem) {
+		.participa .boto {
+			grid-column: 2;
+		}
+	}
+</style>

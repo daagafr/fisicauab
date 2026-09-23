@@ -1,0 +1,169 @@
+---
+// El banner de Física UAB, per a les entrades que no tenen un `estil` propi: una
+// fitxa amb una franja del color del seu calaix a dalt.
+//   - normal:  fitxa clara amb les sigles, el tipus, el nom, la descripció i el domini
+//   - gran:    `destacat: true` → tota del color del calaix
+//   - aviat:   sense `url` → vora discontínua, no clicable
+import type { Entrada } from '../../data/phihub';
+import { categoria, esAviat, peuDe } from '../../data/phihub';
+import Monograma from '../Monograma.astro';
+import Fletxa from '../Fletxa.astro';
+
+interface Props {
+	entrada: Entrada;
+}
+const { entrada: e } = Astro.props;
+
+const cat = categoria(e.categoria);
+const aviat = esAviat(e);
+const gran = !!e.destacat && !aviat;
+const Etiqueta = aviat ? 'div' : 'a';
+const enllac = aviat ? {} : { href: e.url, target: '_blank', rel: 'noopener' };
+---
+
+<Etiqueta class:list={['fitxa', { gran, aviat }]} style={`--c: var(--${cat.color})`} {...enllac}>
+	<div class="fitxa-cap">
+		<Monograma sigles={e.sigles} imatge={e.imatge} color={cat.color} />
+		<span class="xip">{e.tipus ?? cat.nom}</span>
+	</div>
+
+	<h3 class="fitxa-nom">{e.nom}</h3>
+	<p class="fitxa-text">{e.descripcio}</p>
+
+	<div class="fitxa-peu">
+		{
+			aviat ? (
+				<span class="xip aviat-xip">Aviat</span>
+			) : gran ? (
+				<span class="boto boto-petit">
+					{e.cta ?? 'Entra-hi'} <Fletxa sortida />
+				</span>
+			) : (
+				<>
+					<span class="mono">{peuDe(e)}</span>
+					<Fletxa sortida />
+				</>
+			)
+		}
+	</div>
+	{!aviat && <span class="visualment-amagat">(s’obre en una pestanya nova)</span>}
+</Etiqueta>
+
+<style>
+	.fitxa {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+		height: 100%;
+		overflow: hidden;
+		padding: 1.6rem 1.4rem 1.2rem;
+		border: 1.5px solid var(--linia);
+		border-radius: var(--radi);
+		background: var(--superficie);
+		color: var(--text);
+		text-decoration: none;
+		transition:
+			transform 0.2s,
+			box-shadow 0.2s;
+	}
+	a.fitxa:hover {
+		transform: translateY(-3px);
+		box-shadow: var(--ombra-forta);
+		color: var(--text);
+	}
+	/* La franja del color del calaix. */
+	.fitxa::before {
+		content: '';
+		position: absolute;
+		inset: 0 0 auto;
+		height: 5px;
+		background: var(--c);
+	}
+
+	.fitxa-cap {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin-bottom: 0.3rem;
+	}
+	.fitxa-cap .xip {
+		--c: inherit;
+		background: color-mix(in srgb, var(--c) 55%, transparent);
+		color: var(--text);
+	}
+	.fitxa-nom {
+		font-size: 1.35rem;
+	}
+	.fitxa-text {
+		color: var(--text-suau);
+		font-size: 1rem;
+		line-height: 1.5;
+	}
+	.fitxa-peu {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-top: auto;
+		padding-top: 0.9rem;
+		border-top: 1.5px solid var(--linia);
+		color: var(--accent);
+	}
+	.fitxa-peu .mono {
+		overflow: hidden;
+		color: var(--text-suau);
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.fitxa-peu :global(.fletxa) {
+		flex: none;
+		width: 1.1rem;
+		transition: transform 0.2s;
+	}
+	a.fitxa:hover .fitxa-peu :global(.fletxa) {
+		transform: translate(2px, -2px);
+	}
+
+	/* ── Aviat ── */
+	.aviat {
+		border-style: dashed;
+		border-color: var(--linia-forta);
+		background: transparent;
+	}
+	.aviat-xip {
+		--c: inherit;
+		background: color-mix(in srgb, var(--c) 45%, transparent);
+		color: var(--text);
+	}
+
+	/* ── Gran ── */
+	.gran {
+		background: var(--c);
+		color: var(--tinta);
+	}
+	a.gran:hover {
+		color: var(--tinta);
+	}
+	.gran .fitxa-nom {
+		font-size: clamp(1.7rem, 3.4vw, 2.3rem);
+	}
+	.gran .fitxa-text,
+	.gran .fitxa-peu {
+		color: var(--tinta);
+	}
+	.gran .fitxa-cap .xip {
+		background: var(--superficie);
+		color: var(--tinta);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.fitxa,
+		.fitxa :global(*) {
+			transition: none !important;
+		}
+		a.fitxa:hover {
+			transform: none;
+		}
+	}
+</style>

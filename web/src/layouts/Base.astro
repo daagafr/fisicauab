@@ -1,0 +1,58 @@
+---
+// La closca de totes les pàgines: <head>, capçalera, contingut i peu.
+//
+//   <Base titol="Phihub" descripcio="...">…</Base>
+//
+// Sense `titol`, la pestanya diu només «Física UAB».
+import '@fontsource-variable/rubik';
+import '@fontsource/eb-garamond/700.css'; // només per al nom de la marca on no hi ha Palatino
+import '../styles/global.css';
+import { lloc } from '../config/lloc';
+import Capcalera from '../components/Capcalera.astro';
+import Peu from '../components/Peu.astro';
+
+interface Props {
+	titol?: string;
+	descripcio?: string;
+	imatge?: string; // per a xarxes; per defecte, /og.png
+}
+const { titol, descripcio = lloc.descripcio, imatge = '/og.png' } = Astro.props;
+
+const titolComplet = titol ? `${titol} · ${lloc.nom}` : lloc.nom;
+const canonica = new URL(Astro.url.pathname, lloc.url);
+const imatgeAbs = new URL(imatge, lloc.url);
+---
+
+<!doctype html>
+<html lang={lloc.idioma}>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{titolComplet}</title>
+		<meta name="description" content={descripcio} />
+		<link rel="canonical" href={canonica} />
+
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<meta name="theme-color" content="#70143D" />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={lloc.nom} />
+		<meta property="og:title" content={titol ?? lloc.nom} />
+		<meta property="og:description" content={descripcio} />
+		<meta property="og:url" content={canonica} />
+		<meta property="og:image" content={imatgeAbs} />
+		<meta property="og:locale" content="ca_ES" />
+		<meta name="twitter:card" content="summary_large_image" />
+
+		<meta name="generator" content={Astro.generator} />
+	</head>
+	<body>
+		<a class="salta" href="#contingut">Salta al contingut</a>
+		<Capcalera />
+		<main id="contingut">
+			<slot />
+		</main>
+		<Peu />
+	</body>
+</html>

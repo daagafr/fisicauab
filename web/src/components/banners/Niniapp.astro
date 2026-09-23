@@ -1,0 +1,154 @@
+---
+// NiniApp — recrea la portada de niniapp.org/gateway: fons negre, la icona de la
+// catapulta, el títol en Lora, el botó lila i les targetes fosques del que fa
+// l'app. Colors mesurats de la seva web (#000, #17171c, #2a2a32, #8b7cf7).
+import '@fontsource/lora/400.css';
+import '@fontsource/lora/700.css';
+import type { Entrada } from '../../data/phihub';
+
+interface Props {
+	entrada: Entrada;
+}
+const { entrada: e } = Astro.props;
+
+// Les quatre coses que fa, tal com les explica la seva portada.
+const funcions = [
+	{ emoji: '🗓️', nom: 'Plans i votacions' },
+	{ emoji: '🔥', nom: 'Ratxes' },
+	{ emoji: '🚗', nom: 'Cotxes i transport' },
+	{ emoji: '💬', nom: 'Frasari i cançoner' },
+];
+---
+
+<a class="nini" href={e.url} target="_blank" rel="noopener">
+	<div class="nini-cap">
+		<img class="nini-icona" src="/phihub/niniapp-icona.png" alt="" width="180" height="180" loading="lazy" />
+		<h3 class="nini-nom">{e.nom}</h3>
+		<p class="nini-lema">L’app del teu grup d’amics.</p>
+		<p class="nini-text">{e.descripcio}</p>
+		<span class="nini-boto">{e.cta ?? 'Accedeix a l’app'}</span>
+	</div>
+	<ul class="nini-funcions" aria-hidden="true">
+		{
+			funcions.map((f) => (
+				<li>
+					<span>{f.emoji}</span>
+					{f.nom}
+				</li>
+			))
+		}
+	</ul>
+	<span class="visualment-amagat">(s’obre en una pestanya nova)</span>
+</a>
+
+<style>
+	.nini {
+		--negre: #000000;
+		--targeta: #17171c;
+		--vora: #2a2a32;
+		--suau: #9a9aa5;
+		--lila: #8b7cf7;
+		--lila-hover: #9d90f9;
+
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 1.25rem;
+		height: 100%;
+		container-type: inline-size;
+		padding: clamp(1.5rem, 7cqi, 2rem) clamp(1.25rem, 6cqi, 1.75rem);
+		border: 1px solid var(--vora);
+		border-radius: 16px;
+		background: var(--negre);
+		color: #fff;
+		font-family: 'Lora', Georgia, serif;
+		text-align: center;
+		text-decoration: none;
+		transition:
+			transform 0.2s,
+			box-shadow 0.2s;
+	}
+	.nini:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 22px 40px -18px rgb(139 124 247 / 0.55);
+		color: #fff;
+	}
+
+	.nini-cap {
+		display: grid;
+		justify-items: center;
+	}
+	.nini-icona {
+		width: 3.6rem;
+		height: 3.6rem;
+		border-radius: 14px;
+		transition: transform 0.3s cubic-bezier(0.3, 1.5, 0.5, 1);
+	}
+	.nini:hover .nini-icona {
+		transform: rotate(-8deg) scale(1.05);
+	}
+	.nini-nom {
+		margin-top: 0.75rem;
+		font-family: inherit;
+		font-size: 1.75rem;
+		font-weight: 700;
+		letter-spacing: 0;
+	}
+	.nini-lema {
+		margin-top: 0.3rem;
+		font-weight: 700;
+	}
+	.nini-text {
+		max-width: 26rem;
+		margin-top: 0.5rem;
+		color: var(--suau);
+		font-size: 0.92rem;
+		line-height: 1.5;
+	}
+	.nini-boto {
+		display: block;
+		width: min(100%, 17rem);
+		margin-top: 1.1rem;
+		padding: 0.7rem 1rem;
+		border-radius: 12px;
+		background: var(--lila);
+		font-weight: 700;
+		transition: background-color 0.15s;
+	}
+	.nini:hover .nini-boto {
+		background: var(--lila-hover);
+	}
+
+	.nini-funcions {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.5rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		text-align: left;
+	}
+	.nini-funcions li {
+		display: flex;
+		align-items: center;
+		gap: 0.45rem;
+		padding: 0.55rem 0.65rem;
+		border: 1px solid var(--vora);
+		border-radius: 12px;
+		background: var(--targeta);
+		font-size: 0.8rem;
+		font-weight: 700;
+		line-height: 1.2;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.nini,
+		.nini * {
+			transition: none !important;
+		}
+		.nini:hover,
+		.nini:hover .nini-icona {
+			transform: none;
+		}
+	}
+</style>

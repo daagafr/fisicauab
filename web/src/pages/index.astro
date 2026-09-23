@@ -1,0 +1,378 @@
+---
+import Base from '../layouts/Base.astro';
+import Seccio from '../components/Seccio.astro';
+import Banner from '../components/Banner.astro';
+import Fletxa from '../components/Fletxa.astro';
+import Icona from '../components/Icona.astro';
+import Marca from '../components/Marca.astro';
+import { categories, destacats, entradesDe, entrades } from '../data/phihub';
+import { getCollection } from 'astro:content';
+import { data, dataIso } from '../utils';
+
+const avisos = (await getCollection('avisos', (a) => !a.data.esborrany))
+	.sort((a, b) => b.data.data.valueOf() - a.data.data.valueOf())
+	.slice(0, 3);
+
+const onedrive = entrades.find((e) => e.id === 'drive');
+---
+
+<Base>
+	<!-- ── Portada ─────────────────────────────────────────────────────── -->
+	<section class="hero">
+		<div class="contenidor hero-graella">
+			<div class="hero-text">
+				<p class="xip" style="--c: var(--blau)">La web de la gent de física de la UAB</p>
+				<h1>Tot Física UAB, <mark>en un sol lloc</mark>.</h1>
+				<p class="hero-entrada">
+					El OneDrive amb els apunts, els clubs, els projectes que fa la gent de la carrera i la
+					nostra cultura. Fet per estudiants, per a estudiants.
+				</p>
+				<div class="hero-accions">
+					<a class="boto boto-ple" href="/phihub">Entra al phihub <Fletxa /></a>
+					{
+						onedrive?.url && (
+							<a class="boto boto-groc" href={onedrive.url} target="_blank" rel="noopener">
+								OneDrive <Fletxa sortida />
+							</a>
+						)
+					}
+				</div>
+			</div>
+
+			<div class="hero-segell">
+				<img
+					src="/marca/segell.svg"
+					width="1000"
+					height="1000"
+					alt="Segell de Física UAB: la gallina en flames i glaçada amb la pinya, envoltada pel nom."
+				/>
+			</div>
+		</div>
+	</section>
+
+	<!-- ── El OneDrive, MineUAB i el DLV ───────────────────────────────── -->
+	<section class="contenidor destacats" aria-label="Del phihub">
+		{
+			destacats().map((e, i) => (
+				<div class:list={['cel', { plena: i === 0 }]}>
+					<Banner entrada={e} />
+				</div>
+			))
+		}
+	</section>
+
+	<!-- ── Els calaixos del phihub ────────────────────────────────────── -->
+	<section class="contenidor seccio">
+		<Seccio enllac={{ text: 'Tot el phihub', href: '/phihub' }}>
+			Què hi <mark style="--m: var(--blau)">trobaràs</mark>
+		</Seccio>
+		<ul class="calaixos">
+			{
+				categories.map((c) => {
+					const n = entradesDe(c.id).length;
+					return (
+						<li>
+							<a class="calaix" href={`/phihub#${c.id}`} style={`--c: var(--${c.color})`}>
+								<span class="calaix-icona">
+									<Icona nom={c.icona} />
+								</span>
+								<span class="calaix-nom">{c.nom}</span>
+								<span class="calaix-text">{c.descripcio}</span>
+								<span class="calaix-compte">
+									{n === 1 ? 'Entra-hi' : `${n} coses`} <Fletxa />
+								</span>
+							</a>
+						</li>
+					);
+				})
+			}
+		</ul>
+	</section>
+
+	<!-- ── Novetats ───────────────────────────────────────────────────── -->
+	<section class="contenidor seccio">
+		<Seccio enllac={{ text: 'Tot el tauler', href: '/tauler' }}>
+			<mark style="--m: var(--taronja)">Novetats</mark>
+		</Seccio>
+		<ul class="avisos">
+			{
+				avisos.map((a) => (
+					<li>
+						<a href={`/tauler/${a.id}`}>
+							<time datetime={dataIso(a.data.data)}>{data(a.data.data)}</time>
+							<span class="avis-titol">{a.data.titol}</span>
+							<span class="avis-resum">{a.data.resum}</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+
+	<!-- ── Crida ──────────────────────────────────────────────────────── -->
+	<section class="contenidor seccio">
+		<div class="crida">
+			<Marca class="crida-marca" />
+			<div>
+				<h2>Tens un projecte?</h2>
+				<p>
+					Un club, una app, un joc, uns apunts o una web. Si l’ha fet algú de física, té lloc al
+					phihub.
+				</p>
+			</div>
+			<a class="boto crida-boto" href="/comunitat#participa">Com afegir-lo <Fletxa /></a>
+		</div>
+	</section>
+</Base>
+
+<style>
+	/* ── Portada ── */
+	.hero {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		padding-block: clamp(2.5rem, 7vw, 5rem);
+	}
+	.hero::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background-image:
+			linear-gradient(var(--quadricula) 1px, transparent 1px),
+			linear-gradient(90deg, var(--quadricula) 1px, transparent 1px);
+		background-size: 26px 26px;
+		mask-image: linear-gradient(to bottom, #000 55%, transparent);
+	}
+	.hero-graella {
+		display: grid;
+		gap: 2.5rem;
+		align-items: center;
+	}
+	@media (min-width: 56rem) {
+		.hero-graella {
+			grid-template-columns: 1.25fr 1fr;
+			gap: 4rem;
+		}
+	}
+	.hero h1 {
+		margin-top: 1.25rem;
+		font-size: clamp(2.6rem, 6.5vw, 4.6rem);
+		line-height: 1.04;
+		letter-spacing: -0.035em;
+	}
+	.hero-entrada {
+		max-width: 32rem;
+		margin-top: 1.4rem;
+		color: var(--text-suau);
+		font-size: clamp(1.1rem, 2vw, 1.25rem);
+		line-height: 1.55;
+	}
+	.hero-accions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		margin-top: 2rem;
+	}
+
+	.hero-segell {
+		width: min(64vw, 18rem);
+		justify-self: center;
+		order: -1;
+	}
+	@media (min-width: 56rem) {
+		.hero-segell {
+			order: 0;
+			width: min(100%, 25rem);
+			justify-self: end;
+		}
+	}
+	.hero-segell img {
+		width: 100%;
+		height: auto;
+		filter: drop-shadow(0 18px 28px rgb(74 12 40 / 0.25));
+	}
+	@media (prefers-reduced-motion: no-preference) {
+		.hero-segell img {
+			animation: apareix 0.7s cubic-bezier(0.2, 0.8, 0.25, 1.1) 0.1s both;
+		}
+	}
+	@keyframes apareix {
+		from {
+			opacity: 0;
+			scale: 1.06;
+		}
+	}
+
+	/* ── El OneDrive, MineUAB i el DLV ── */
+	.destacats {
+		display: grid;
+		gap: 1.5rem;
+	}
+	@media (min-width: 50rem) {
+		.destacats {
+			grid-template-columns: 1fr 1fr;
+		}
+		.plena {
+			grid-column: 1 / -1;
+		}
+	}
+
+	.seccio {
+		margin-top: var(--espai);
+	}
+
+	/* ── Els calaixos ── */
+	.calaixos {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+		gap: 1.25rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.calaix {
+		display: grid;
+		align-content: start;
+		justify-items: start;
+		gap: 0.4rem;
+		height: 100%;
+		padding: 1.4rem;
+		border-radius: var(--radi);
+		background: var(--c);
+		color: var(--tinta);
+		text-decoration: none;
+		transition:
+			transform 0.2s,
+			box-shadow 0.2s;
+	}
+	.calaix:hover {
+		transform: translateY(-3px);
+		box-shadow: var(--ombra-forta);
+		color: var(--tinta);
+	}
+	.calaix-icona {
+		display: grid;
+		place-items: center;
+		width: 2.6rem;
+		height: 2.6rem;
+		margin-bottom: 0.4rem;
+		border-radius: 12px;
+		background: rgb(255 255 255 / 0.55);
+		font-size: 1.1rem;
+	}
+	.calaix-nom {
+		font-size: 1.25rem;
+		font-weight: 700;
+		letter-spacing: -0.015em;
+	}
+	.calaix-text {
+		font-size: 0.97rem;
+		line-height: 1.45;
+		opacity: 0.85;
+	}
+	.calaix-compte {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		margin-top: 0.5rem;
+		font-size: 0.92rem;
+		font-weight: 600;
+	}
+	.calaix-compte :global(.fletxa) {
+		width: 0.95rem;
+		transition: transform 0.2s;
+	}
+	.calaix:hover .calaix-compte :global(.fletxa) {
+		transform: translateX(3px);
+	}
+
+	/* ── Novetats ── */
+	.avisos {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+		gap: 1.25rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.avisos a {
+		display: grid;
+		align-content: start;
+		gap: 0.35rem;
+		height: 100%;
+		padding: 1.4rem;
+		border: 1.5px solid var(--linia);
+		border-radius: var(--radi);
+		background: var(--superficie);
+		color: var(--text);
+		text-decoration: none;
+		transition:
+			border-color 0.2s,
+			transform 0.2s;
+	}
+	.avisos a:hover {
+		border-color: var(--linia-forta);
+		transform: translateY(-3px);
+		color: var(--text);
+	}
+	.avisos time {
+		color: var(--text-suau);
+		font-size: 0.88rem;
+	}
+	.avis-titol {
+		font-size: 1.25rem;
+		font-weight: 700;
+		letter-spacing: -0.015em;
+		line-height: 1.25;
+	}
+	.avis-resum {
+		color: var(--text-suau);
+	}
+
+	/* ── Crida ── */
+	.crida {
+		display: grid;
+		gap: 1.5rem 2.5rem;
+		align-items: center;
+		padding: clamp(1.75rem, 5vw, 2.75rem);
+		border-radius: 24px;
+		background: var(--rosa);
+		color: var(--tinta);
+	}
+	.crida :global(.crida-marca) {
+		width: 6.5rem;
+		height: auto;
+		color: var(--borgonya);
+	}
+	.crida h2 {
+		font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+	}
+	.crida p {
+		max-width: 34rem;
+		margin-top: 0.5rem;
+		font-size: 1.08rem;
+	}
+	.crida-boto {
+		--text: var(--tinta);
+		--superficie: #fffdf8;
+		--linia-forta: transparent;
+		justify-self: start;
+	}
+	@media (min-width: 56rem) {
+		.crida {
+			grid-template-columns: auto 1fr auto;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.calaix,
+		.avisos a {
+			transition: none;
+		}
+		.calaix:hover,
+		.avisos a:hover {
+			transform: none;
+		}
+	}
+</style>

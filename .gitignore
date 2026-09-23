@@ -1,0 +1,8 @@
+# Python
+__pycache__/
+marca/eines/_tmp/
+
+# Configuració local de l'editor i de Claude
+.claude/
+
+# El web: vegeu web/.gitignore (node_modules, dist, .astro)

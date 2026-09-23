@@ -1,0 +1,25 @@
+---
+// El dibuix de la marca, en línia i pintat amb `currentColor`, perquè agafi el
+// color del tema (borgonya en clar, os en fosc). No en toca la forma.
+import cru from '../assets/marca.svg?raw';
+
+interface Props {
+	class?: string;
+	/** Si el dibuix diu alguna cosa per si sol (sense text al costat), dona-li un nom. */
+	titol?: string;
+}
+const { class: classe = '', titol } = Astro.props;
+
+const accessible = titol
+	? `role="img" aria-label="${titol}"`
+	: 'aria-hidden="true"';
+
+const svg = cru
+	.replace(/<\?xml[^>]*>\s*/, '')
+	.replace(/<title>[\s\S]*?<\/title>/, '')
+	.replace(/\s(width|height)="[^"]*"/g, '')
+	.replace(/fill="#70143D"/gi, 'fill="currentColor"')
+	.replace('<svg ', `<svg class="marca ${classe}" ${accessible} focusable="false" `);
+---
+
+<Fragment set:html={svg} />

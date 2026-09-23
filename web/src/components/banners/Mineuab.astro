@@ -1,0 +1,267 @@
+---
+// MineUAB — recrea la portada de mineuab.org: paviment de la plaça cívica,
+// vores de 2 px i ombres dures com blocs, verd #0A8A3F, Bricolage per als títols,
+// Silkscreen per a les etiquetes i la captura enganxada com una foto.
+// Colors i mesures de tailwind.config.ts i globals.css del seu web.
+import '@fontsource/bricolage-grotesque/800.css';
+import '@fontsource/silkscreen/400.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/700.css';
+import type { Entrada } from '../../data/phihub';
+
+interface Props {
+	entrada: Entrada;
+}
+const { entrada: e } = Astro.props;
+const adreca = new URL(e.url!).hostname;
+---
+
+<a class="mu" href={e.url} target="_blank" rel="noopener">
+	<div class="mu-dins">
+		<div class="mu-text">
+			<img class="mu-logo" src="/phihub/mineuab-logo.png" alt="" width="480" height="104" loading="lazy" />
+			<p class="mu-eyebrow">Servidor de Minecraft · Java Edition</p>
+			<h3 class="mu-titol">El servidor de <span>l’Autònoma</span></h3>
+			<p class="mu-sub">{e.descripcio}</p>
+			<div class="mu-ip">
+				<span class="mu-ip-dades">
+					<span class="mu-ip-label">Adreça IP</span>
+					<span class="mu-ip-valor">{adreca}</span>
+				</span>
+				<span class="mu-ip-boto">
+					Entra
+					<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10" /></svg>
+				</span>
+			</div>
+		</div>
+
+		<figure class="mu-foto">
+			<img src="/phihub/mineuab-placa.jpg" alt="" width="900" height="542" loading="lazy" />
+			<figcaption>La plaça cívica</figcaption>
+		</figure>
+		<span class="mu-adhesiu">Fet per estudiants</span>
+	</div>
+	<span class="visualment-amagat">(s’obre en una pestanya nova)</span>
+</a>
+
+<style>
+	.mu {
+		--brand: #0a8a3f;
+		--brand-600: #087334;
+		--paper: #f4f1ea;
+		--paper-50: #fbfaf6;
+		--ink: #131a16;
+		--ink-600: #454e49;
+		--ink-500: #5c655f;
+		--ombra: var(--ink);
+		--f-display: 'Bricolage Grotesque', Inter, system-ui, sans-serif;
+		--f-pixel: 'Silkscreen', ui-monospace, monospace;
+
+		display: block;
+		height: 100%;
+		container-type: inline-size;
+		border: 2px solid var(--ink);
+		/* Les rajoles de la plaça cívica (bg-paving), a mitja escala. */
+		background-color: var(--paper);
+		background-image:
+			linear-gradient(to right, rgb(194 96 58 / 0.1) 2px, transparent 2px),
+			linear-gradient(to bottom, rgb(194 96 58 / 0.1) 2px, transparent 2px);
+		background-size: 28px 28px;
+		box-shadow: 6px 6px 0 0 var(--ombra);
+		color: var(--ink);
+		font-family: Inter, system-ui, Arial, sans-serif;
+		text-decoration: none;
+		transition:
+			transform 0.12s,
+			box-shadow 0.12s;
+	}
+	/* Sobre fons fosc, l'ombra negra no es veuria: fan servir la verda (shadow-block-brand). */
+	@media (prefers-color-scheme: dark) {
+		:global(:root:not([data-theme='light'])) .mu {
+			--ombra: var(--brand);
+		}
+	}
+	.mu:hover {
+		transform: translate(-2px, -2px);
+		box-shadow: 8px 8px 0 0 var(--ombra);
+		color: var(--ink);
+	}
+	/* Com els seus botons: el bloc s'enfonsa quan el prems. */
+	.mu:active {
+		transform: translate(4px, 4px);
+		box-shadow: 2px 2px 0 0 var(--ombra);
+	}
+
+	.mu-dins {
+		position: relative;
+		display: grid;
+		gap: 2rem;
+		align-items: center;
+		height: 100%;
+		padding: clamp(1.4rem, 6cqi, 2.25rem);
+	}
+	@container (min-width: 40rem) {
+		.mu-dins {
+			grid-template-columns: 1.15fr 1fr;
+			gap: 2.5rem;
+		}
+	}
+
+	.mu-logo {
+		display: block;
+		width: auto;
+		height: 1.6rem;
+		margin-bottom: 1.25rem;
+	}
+	.mu-eyebrow {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		color: var(--brand-600);
+		font: 400 0.68rem/1.3 var(--f-pixel);
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+	}
+	.mu-eyebrow::before {
+		content: '';
+		flex: none;
+		width: 0.6rem;
+		height: 0.6rem;
+		background: currentColor;
+	}
+	.mu-titol {
+		margin-top: 0.9rem;
+		font: 800 clamp(2rem, 8cqi, 3.1rem) / 0.95 var(--f-display);
+		letter-spacing: -0.025em;
+	}
+	.mu-titol span {
+		display: inline-block;
+		margin-top: 0.4rem;
+		padding: 0 0.5rem 0.2rem;
+		border: 2px solid var(--ink);
+		background: var(--brand);
+		box-shadow: 4px 4px 0 0 var(--ink);
+		color: #fff;
+		white-space: nowrap;
+		transform: rotate(-1deg);
+	}
+	.mu-sub {
+		max-width: 28rem;
+		margin-top: 1.25rem;
+		color: var(--ink-600);
+		font-size: 1rem;
+		line-height: 1.5;
+	}
+
+	/* L'adreça, en una peça de bloc amb el botó enganxat. */
+	.mu-ip {
+		display: flex;
+		max-width: 26rem;
+		margin-top: 1.5rem;
+		border: 2px solid var(--ink);
+		background: var(--paper-50);
+		box-shadow: 4px 4px 0 0 var(--ink);
+	}
+	.mu-ip-dades {
+		display: grid;
+		flex: 1;
+		min-width: 0;
+		padding: 0.55rem 0.9rem;
+	}
+	.mu-ip-label {
+		color: var(--ink-500);
+		font: 400 0.6rem/1.3 var(--f-pixel);
+		text-transform: uppercase;
+	}
+	.mu-ip-valor {
+		overflow: hidden;
+		font: 700 1.05rem/1.3 ui-monospace, 'Cascadia Mono', Consolas, monospace;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.mu-ip-boto {
+		display: flex;
+		align-items: center;
+		gap: 0.45rem;
+		padding: 0 1rem;
+		border-left: 2px solid var(--ink);
+		background: var(--brand);
+		color: #fff;
+		font-weight: 700;
+		transition: background-color 0.15s;
+	}
+	.mu-ip-boto svg {
+		width: 0.95rem;
+		height: 0.95rem;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 2;
+	}
+	.mu:hover .mu-ip-boto {
+		background: var(--brand-600);
+	}
+
+	/* La captura, enganxada com una foto al suro. */
+	.mu-foto {
+		display: none;
+		margin: 0;
+		padding: 0.4rem;
+		border: 2px solid var(--ink);
+		background: var(--paper-50);
+		box-shadow: 8px 8px 0 0 var(--ink);
+		transform: rotate(1.5deg);
+		transition: transform 0.3s cubic-bezier(0.3, 1.4, 0.5, 1);
+	}
+	.mu:hover .mu-foto {
+		transform: rotate(0.5deg) scale(1.02);
+	}
+	.mu-foto img {
+		display: block;
+		width: 100%;
+		height: auto;
+		aspect-ratio: 4 / 3;
+		object-fit: cover;
+	}
+	.mu-foto figcaption {
+		padding: 0.4rem 0.15rem 0;
+		color: var(--ink-600);
+		font: 400 0.62rem/1.2 var(--f-pixel);
+		text-transform: uppercase;
+	}
+	@container (min-width: 40rem) {
+		.mu-foto {
+			display: block;
+		}
+	}
+
+	.mu-adhesiu {
+		position: absolute;
+		top: clamp(1.2rem, 5cqi, 2rem);
+		right: clamp(1rem, 4cqi, 1.75rem);
+		padding: 0.4rem 0.6rem;
+		border: 2px solid var(--ink);
+		background: var(--brand);
+		box-shadow: 4px 4px 0 0 var(--ink);
+		color: #fff;
+		font: 400 0.62rem/1 var(--f-pixel);
+		text-transform: uppercase;
+		transform: rotate(-6deg);
+	}
+	@container (max-width: 26rem) {
+		.mu-adhesiu {
+			display: none;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.mu,
+		.mu * {
+			transition: none !important;
+		}
+		.mu:hover,
+		.mu:active,
+		.mu:hover .mu-foto {
+			transform: none;
+		}
+	}
+</style>

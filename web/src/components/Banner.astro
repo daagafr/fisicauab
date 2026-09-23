@@ -1,0 +1,25 @@
+---
+// Tria el banner de cada entrada del phihub. Les que tenen `estil` fan servir el
+// seu (recreen l'estil del web de cada projecte); la resta, el de Física UAB.
+//
+// Per afegir-ne un de nou: crea'l a banners/, afegeix-lo aquí i a `Estil`
+// (src/data/phihub.ts).
+import type { Entrada } from '../data/phihub';
+import Fisica from './banners/Fisica.astro';
+import Onedrive from './banners/Onedrive.astro';
+import Club from './banners/Club.astro';
+import Instagram from './banners/Instagram.astro';
+import Mineuab from './banners/Mineuab.astro';
+import Niniapp from './banners/Niniapp.astro';
+import Dlv from './banners/Dlv.astro';
+
+interface Props {
+	entrada: Entrada;
+}
+const { entrada } = Astro.props;
+
+const propis = { onedrive: Onedrive, club: Club, instagram: Instagram, mineuab: Mineuab, niniapp: Niniapp, dlv: Dlv };
+const Component = entrada.estil ? propis[entrada.estil] : Fisica;
+---
+
+<Component entrada={entrada} />
