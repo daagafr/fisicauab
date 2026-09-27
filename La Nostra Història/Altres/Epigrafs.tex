@@ -1,0 +1,130 @@
+\documentclass[12pt, a5paper, twoside]{book}
+
+% ----------------------------------------------
+% Llengua i codificació
+% ----------------------------------------------
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{catalan}
+
+% ----------------------------------------------
+% Tipografia
+% ----------------------------------------------
+\setmainfont{EB Garamond} % o 'Cormorant Garamond', 'Crimson Text'
+
+% ----------------------------------------------
+% Disseny de pàgina
+% ----------------------------------------------
+\usepackage{geometry}
+\geometry{
+    paperwidth=148mm,
+    paperheight=210mm,
+    inner=25mm,
+    outer=20mm,
+    top=25mm,
+    bottom=25mm
+}
+\let\cleardoublepage\clearpage % evita pàgines buides
+
+\usepackage{wallpaper}
+
+% ----------------------------------------------
+% Capçaleres i peus
+% ----------------------------------------------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+
+% ----------------------------------------------
+% Estètica tipogràfica
+% ----------------------------------------------
+\usepackage{microtype}
+\usepackage{lettrine}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{quoting}
+\usepackage{tikz}
+
+\setstretch{1.3}
+
+% Format per a capítols numerats centrats
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\centering}
+  {\chaptername~\thechapter}
+  {1ex}
+  {
+    \Huge
+    \vspace{1ex}
+    \rule[0.5ex]{5cm}{0.5pt} \\[-1.5ex]
+  }
+\titlespacing*{\chapter}{0pt}{-10pt}{30pt}
+
+% ----------------------------------------------
+% Comandes personalitzades
+% ----------------------------------------------
+\newcommand{\epigraf}[2]{%
+    \begin{flushright}
+        \textit{#1}\\
+        {\small ---#2}
+    \end{flushright}
+    \vspace{2em}
+}
+
+\newcommand{\saltescena}{
+    \vspace{1.5em}
+    \begin{center}
+        \textasteriskcentered\ \textasteriskcentered\ \textasteriskcentered
+    \end{center}
+    \vspace{1.5em}
+}
+
+\newcommand{\vers}[1]{\hspace*{2em}#1\\}
+
+\usepackage{hyperref}
+
+% Comanda per a epíleg com un capítol sense número però amb mateix format
+\newcommand{\epileg}[1]{%
+  \cleardoublepage
+  \phantomsection
+  \thispagestyle{empty}
+  \addcontentsline{toc}{chapter}{Epíleg: #1}
+  {\centering
+    \normalfont\huge\bfseries Epíleg\par
+    \vspace{1ex}
+    \rule[0.5ex]{5cm}{0.5pt}\par
+    \vspace{-5mm}
+    \Huge #1\par
+    \vspace{4ex}
+  }
+}
+
+
+
+% ----------------------------------------------
+% Cos del document
+% ----------------------------------------------
+\begin{document}
+
+
+\epigraf{Només els déus i els físics coneixen els fonaments del món. Els segons, però, ho escriuen a \LaTeX.}{David Galan}
+
+\epigraf{La causa de tots els mals no és la ignorància, són els daddy issues.}{Regina Calsapeu}
+
+\epigraf{Les lesbianes? Sempre amb educació, però que no em toquin la Constitució.}{Felipe VI}
+
+\epigraf{No heu de mirar mai cap a l’esquerra, que no és cap missatge polític.}{Ramón Muñoz}
+
+\epigraf{Deixa que \textbf{destrueixi} a l’Emili.}{Ramón Muñoz}
+
+\epigraf{Él tiene dos vaginas, yo tengo dos anos y por algún motivo no tengo pene.}{David HC}
+
+
+
+
+\end{document}
+
+
+

@@ -1,0 +1,706 @@
+---
+// La Nostra Història, sencer, a partir dels mateixos .tex del llibre
+// (../La Nostra Història). Si canvies el llibre, la pàgina canvia amb ell.
+//
+// Ordre: la portada, el llibre obert (contracoberta i índex), les parts i els
+// capítols, i el colofó.
+import Llibre from '../../layouts/Llibre.astro';
+import Lotus from '../../components/lnh/Lotus.astro';
+import { llibreDelDisc } from '../../lnh/diposit';
+import { capcalera, type Capitol, type Part } from '../../lnh/latex';
+
+const llibre = llibreDelDisc();
+for (const avis of llibre.avisos) console.warn(`[La Nostra Història] ${avis}`);
+
+// La sinopsi és a Recursos/Sinopsi.pdf, no a cap .tex; per això viu aquí.
+const sinopsi =
+	'Aquest llibre revela la història amagada d’una generació d’estudiants que, entre exàmens i esquemes, entre nits en blanc i somnis de descobriment, van alçar-se per crear una eina que canviaria la manera d’aprendre. És la crònica de gestos silenciosos i moments robats al temps, de complicitats que floreixen en la foscor de l’angoixa i la perseverança que desafia l’oblit. Cada idea és una espurna de vida, cada resolució un petit acte de rebel·lia contra la rutina, un recordatori que aprendre és construir móns, desafiar límits i transformar-se un mateix en el procés.';
+
+const capitols = llibre.peces.filter((p): p is Capitol => p.tipus === 'capitol');
+const minuts = (paraules: number) => Math.max(1, Math.round(paraules / 220));
+const totalMinuts = minuts(capitols.reduce((n, c) => n + c.paraules, 0));
+const numerats = capitols.filter((c) => c.mena === 'capitol').length;
+const numParts = llibre.peces.filter((p) => p.tipus === 'part').length;
+
+// L'índex: el que va abans de la primera part, cada part amb els seus capítols
+// i l'epíleg a banda. La pàgina de crèdits no hi surt, com al llibre.
+const index: { part: Part | null; capitols: Capitol[] }[] = [{ part: null, capitols: [] }];
+for (const p of llibre.peces) {
+	if (p.tipus === 'part') index.push({ part: p, capitols: [] });
+	else if (p.mena === 'epileg') index.push({ part: null, capitols: [p] });
+	else if (p.mena !== 'solt') index.at(-1)!.capitols.push(p);
+}
+const grups = index.filter((g) => g.part || g.capitols.length);
+---
+
+<Llibre
+	titol="La Nostra Història · Física UAB"
+	descripcio="La crònica apòcrifa del OneDrive de Física: l’arqueologia sentimental del coneixement compartit a la UAB, de l’Erik al Consell de Savis."
+>
+	<a class="salta visualment-amagat" href="#llibre">Salta al text</a>
+
+	<!-- La barra de lectura: surt quan deixes enrere la portada. -->
+	<div class="barra" aria-hidden="true" inert>
+		<a class="barra-nom" href="#portada">
+			<Lotus class="barra-lotus" />
+			<span>La Nostra Història</span>
+		</a>
+		<p class="barra-on"></p>
+		<a class="barra-index" href="#index">Índex</a>
+		<span class="barra-progres"></span>
+	</div>
+
+	<!-- ── Portada ─────────────────────────────────────────────────────────── -->
+	<header class="portada" id="portada">
+		<div class="marc portada-marc">
+			<div class="marc-dins portada-dins">
+				<a class="portada-torna" href="/phihub#hemeroteca"><span aria-hidden="true">←</span> Física UAB</a>
+				<h1 class="portada-titol">La Nostra <span>Història</span></h1>
+				<hr class="portada-filet" />
+				<Lotus class="portada-lotus" obre />
+				<p class="portada-peu">Física UAB</p>
+				<a class="portada-obre" href="#sinopsi" data-punt>
+					<span class="portada-obre-text">Obre el llibre</span>
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9.5 12 15l6-5.5"></path></svg>
+				</a>
+			</div>
+		</div>
+	</header>
+
+	<!-- ── El llibre obert: contracoberta i índex ──────────────────────────── -->
+	<section class="obert" aria-label="Sinopsi i índex">
+		<div class="obert-dins">
+			<div class="full full-sinopsi" id="sinopsi">
+				<div class="marc sinopsi-marc">
+					<div class="marc-dins sinopsi-dins">
+						<p class="sinopsi-subtitol">Una arqueologia sentimental del coneixement compartit</p>
+						<p class="sinopsi-text">{sinopsi}</p>
+						<hr class="portada-filet" />
+						<Lotus class="sinopsi-lotus" />
+					</div>
+				</div>
+				<p class="sinopsi-dades">
+					{numParts} parts · {numerats} capítols · {totalMinuts} minuts de lectura
+				</p>
+			</div>
+
+			<nav class="full full-index" id="index" aria-labelledby="index-titol">
+				<h2 class="index-titol" id="index-titol">Índex</h2>
+				{
+					grups.map((g) => (
+						<div class="index-grup">
+							{g.part && (
+								<a class="index-part" href={`#${g.part.id}`}>
+									<span class="index-part-num">{g.part.etiqueta}</span>
+									<span class="index-part-nom" set:html={g.part.titolHtml} />
+								</a>
+							)}
+							<ol class="index-llista" role="list">
+								{g.capitols.map((c) => (
+									<li>
+										<a href={`#${c.id}`} class:list={[{ 'sense-num': c.numero === null && c.mena !== 'epileg', epileg: c.mena === 'epileg' }]}>
+											<span class="index-num">{c.mena === 'capitol' ? c.numero : c.mena === 'epileg' ? 'Epíleg' : ''}</span>
+											<span class="index-nom" set:html={c.titolHtml} />
+											<span class="index-punts" aria-hidden="true" />
+											<span class="index-min">{minuts(c.paraules)} min</span>
+										</a>
+									</li>
+								))}
+							</ol>
+						</div>
+					))
+				}
+			</nav>
+		</div>
+	</section>
+
+	<!-- ── El text ─────────────────────────────────────────────────────────── -->
+	<main class="llibre" id="llibre">
+		{
+			llibre.peces.map((p) =>
+				p.tipus === 'part' ? (
+					<section class="part" id={p.id} data-on={`${p.etiqueta} · ${p.titol}`} aria-labelledby={`${p.id}-titol`}>
+						<div class="marc part-marc">
+							<div class="marc-dins part-dins">
+								<p class="part-etiqueta">{p.etiqueta}</p>
+								<h2 class="part-titol" id={`${p.id}-titol`} set:html={p.titolHtml} />
+								<hr class="part-filet" />
+								{p.subtitolHtml && <p class="part-subtitol" set:html={p.subtitolHtml} />}
+							</div>
+						</div>
+					</section>
+				) : (
+					<article
+						class:list={['capitol', `mena-${p.mena}`]}
+						id={p.id}
+						data-on={p.etiqueta ? `${p.etiqueta} · ${p.titol}` : p.titol}
+						aria-label={p.mena === 'solt' ? 'Pàgina de crèdits' : undefined}
+					>
+						<div class="text-llibre">
+							<Fragment set:html={capcalera(p)} />
+							<Fragment set:html={p.html} />
+						</div>
+						<a class="edita" href={`/la-nostra-historia/editor?capitol=${p.id}`} hidden>
+							<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4ZM13.5 6.5l4 4" /></svg>
+							Edita {p.mena === 'solt' ? 'aquesta pàgina' : 'aquest capítol'}
+						</a>
+					</article>
+				),
+			)
+		}
+	</main>
+
+	<!-- ── Colofó ──────────────────────────────────────────────────────────── -->
+	<footer class="colofo">
+		<Lotus class="colofo-lotus" />
+		<p class="colofo-nom">La Nostra Història</p>
+		<p class="colofo-text">
+			Aquesta edició es genera dels mateixos fitxers <span class="logo-tex">L<span class="a">a</span>T<span class="e">e</span>X</span> que el llibre imprès, en EB Garamond. Quan el llibre canvia, la pàgina canvia amb ell.
+		</p>
+		<p class="colofo-enllacos">
+			<a href="/phihub#hemeroteca">← Torna al phihub</a>
+			<span aria-hidden="true">·</span>
+			<a href="#portada">Torna a la portada</a>
+			<span aria-hidden="true">·</span>
+			<a href="/la-nostra-historia/editor">Accés d’edició</a>
+		</p>
+	</footer>
+</Llibre>
+
+<script>
+	const barra = document.querySelector<HTMLElement>('.barra')!;
+	const on = barra.querySelector<HTMLElement>('.barra-on')!;
+	const portada = document.querySelector<HTMLElement>('.portada')!;
+	const llibre = document.querySelector<HTMLElement>('.llibre')!;
+	const peces = [...document.querySelectorAll<HTMLElement>('.llibre > [data-on]')];
+
+	// La barra surt quan la portada ja no es veu.
+	new IntersectionObserver(([e]) => {
+		const visible = !e.isIntersecting;
+		barra.classList.toggle('visible', visible);
+		barra.toggleAttribute('inert', !visible);
+		barra.setAttribute('aria-hidden', String(!visible));
+	}).observe(portada);
+
+	// El punt de llibre: recorda l'últim capítol que has llegit (només en aquest
+	// navegador) i la portada et proposa continuar-hi.
+	const PUNT = 'lnh-punt';
+	const desaPunt = (id: string) => {
+		try {
+			localStorage.setItem(PUNT, id);
+		} catch {}
+	};
+	try {
+		const id = localStorage.getItem(PUNT);
+		const peca = id ? document.getElementById(id) : null;
+		const obre = document.querySelector<HTMLAnchorElement>('[data-punt]');
+		if (peca?.classList.contains('capitol') && obre) {
+			obre.href = `#${id}`;
+			obre.querySelector('.portada-obre-text')!.textContent = `Continua: ${peca.dataset.on}`;
+			obre.classList.add('amb-punt');
+		}
+	} catch {}
+
+	// On ets: el capítol que creua el mig de la pantalla.
+	const aquest = new IntersectionObserver(
+		(entrades) => {
+			for (const e of entrades) {
+				if (!e.isIntersecting) continue;
+				const el = e.target as HTMLElement;
+				on.textContent = el.dataset.on ?? '';
+				if (el.classList.contains('capitol') && !el.classList.contains('mena-solt')) desaPunt(el.id);
+			}
+		},
+		{ rootMargin: '-45% 0px -54% 0px' },
+	);
+	peces.forEach((p) => aquest.observe(p));
+
+	// Quant en portes llegit.
+	let pendent = false;
+	const progres = () => {
+		pendent = false;
+		const r = llibre.getBoundingClientRect();
+		const fet = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - innerHeight)));
+		barra.style.setProperty('--progres', String(fet));
+	};
+	addEventListener(
+		'scroll',
+		() => {
+			if (!pendent) {
+				pendent = true;
+				requestAnimationFrame(progres);
+			}
+		},
+		{ passive: true },
+	);
+	progres();
+
+	// Si has entrat a l'editor, cada capítol t'ofereix editar-lo.
+	if (document.cookie.split('; ').includes('lnh_admin=1')) {
+		document.querySelectorAll<HTMLElement>('.edita').forEach((a) => (a.hidden = false));
+	}
+</script>
+
+<style>
+	/* ── Barra de lectura ─────────────────────────────────────────────────── */
+	.barra {
+		position: fixed;
+		inset: 0 0 auto;
+		z-index: 10;
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		align-items: center;
+		gap: 1rem;
+		height: 3.25rem;
+		padding: 0 var(--marge);
+		border-bottom: 1px solid var(--filet);
+		background: color-mix(in srgb, var(--paper) 96%, transparent);
+		font-size: 0.95rem;
+		transform: translateY(-100%);
+		transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+	}
+	.barra.visible {
+		transform: none;
+	}
+	.barra a {
+		text-decoration: none;
+	}
+	.barra-nom {
+		display: flex;
+		align-items: center;
+		gap: 0.55rem;
+		color: var(--accent);
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		font-size: 0.8rem;
+		white-space: nowrap;
+	}
+	.barra-nom :global(.barra-lotus) {
+		width: 1.9rem;
+	}
+	.barra-on {
+		overflow: hidden;
+		color: var(--tinta-suau);
+		font-style: italic;
+		text-align: center;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.barra-index {
+		color: var(--tinta);
+		font-weight: 600;
+	}
+	.barra-progres {
+		position: absolute;
+		left: 0;
+		bottom: -1px;
+		width: 100%;
+		height: 2px;
+		background: var(--accent);
+		transform: scaleX(var(--progres, 0));
+		transform-origin: left;
+	}
+	@media (max-width: 34rem) {
+		.barra-nom span {
+			display: none;
+		}
+	}
+
+	/* ── Portada ──────────────────────────────────────────────────────────── */
+	.portada {
+		display: grid;
+		min-height: 100svh;
+		padding: clamp(0.6rem, 1.8vmin, 1rem);
+		background: var(--gra), var(--fons-portada);
+		color: var(--tinta-portada);
+	}
+	.portada-dins {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: clamp(1rem, 3.2svh, 2.2rem);
+		padding: clamp(3.5rem, 9svh, 5.5rem) 1.25rem clamp(4.5rem, 11svh, 6.5rem);
+		text-align: center;
+	}
+	.portada-torna {
+		position: absolute;
+		top: 0.9rem;
+		left: 1.1rem;
+		color: inherit !important;
+		font-size: 0.85rem;
+		font-weight: 600;
+		letter-spacing: 0.14em;
+		text-decoration: none;
+		text-transform: uppercase;
+		opacity: 0.75;
+		transition: opacity 0.2s;
+	}
+	.portada-torna:hover {
+		opacity: 1;
+	}
+	.portada-titol {
+		font-size: clamp(2.5rem, min(10.5vw, 9.5svh), 6.6rem);
+		font-weight: 700;
+		line-height: 1.12;
+		letter-spacing: 0.035em;
+		text-transform: uppercase;
+	}
+	.portada-titol span {
+		display: block;
+	}
+	.portada-filet,
+	.part-filet {
+		width: min(78%, 34rem);
+		height: 0;
+		margin: 0;
+		border: 0;
+		color: inherit;
+		border-top: clamp(4px, 0.8vmin, 7px) solid currentColor;
+	}
+	.portada :global(.portada-lotus) {
+		width: min(64vw, 38svh, 26rem);
+	}
+	.portada-peu {
+		font-size: clamp(1.6rem, min(6vw, 5.6svh), 3.8rem);
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+	/* «Obre el llibre»: una pestanya que talla la línia de baix del marc. */
+	.portada-obre {
+		position: absolute;
+		left: 50%;
+		/* El centre de la pestanya, al mig de les dues línies del marc. */
+		bottom: calc(var(--gruix) * -1.425);
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4em;
+		max-width: calc(100% - 2rem);
+		padding: 0.3em 1.1em;
+		background: var(--gra), var(--fons-portada);
+		color: inherit !important;
+		font-size: 1rem;
+		font-style: italic;
+		text-decoration: none;
+		white-space: nowrap;
+		transform: translate(-50%, 50%);
+	}
+	.portada-obre-text {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.portada-obre svg {
+		flex: none;
+		width: 1.2em;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	@media (prefers-reduced-motion: no-preference) {
+		.portada-obre svg {
+			animation: baixa 2.4s ease-in-out 2s infinite;
+		}
+	}
+	@keyframes baixa {
+		0%,
+		60%,
+		100% {
+			transform: none;
+		}
+		30% {
+			transform: translateY(3px);
+		}
+	}
+
+	/* ── El llibre obert ──────────────────────────────────────────────────── */
+	.obert {
+		padding: clamp(3.5rem, 9vw, 7rem) var(--marge);
+		background: var(--paper-fosc);
+	}
+	.obert-dins {
+		display: grid;
+		gap: clamp(3rem, 6vw, 4rem);
+		max-width: 68rem;
+		margin: 0 auto;
+	}
+	@media (min-width: 58rem) {
+		/* Dues pàgines, amb la sombra del plec al mig. */
+		.obert-dins {
+			grid-template-columns: 1fr 1fr;
+			gap: 0;
+			background: var(--paper);
+			box-shadow: var(--ombra);
+		}
+		.full {
+			padding: clamp(2.5rem, 5vw, 4rem);
+		}
+		.full-sinopsi {
+			background: linear-gradient(to left, rgb(43 27 24 / 0.09), transparent 3.5rem);
+		}
+		.full-index {
+			background: linear-gradient(to right, rgb(43 27 24 / 0.09), transparent 3.5rem);
+		}
+	}
+
+	.full-sinopsi {
+		display: grid;
+		align-content: center;
+		gap: 1.1rem;
+	}
+	.sinopsi-marc {
+		--gruix: 5px;
+		background: var(--gra), var(--fons-portada);
+		color: var(--tinta-portada);
+	}
+	.sinopsi-dins {
+		display: grid;
+		justify-items: center;
+		gap: 1.3rem;
+		padding: clamp(1.6rem, 4vw, 2.6rem) clamp(1.3rem, 3.5vw, 2.4rem);
+	}
+	.sinopsi-subtitol {
+		font-style: italic;
+		text-align: center;
+		text-wrap: balance;
+	}
+	.sinopsi-text {
+		font-size: 1.02em;
+		font-weight: 600;
+		line-height: 1.55;
+		letter-spacing: 0.012em;
+		hyphens: auto;
+	}
+	@media (min-width: 30rem) {
+		:global(.guionet) .sinopsi-text {
+			text-align: justify;
+		}
+	}
+	.sinopsi-dins .portada-filet {
+		width: 100%;
+		border-top-width: 4px;
+	}
+	.full-sinopsi :global(.sinopsi-lotus) {
+		width: 7.5rem;
+	}
+	.sinopsi-dades {
+		color: var(--tinta-suau);
+		font-size: 0.92rem;
+		font-style: italic;
+		text-align: center;
+	}
+
+	.index-titol {
+		margin-bottom: 1.6rem;
+		color: var(--accent);
+		font-size: 2.1rem;
+		font-weight: 600;
+		text-align: center;
+	}
+	.index-grup + .index-grup {
+		margin-top: 1.15rem;
+	}
+	.index-part {
+		display: flex;
+		align-items: baseline;
+		gap: 0.6rem;
+		margin-bottom: 0.3rem;
+		color: var(--tinta);
+		text-decoration: none;
+	}
+	.index-part-num {
+		color: var(--accent);
+		font-size: 0.75rem;
+		font-weight: 700;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+	.index-part-nom {
+		font-size: 1.12rem;
+		font-weight: 600;
+	}
+	.index-llista {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.index-llista a {
+		display: grid;
+		grid-template-columns: 2.2rem auto 1fr auto;
+		align-items: baseline;
+		gap: 0.4rem;
+		padding: 0.16rem 0;
+		color: var(--tinta);
+		text-decoration: none;
+		line-height: 1.35;
+	}
+	.index-llista a:hover .index-nom {
+		color: var(--accent);
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.18em;
+	}
+	.index-num {
+		color: var(--tinta-suau);
+		font-variant-numeric: tabular-nums;
+	}
+	.index-llista a.sense-num {
+		grid-template-columns: auto 1fr auto;
+	}
+	.sense-num .index-num {
+		display: none;
+	}
+	/* L'epíleg porta la paraula sencera en lloc del número. */
+	.index-llista a.epileg {
+		grid-template-columns: auto auto 1fr auto;
+		gap: 0.6rem;
+	}
+	.epileg .index-num {
+		color: var(--accent);
+		font-style: italic;
+	}
+	.index-punts {
+		align-self: end;
+		height: 0.4em;
+		margin-bottom: 0.32em;
+		border-bottom: 1.5px dotted var(--filet);
+	}
+	.index-min {
+		color: var(--tinta-suau);
+		font-size: 0.85em;
+		font-style: italic;
+		white-space: nowrap;
+	}
+
+	/* ── El text ──────────────────────────────────────────────────────────── */
+	.llibre {
+		padding-bottom: 3rem;
+	}
+	.capitol {
+		max-width: calc(var(--mesura) + 2 * var(--marge));
+		margin: 0 auto;
+		padding: clamp(4rem, 10vw, 7rem) var(--marge) 0;
+	}
+	.capitol + .capitol {
+		padding-top: clamp(5rem, 12vw, 8rem);
+	}
+	/* La pàgina de crèdits, petita i discreta, com al revers de la portada. */
+	.mena-solt .text-llibre {
+		max-width: 26rem;
+		padding: 1.6rem 1.8rem;
+		border-left: 3px solid var(--filet);
+		color: var(--tinta-suau);
+		font-size: 0.9em;
+		line-height: 1.5;
+	}
+	.mena-solt .text-llibre :global(p) {
+		text-align: left;
+	}
+	.mena-sense-numero :global(.cap) {
+		margin-bottom: 2rem;
+	}
+
+	.edita {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4em;
+		margin-top: 1.6rem;
+		font-size: 0.9rem;
+		font-style: italic;
+	}
+	.edita[hidden] {
+		display: none;
+	}
+	.edita svg {
+		width: 1.1em;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 1.7;
+		stroke-linejoin: round;
+	}
+
+	/* Les pàgines de part: la portada, però amb els colors girats. */
+	.part {
+		display: grid;
+		min-height: min(78svh, 44rem);
+		margin-top: clamp(5rem, 12vw, 8rem);
+		padding: clamp(0.6rem, 1.8vmin, 1rem);
+		background: var(--part-fons);
+		color: var(--part-tinta);
+	}
+	.part-dins {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 1.1rem;
+		padding: 3rem 1.25rem;
+		text-align: center;
+	}
+	.part-etiqueta {
+		font-size: 0.95rem;
+		font-weight: 700;
+		letter-spacing: 0.3em;
+		text-transform: uppercase;
+		opacity: 0.85;
+	}
+	.part-titol {
+		font-size: clamp(3rem, 2rem + 6vw, 6.2rem);
+		font-weight: 600;
+		line-height: 1;
+		letter-spacing: 0.01em;
+	}
+	.part-filet {
+		width: min(60%, 18rem);
+		border-top-width: 3px;
+	}
+	.part-subtitol {
+		max-width: 30rem;
+		font-size: 1.2rem;
+		font-style: italic;
+		text-wrap: balance;
+	}
+
+	/* ── Colofó ───────────────────────────────────────────────────────────── */
+	.colofo {
+		display: grid;
+		justify-items: center;
+		gap: 0.8rem;
+		margin-top: clamp(4rem, 10vw, 7rem);
+		padding: clamp(3rem, 8vw, 5rem) var(--marge) 3.5rem;
+		background: var(--gra), var(--fons-portada);
+		color: var(--tinta-portada);
+		text-align: center;
+	}
+	.colofo :global(.colofo-lotus) {
+		width: 5.5rem;
+	}
+	.colofo-nom {
+		font-size: 1.3rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+	.colofo-text {
+		max-width: 30rem;
+		color: var(--tinta);
+		font-size: 0.98rem;
+		font-style: italic;
+	}
+	.colofo-enllacos {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.3rem 0.7rem;
+		margin-top: 0.6rem;
+		font-size: 0.98rem;
+	}
+	.colofo-enllacos a {
+		color: var(--tinta-portada);
+	}
+</style>

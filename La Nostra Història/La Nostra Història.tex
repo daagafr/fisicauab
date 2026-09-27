@@ -1,0 +1,298 @@
+\documentclass[12pt, a5paper, twoside]{book}
+
+% ----------------------------------------------
+% Llengua i codificació
+% ----------------------------------------------
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{catalan}
+
+% ----------------------------------------------
+% Tipografia
+% ----------------------------------------------
+\setmainfont{EB Garamond} % o 'Cormorant Garamond', 'Crimson Text'
+
+% ----------------------------------------------
+% Disseny de pàgina
+% ----------------------------------------------
+\usepackage{geometry}
+
+\geometry{
+    paperwidth=148mm,
+    paperheight=210mm,
+    left=20mm,    % Per a que el marge sigui el mateix a dues bandes
+    right=20mm,
+    top=25mm,
+    bottom=25mm
+}
+
+% ----------------------------------------------
+% Si es vol imprimir a dues cares
+% ----------------------------------------------
+
+%\geometry{
+%    paperwidth=148mm,
+%    paperheight=210mm,
+%    inner=25mm,   % marge interior més ample per enquadernació
+%    outer=20mm,   % marge exterior
+%    top=25mm,
+%    bottom=25mm,
+%    twoside       % Assegura explícitament doble cara
+%}
+
+\let\cleardoublepage\clearpage % evita pàgines buides
+
+\usepackage{wallpaper}
+
+% ----------------------------------------------
+% Capçaleres i peus
+% ----------------------------------------------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+
+% ----------------------------------------------
+% Estètica tipogràfica
+% ----------------------------------------------
+\usepackage{microtype}
+\usepackage{lettrine}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{quoting}
+\usepackage{tikz}
+\usepackage{siunitx}
+
+\setlength{\parindent}{20pt}
+
+\setstretch{1.3}
+
+% Format per a capítols numerats centrats
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\centering}
+  {\chaptername~\thechapter}
+  {1ex}
+  {
+    \Huge
+    \vspace{1ex}
+    \rule[0.5ex]{5cm}{0.5pt} \\[-1.5ex]
+  }
+\titlespacing*{\chapter}{0pt}{-10pt}{30pt}
+
+% ----------------------------------------------
+% Comandes personalitzades
+% ----------------------------------------------
+\newcommand{\epigraf}[2]{%
+    \begin{flushright}
+        \textit{#1}\\
+        {\small ---#2}
+    \end{flushright}
+    \vspace{2em}
+}
+
+\newcommand{\saltescena}{
+    \vspace{1.5em}
+    \begin{center}
+        \textasteriskcentered\ \textasteriskcentered\ \textasteriskcentered
+    \end{center}
+    \vspace{1.5em}
+}
+
+\newcommand{\vers}[1]{\hspace*{2em}#1\\}
+
+\usepackage{hyperref}
+
+% Comanda per a epíleg com un capítol sense número però amb mateix format
+\newcommand{\epileg}[1]{%
+  \cleardoublepage
+  \phantomsection
+  \thispagestyle{empty}
+  \addcontentsline{toc}{chapter}{Epíleg: #1}
+  {\centering
+    \normalfont\huge\bfseries Epíleg\par
+    \vspace{1ex}
+    \rule[0.5ex]{5cm}{0.5pt}\par
+    \vspace{-5mm}
+    \Huge #1\par
+    \vspace{4ex}
+  }
+}
+
+% ---------- 1r Estil per a diàlegs platònics ---------- %
+
+% Interlocutor: text en negreta i color lleugerament diferent
+\newcommand{\speaker}[1]{\textbf{\color{black!80} #1}}
+
+% Diàleg: sagnat i espai entre rèpliques
+\newenvironment{dialogue}{
+  \begin{list}{}{
+    \setlength{\leftmargin}{3em} % sagnat del text
+    \setlength{\itemsep}{1.2ex}  % espai entre rèpliques
+    \setlength{\parsep}{0pt}
+    \setlength{\parskip}{0pt}
+  }
+}{
+  \end{list}
+}
+
+% Ús: 
+% \begin{dialogue}
+% \item[\speaker{Dauídas:}] Text de Dauídas.
+% \item[\speaker{Rógos:}] Resposta de Rógos.
+% \end{dialogue}
+
+
+% ---------- 2n Estil per a diàlegs platònics ---------- %
+
+\usepackage{enumitem}
+
+% Definimos el estilo para diálogos platónicos
+\newlist{platdialogue}{description}{1}
+\setlist[platdialogue]{
+  labelindent=0pt,
+  leftmargin=3em,
+  labelwidth=3em,
+  labelsep=0.5em,
+  font=\scshape\bfseries\color{black!70},
+  itemsep=1.2em,
+  parsep=0pt,
+  itemindent=0pt,
+  align=right,
+  style=standard,
+  before=\setstretch{1.3},
+}
+
+
+
+
+
+
+
+
+\setcounter{chapter}{-1}
+
+% ----------------------------------------------
+% Cos del document
+% ----------------------------------------------
+\begin{document}
+
+% ----------------------------------------------
+% Portada
+% ----------------------------------------------
+
+\begin{titlepage}
+\thispagestyle{empty}
+\ThisCenterWallPaper{1.0}{Recursos/Portada.pdf}
+\vfill
+~
+\end{titlepage}
+\cleardoublepage
+
+\input{Parts (LNH)/Preàmbul}
+
+\cleardoublepage
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+    {\normalfont\huge\bfseries Part 0}\\[0.5cm]
+    {\Huge Chaos}\\[1ex]
+    \rule[0.5ex]{5cm}{0.5pt}\\[1ex]
+    {\small Sine ordine et regula}
+\end{center}
+\vspace*{\fill}
+\addcontentsline{toc}{part}{Part 0: Chaos}
+\cleardoublepage
+
+\input{Parts (LNH)/0/0 Res Kadmon}
+
+\cleardoublepage
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+    {\normalfont\huge\bfseries Part I}\\[0.5cm]
+    {\Huge Genesis}\\[1ex]
+    \rule[0.5ex]{5cm}{0.5pt}\\[1ex]
+    {\small Crònica dels orígens del caos digital}
+\end{center}
+\vspace*{\fill}
+\addcontentsline{toc}{part}{Part I: Genesis}
+\cleardoublepage
+
+\input{Parts (LNH)/1/1 Gènesi}
+
+\cleardoublepage
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+    {\normalfont\huge\bfseries Part II}\\[0.5cm]
+    {\Huge Stasis}\\[1ex]
+    \rule[0.5ex]{5cm}{0.5pt}\\[1ex]
+    {\small Quies apparens, mentis inertiæ}
+\end{center}
+\vspace*{\fill}
+\addcontentsline{toc}{part}{Part II: Stasis}
+\cleardoublepage
+
+\input{Parts (LNH)/2/2 Stasis}
+
+\cleardoublepage
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+    {\normalfont\huge\bfseries Part III}\\[0.5cm]
+    {\Huge Conflictus}\\[1ex]
+    \rule[0.5ex]{5cm}{0.5pt}\\[1ex]
+    {\small Perturbatio regni instaurati}
+\end{center}
+\vspace*{\fill}
+\addcontentsline{toc}{part}{Part III: Conflictus}
+\cleardoublepage
+
+\input{Parts (LNH)/3/3 Conflictus}
+
+\cleardoublepage
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+    {\normalfont\huge\bfseries Part IV}\\[0.5cm]
+    {\Huge Crisis}\\[1ex]
+    \rule[0.5ex]{5cm}{0.5pt}\\[1ex]
+    {\small Perturbatio regni instaurati}
+\end{center}
+\vspace*{\fill}
+\addcontentsline{toc}{part}{Part IV: Crisis}
+\cleardoublepage
+
+\input{Parts (LNH)/4/4 Crisis}
+
+\input{Parts (LNH)/Epíleg/Epíleg}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% ----------------------------------------------
+% Sinopsi
+% ----------------------------------------------
+\cleardoublepage
+\thispagestyle{empty}
+\ThisCenterWallPaper{1.0}{Recursos/Sinopsi.pdf}
+
+\vspace*{\fill}
+\cleardoublepage
+
+\end{document}

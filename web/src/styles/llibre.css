@@ -1,0 +1,384 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   La Nostra Història — l'estil del llibre
+   Surt de la portada (Recursos/Portada.pdf): fons de pergamí, tinta granat, el
+   marc doble, el lotus i EB Garamond. Les pàgines de dins són de paper més clar,
+   com les del llibre imprès. De nit, el llibre es torna «vespertí»: fons fosc i
+   la tinta passa a ser el pergamí.
+
+   Aquí hi ha els colors i la tipografia del text dels capítols (el que surt de
+   src/lnh/latex.ts). Els fan servir la pàgina i la vista prèvia de l'editor.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.lnh {
+	/* Mesurats de la portada */
+	--pergami: #dbc4a0;
+	--grana: #8f2523;
+
+	--fons-portada: var(--pergami);
+	--tinta-portada: var(--grana);
+	--paper: #f6efe3;
+	--paper-fosc: #efe4d2;
+	--tinta: #2b1b18;
+	--tinta-suau: #6a5549;
+	--accent: var(--grana);
+	--accent-fort: #6c1918;
+	--filet: rgb(143 37 35 / 0.22);
+	--part-fons: var(--grana);
+	--part-tinta: #f3e6cf;
+	--ombra: 0 1px 2px rgb(43 27 24 / 0.08), 0 18px 40px -22px rgb(43 27 24 / 0.45);
+
+	--lletra: 'EB Garamond', Garamond, 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+	--mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, monospace;
+	--mida: clamp(1.13rem, 1.02rem + 0.42vw, 1.3rem);
+	--mesura: 34rem;
+	--marge: clamp(1rem, 4vw, 2.5rem);
+
+	/* El gra del paper: soroll molt suau per sobre del color pla. */
+	--gra: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .18 0 0 0 0 .1 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+
+	color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+	.lnh:not([data-theme='light']) {
+		--fons-portada: #211512;
+		--tinta-portada: #dcc39c;
+		--paper: #17100e;
+		--paper-fosc: #1f1613;
+		--tinta: #ecdfc9;
+		--tinta-suau: #b8a390;
+		--accent: #e5968a;
+		--accent-fort: #f3bcb2;
+		--filet: rgb(220 195 156 / 0.2);
+		--part-fons: #3a1513;
+		--part-tinta: #ecd6b3;
+		--ombra: 0 18px 40px -22px rgb(0 0 0 / 0.8);
+		color-scheme: dark;
+	}
+}
+.lnh[data-theme='dark'] {
+	--fons-portada: #211512;
+	--tinta-portada: #dcc39c;
+	--paper: #17100e;
+	--paper-fosc: #1f1613;
+	--tinta: #ecdfc9;
+	--tinta-suau: #b8a390;
+	--accent: #e5968a;
+	--accent-fort: #f3bcb2;
+	--filet: rgb(220 195 156 / 0.2);
+	--part-fons: #3a1513;
+	--part-tinta: #ecd6b3;
+	--ombra: 0 18px 40px -22px rgb(0 0 0 / 0.8);
+	color-scheme: dark;
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────────── */
+
+.lnh *,
+.lnh *::before,
+.lnh *::after {
+	box-sizing: border-box;
+}
+
+.lnh {
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+	scroll-padding-top: 4.5rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+	.lnh {
+		scroll-behavior: smooth;
+	}
+}
+
+.lnh body {
+	margin: 0;
+	background: var(--paper);
+	color: var(--tinta);
+	font-family: var(--lletra);
+	font-size: var(--mida);
+	line-height: 1.6;
+	font-kerning: normal;
+	-webkit-font-smoothing: antialiased;
+	overflow-x: clip;
+}
+
+/* Amb :where() aquestes regles no pesen res i qualsevol classe les guanya. */
+:where(.lnh) :where(h1, h2, h3, h4, h5, p, figure, blockquote) {
+	margin: 0;
+}
+
+/* Els <hr> porten color: gray del navegador; els filets són de la tinta. */
+:where(.lnh) :where(hr) {
+	color: inherit;
+}
+
+:where(.lnh) a {
+	color: var(--accent);
+	text-decoration-thickness: 1px;
+	text-underline-offset: 0.18em;
+}
+:where(.lnh) a:hover {
+	color: var(--accent-fort);
+}
+
+.lnh :focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 3px;
+	border-radius: 2px;
+}
+
+.lnh ::selection {
+	background: rgb(143 37 35 / 0.22);
+}
+
+.visualment-amagat {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* ── El marc doble de la portada ─────────────────────────────────────────── */
+/* Dues línies gruixudes amb una de pergamí al mig, com a Portada.pdf.       */
+
+.marc {
+	--gruix: clamp(4px, 0.9vmin, 7px);
+	padding: calc(var(--gruix) * 0.85);
+	border: var(--gruix) solid currentColor;
+}
+.marc > .marc-dins {
+	height: 100%;
+	border: var(--gruix) solid currentColor;
+}
+
+/* ── El text dels capítols ───────────────────────────────────────────────── */
+
+.text-llibre {
+	font-family: var(--lletra);
+	font-size: var(--mida);
+	line-height: 1.62;
+	color: var(--tinta);
+	hyphens: auto;
+	overflow-wrap: break-word;
+}
+.text-llibre p {
+	text-indent: 1.45em;
+	text-wrap: pretty;
+}
+/* Justificat només si el navegador sap partir paraules en català (ho mira
+   Llibre.astro); sense guionet, el justificat fa rius. */
+@media (min-width: 40rem) {
+	.guionet .text-llibre p {
+		text-align: justify;
+	}
+}
+/* Com a LaTeX: el primer paràgraf després d'un títol o d'un bloc no té sagnat. */
+.text-llibre p:first-child,
+.text-llibre :is(.cap, .epigraf, hr, .espai, .seccio, .dialeg, .centrat, .a-dreta, .cita, .poema, ul, ol, table) + p,
+.text-llibre p:is(.sense-sagnat, .inicial) {
+	text-indent: 0;
+}
+
+/* La capçalera del capítol, com la fa titlesec: número, filet i títol. */
+.cap {
+	margin-bottom: 2.6em;
+	text-align: center;
+	text-wrap: balance;
+}
+.cap p {
+	text-align: center !important;
+	text-indent: 0;
+}
+.cap-etiqueta {
+	color: var(--accent);
+	font-size: 0.82em;
+	font-weight: 600;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+}
+.cap-filet {
+	width: min(11rem, 50%);
+	height: 0;
+	margin: 0.75em auto 0.8em;
+	border: 0;
+	border-top: 1.5px solid var(--accent);
+}
+.cap-titol {
+	font-size: clamp(1.85rem, 1.35rem + 1.9vw, 2.6rem);
+	font-weight: 600;
+	line-height: 1.12;
+	letter-spacing: -0.005em;
+}
+
+.epigraf {
+	width: fit-content;
+	max-width: min(100%, 26rem);
+	margin: 0 0 2.4em auto;
+	text-align: right;
+	hyphens: manual;
+}
+.epigraf blockquote {
+	font-style: italic;
+	line-height: 1.45;
+}
+.epigraf blockquote p {
+	text-align: right;
+	text-indent: 0;
+}
+.epigraf figcaption {
+	margin-top: 0.4em;
+	color: var(--tinta-suau);
+	font-size: 0.86em;
+}
+
+/* \lettrine: la caplletra, dues línies, i la resta de la paraula en versaletes. */
+.caplletra {
+	float: left;
+	margin: 0.1em 0.07em 0 -0.02em;
+	color: var(--accent);
+	font-size: 3.5em;
+	font-weight: 500;
+	line-height: 0.78;
+}
+.versaleta {
+	font-size: 0.8em;
+	letter-spacing: 0.07em;
+	text-transform: uppercase;
+}
+
+hr.salt {
+	height: auto;
+	margin: 1.5em 0;
+	border: 0;
+	color: var(--accent);
+	text-align: center;
+}
+hr.salt::after {
+	content: '∗\2003∗\2003∗';
+}
+hr.filet {
+	width: min(11rem, 50%);
+	margin: 1em auto;
+	border: 0;
+	border-top: 1.5px solid var(--accent);
+}
+
+.espai {
+	display: block;
+	height: 0.85em;
+}
+
+.seccio {
+	margin: 1.8em 0 0.6em;
+	font-size: 1.18em;
+	font-weight: 600;
+	line-height: 1.25;
+}
+
+.dialeg {
+	margin: 1.1em 0;
+}
+.replica {
+	margin-bottom: 0.7em;
+	padding-left: 3em;
+	text-indent: -3em !important;
+}
+.parla {
+	color: var(--tinta-suau);
+	font-size: 0.82em;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.centrat {
+	text-align: center;
+}
+.centrat p,
+.a-dreta p {
+	text-align: inherit !important;
+	text-indent: 0;
+}
+.a-dreta {
+	text-align: right;
+}
+.cita,
+.poema {
+	margin: 1.1em 0 1.1em 1.6em;
+}
+.cita p,
+.poema p {
+	text-indent: 0;
+	text-align: left !important;
+}
+.vers {
+	padding-left: 2em;
+}
+
+.text-llibre :is(ul, ol) {
+	margin: 0.9em 0;
+	padding-left: 1.4em;
+}
+.text-llibre table {
+	margin: 1.2em auto;
+	border-collapse: collapse;
+	font-size: 0.92em;
+}
+.text-llibre td {
+	padding: 0.25em 0.8em;
+	border-bottom: 1px solid var(--filet);
+}
+.text-llibre code {
+	font-family: var(--mono);
+	font-size: 0.84em;
+}
+
+.math {
+	font-style: italic;
+	white-space: nowrap;
+}
+.math .dret {
+	font-style: normal;
+}
+.math-bloc {
+	display: block;
+	margin: 1em 0;
+	text-align: center !important;
+	text-indent: 0 !important;
+}
+
+.nota a {
+	padding: 0 0.1em;
+	text-decoration: none;
+}
+.notes {
+	margin: 2.4em 0 0;
+	padding: 1em 0 0 1.2em;
+	border-top: 1px solid var(--filet);
+	color: var(--tinta-suau);
+	font-size: 0.86em;
+}
+
+/* El logotip de LaTeX, amb la A i la E al seu lloc. */
+.logo-tex {
+	white-space: nowrap;
+}
+.logo-tex .a {
+	position: relative;
+	top: -0.22em;
+	margin: 0 -0.15em 0 -0.34em;
+	font-size: 0.72em;
+	text-transform: uppercase;
+}
+.logo-tex .e {
+	position: relative;
+	top: 0.22em;
+	margin: 0 -0.12em 0 -0.16em;
+	text-transform: uppercase;
+}

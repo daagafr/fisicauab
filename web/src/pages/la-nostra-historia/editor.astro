@@ -1,0 +1,700 @@
+---
+// L'editor de La Nostra Història: només per als admins (correu i contrasenya).
+// La pàgina és estàtica; tot el que és privat passa per /api/lnh/, que comprova
+// la sessió a cada petició. La lògica és a src/lnh/editor.ts.
+import Llibre from '../../layouts/Llibre.astro';
+import Lotus from '../../components/lnh/Lotus.astro';
+---
+
+<Llibre titol="Editor · La Nostra Història" descripcio="Accés d’edició de La Nostra Història." indexar={false}>
+	<!-- Mentre mira si has entrat, o si falla la lectura -->
+	<div class="pantalla" id="vista-carregant">
+		<Lotus class="pantalla-lotus batega" />
+		<p id="carregant-text" role="status">Obrint el llibre…</p>
+	</div>
+
+	<!-- Entrar -->
+	<div class="pantalla" id="vista-entrada" hidden>
+		<form class="marc targeta" id="form-entrada">
+			<div class="marc-dins targeta-dins">
+				<Lotus class="targeta-lotus" />
+				<h1 class="targeta-titol">Accés d’edició</h1>
+				<p class="targeta-text">La Nostra Història només la poden editar els custodis.</p>
+				<label class="camp">
+					<span>Correu</span>
+					<input id="correu" type="email" autocomplete="username" required />
+				</label>
+				<label class="camp">
+					<span>Contrasenya</span>
+					<input id="contrasenya" type="password" autocomplete="current-password" required />
+				</label>
+				<p class="error" id="entrada-error" role="alert" hidden></p>
+				<button class="boto boto-ple" id="entra" type="submit">Entra</button>
+				<a class="torna" href="/la-nostra-historia">← Torna al llibre</a>
+			</div>
+		</form>
+	</div>
+
+	<!-- Encara no hi ha admins -->
+	<div class="pantalla" id="vista-configura" hidden>
+		<div class="marc targeta">
+			<div class="marc-dins targeta-dins">
+				<Lotus class="targeta-lotus" />
+				<h1 class="targeta-titol">L’editor encara no està obert</h1>
+				<p class="targeta-text">
+					Falten els admins. Cal posar <code>LNH_ADMINS</code> i <code>LNH_SECRET</code> a les variables d’entorn
+					(a Vercel, o a <code>web/.env</code> en local). Ho explica el README del web.
+				</p>
+				<a class="torna" href="/la-nostra-historia">← Torna al llibre</a>
+			</div>
+		</div>
+	</div>
+
+	<!-- L'editor -->
+	<div class="editor" id="vista-editor" hidden>
+		<header class="ed-cap">
+			<a class="ed-nom" href="/la-nostra-historia" title="Torna al llibre">
+				<Lotus class="ed-lotus" />
+				<span>La Nostra Història</span>
+			</a>
+			<label class="ed-tria">
+				<span class="visualment-amagat">Capítol</span>
+				<select id="tria"></select>
+			</label>
+			<p class="ed-estat" id="estat" role="status" aria-live="polite"></p>
+			<a class="ed-commit" id="commit" href="#" target="_blank" rel="noopener" hidden>Veure el commit</a>
+			<div class="ed-accions">
+				<a class="boto" id="veure" href="/la-nostra-historia" target="_blank" rel="noopener">Veure al web</a>
+				<button class="boto boto-ple" id="desa" type="button" disabled>Desa <kbd>Ctrl S</kbd></button>
+			</div>
+			<button class="enllac ed-surt" type="button" data-surt>Surt</button>
+		</header>
+
+		<aside class="ed-index" aria-label="Capítols">
+			<p class="ed-index-titol">Índex</p>
+			<ol id="index" role="list"></ol>
+			<div class="ed-qui">
+				<span id="qui"></span>
+				<span id="mode"></span>
+				<button class="enllac" type="button" data-surt>Surt</button>
+			</div>
+		</aside>
+
+		<section class="ed-font" aria-label="Codi LaTeX">
+			<div class="ed-barra">
+				<div class="ed-eines" role="toolbar" aria-label="Format">
+					<button type="button" data-accio="cursiva" title="Cursiva (Ctrl I)"><em>Cursiva</em></button>
+					<button type="button" data-accio="negreta" title="Negreta (Ctrl B)"><strong>Negreta</strong></button>
+					<button type="button" data-accio="cometes" title="Cometes baixes">« »</button>
+					<button type="button" data-accio="guio" title="Guió de diàleg">—</button>
+					<button type="button" data-accio="nota" title="Nota al peu">Nota</button>
+					<span class="ed-sep" aria-hidden="true"></span>
+					<button type="button" data-accio="epigraf" title="\epigraf{cita}{autor}">Epígraf</button>
+					<button type="button" data-accio="caplletra" title="\lettrine">Caplletra</button>
+					<button type="button" data-accio="salt" title="\saltescena">∗ ∗ ∗</button>
+				</div>
+				<p class="ed-fitxer" id="fitxer"></p>
+			</div>
+			<div class="ed-codi" id="codi"></div>
+		</section>
+
+		<section class="ed-previa" id="panell-previa" aria-label="Vista prèvia">
+			<p class="ed-previa-titol">Com quedarà · <span id="titol-actiu"></span></p>
+			<div class="pagina">
+				<div class="text-llibre" id="previa"></div>
+			</div>
+			<p class="ed-avis" id="avis" hidden></p>
+		</section>
+
+		<nav class="ed-pestanyes" aria-label="Panell">
+			<button type="button" data-panell="codi">LaTeX</button>
+			<button type="button" data-panell="previa">Com quedarà</button>
+		</nav>
+	</div>
+
+	<dialog class="dialeg-conflicte" id="conflicte">
+		<h2>Algú ha desat abans que tu</h2>
+		<p>
+			Mentre editaves, algú altre ha desat <strong id="conflicte-fitxer"></strong>. Per no trepitjar-li el canvi, no
+			s’ha desat res. Copia el teu text, recarrega l’editor i torna a aplicar-hi el que calgui.
+		</p>
+		<div class="dialeg-accions">
+			<button class="boto" id="conflicte-copia" type="button">Copia el meu capítol</button>
+			<button class="boto boto-ple" id="conflicte-recarrega" type="button">Recarrega</button>
+		</div>
+	</dialog>
+</Llibre>
+
+<script>
+	import '../../lnh/editor';
+</script>
+
+<style is:global>
+	/* Colors propis de l'editor, a partir dels del llibre. */
+	.lnh {
+		--ed-fons: #fbf7f0;
+		--ed-linia: rgb(143 37 35 / 0.05);
+		--ed-seleccio: rgb(143 37 35 / 0.16);
+		--ed-clau: #a57a4d;
+		--ed-atom: #4d6a7a;
+		--ed-comentari: #8f8069;
+	}
+	@media (prefers-color-scheme: dark) {
+		.lnh:not([data-theme='light']) {
+			--ed-fons: #120c0a;
+			--ed-linia: rgb(220 195 156 / 0.05);
+			--ed-seleccio: rgb(229 150 138 / 0.22);
+			--ed-clau: #c9a57a;
+			--ed-atom: #8fb3c4;
+			--ed-comentari: #8a7a68;
+		}
+	}
+	.lnh[data-theme='dark'] {
+		--ed-fons: #120c0a;
+		--ed-linia: rgb(220 195 156 / 0.05);
+		--ed-seleccio: rgb(229 150 138 / 0.22);
+		--ed-clau: #c9a57a;
+		--ed-atom: #8fb3c4;
+		--ed-comentari: #8a7a68;
+	}
+
+	/* ── Botons i camps ───────────────────────────────────────────────────── */
+	.boto {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5em;
+		min-height: 2.4rem;
+		padding: 0.35rem 1rem;
+		border: 1.5px solid var(--accent);
+		border-radius: 3px;
+		background: transparent;
+		color: var(--accent);
+		font: 600 0.95rem/1.2 var(--lletra);
+		letter-spacing: 0.02em;
+		text-decoration: none;
+		cursor: pointer;
+		white-space: nowrap;
+		transition:
+			background-color 0.15s,
+			color 0.15s,
+			opacity 0.15s;
+	}
+	.boto:hover {
+		background: rgb(143 37 35 / 0.08);
+		color: var(--accent-fort);
+	}
+	.boto-ple {
+		background: var(--accent);
+		color: var(--paper);
+	}
+	.boto-ple:hover {
+		background: var(--accent-fort);
+		color: var(--paper);
+	}
+	.boto:disabled {
+		cursor: default;
+		opacity: 0.45;
+	}
+	.boto kbd {
+		font: 500 0.72rem var(--mono);
+		opacity: 0.75;
+	}
+	.enllac {
+		padding: 0;
+		border: 0;
+		background: none;
+		color: var(--accent);
+		font: inherit;
+		text-decoration: underline;
+		text-underline-offset: 0.18em;
+		cursor: pointer;
+	}
+
+	/* ── Pantalles d'entrada ──────────────────────────────────────────────── */
+	.pantalla {
+		display: grid;
+		place-items: center;
+		align-content: center;
+		gap: 1rem;
+		min-height: 100svh;
+		padding: 1.5rem var(--marge);
+		background: var(--gra), var(--fons-portada);
+		color: var(--tinta-portada);
+		text-align: center;
+	}
+	.pantalla[hidden] {
+		display: none;
+	}
+	.pantalla-lotus {
+		width: 7rem;
+	}
+	@media (prefers-reduced-motion: no-preference) {
+		.batega {
+			animation: batega 1.6s ease-in-out infinite;
+		}
+	}
+	@keyframes batega {
+		50% {
+			opacity: 0.45;
+		}
+	}
+	#carregant-text {
+		max-width: 30rem;
+		font-style: italic;
+	}
+
+	.targeta {
+		--gruix: 5px;
+		width: min(100%, 25rem);
+		background: var(--paper);
+		box-shadow: var(--ombra);
+		color: var(--tinta-portada);
+	}
+	.targeta-dins {
+		display: grid;
+		gap: 0.9rem;
+		padding: 2rem 1.6rem 1.6rem;
+		text-align: left;
+	}
+	.targeta-lotus {
+		justify-self: center;
+		width: 5rem;
+	}
+	.targeta-titol {
+		color: var(--accent);
+		font-size: 1.7rem;
+		font-weight: 600;
+		text-align: center;
+	}
+	.targeta-text {
+		margin-bottom: 0.4rem;
+		color: var(--tinta-suau);
+		font-size: 1rem;
+		font-style: italic;
+		text-align: center;
+	}
+	.targeta-text code {
+		font-family: var(--mono);
+		font-size: 0.82em;
+		font-style: normal;
+	}
+	.camp {
+		display: grid;
+		gap: 0.25rem;
+		color: var(--tinta);
+		font-size: 0.95rem;
+		font-weight: 600;
+	}
+	.camp input {
+		width: 100%;
+		min-height: 2.6rem;
+		padding: 0.4rem 0.7rem;
+		border: 1.5px solid var(--filet);
+		border-radius: 3px;
+		background: var(--ed-fons);
+		color: var(--tinta);
+		font: 400 1.05rem var(--lletra);
+	}
+	.camp input:focus {
+		border-color: var(--accent);
+		outline: none;
+	}
+	.error {
+		padding: 0.5rem 0.7rem;
+		border-left: 3px solid var(--accent);
+		background: rgb(143 37 35 / 0.07);
+		color: var(--accent);
+		font-size: 0.95rem;
+	}
+	.error[hidden] {
+		display: none;
+	}
+	.targeta .boto {
+		margin-top: 0.4rem;
+	}
+	.torna {
+		justify-self: center;
+		font-size: 0.95rem;
+		font-style: italic;
+	}
+
+	/* ── L'editor ─────────────────────────────────────────────────────────── */
+	body[data-vista='editor'] {
+		overflow: hidden;
+	}
+	.editor {
+		display: grid;
+		grid-template:
+			'cap cap cap' auto
+			'index font previa' 1fr
+			/ 15rem minmax(0, 1fr) minmax(0, 1fr);
+		height: 100svh;
+		background: var(--paper);
+	}
+	.editor[hidden] {
+		display: none;
+	}
+
+	.ed-cap {
+		grid-area: cap;
+		display: flex;
+		align-items: center;
+		gap: 0.9rem;
+		min-height: 3.6rem;
+		padding: 0.5rem 1rem;
+		border-bottom: 1px solid var(--filet);
+		background: var(--gra), var(--fons-portada);
+		color: var(--tinta-portada);
+	}
+	.ed-nom {
+		display: flex;
+		align-items: center;
+		gap: 0.55rem;
+		color: inherit !important;
+		font-size: 0.82rem;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		text-decoration: none;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+	.ed-lotus {
+		width: 2rem;
+	}
+	.ed-tria {
+		display: none;
+		min-width: 0;
+		flex: 1;
+	}
+	.ed-tria select {
+		width: 100%;
+		min-height: 2.3rem;
+		padding: 0.2rem 0.5rem;
+		border: 1.5px solid var(--filet);
+		border-radius: 3px;
+		background: var(--paper);
+		color: var(--tinta);
+		font: 1rem var(--lletra);
+	}
+	.ed-estat {
+		margin-left: auto;
+		color: var(--tinta);
+		font-size: 0.92rem;
+		font-style: italic;
+		text-align: right;
+	}
+	.ed-estat::before {
+		content: '';
+		display: inline-block;
+		width: 0.5rem;
+		height: 0.5rem;
+		margin-right: 0.45rem;
+		border-radius: 50%;
+		background: #6b8f5e;
+		vertical-align: 0.08em;
+	}
+	.ed-estat[data-tipus='brut']::before {
+		background: #c98a1b;
+	}
+	.ed-estat[data-tipus='feina']::before {
+		background: var(--tinta-suau);
+	}
+	.ed-estat[data-tipus='error'] {
+		color: var(--accent);
+	}
+	.ed-estat[data-tipus='error']::before {
+		background: var(--accent);
+	}
+	.ed-commit {
+		font-size: 0.9rem;
+		white-space: nowrap;
+	}
+	.ed-commit[hidden] {
+		display: none;
+	}
+	.ed-accions {
+		display: flex;
+		gap: 0.5rem;
+	}
+	.ed-cap .boto:not(.boto-ple) {
+		border-color: currentColor;
+		color: inherit;
+	}
+	/* Quan l'índex del costat s'amaga, «Surt» passa a la capçalera. */
+	.ed-surt {
+		display: none;
+		color: inherit;
+		font-size: 0.95rem;
+	}
+
+	.ed-index {
+		grid-area: index;
+		display: flex;
+		flex-direction: column;
+		min-height: 0;
+		border-right: 1px solid var(--filet);
+		background: var(--paper-fosc);
+	}
+	.ed-index-titol {
+		padding: 1rem 1.1rem 0.5rem;
+		color: var(--accent);
+		font-size: 0.78rem;
+		font-weight: 700;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+	}
+	#index {
+		flex: 1;
+		margin: 0;
+		padding: 0 0.5rem 1rem;
+		overflow-y: auto;
+		list-style: none;
+	}
+	.index-part {
+		margin: 0.9rem 0.6rem 0.2rem;
+		color: var(--tinta-suau);
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+	.index-capitol {
+		display: block;
+		width: 100%;
+		padding: 0.32rem 0.6rem;
+		border: 0;
+		border-radius: 3px;
+		background: none;
+		color: var(--tinta);
+		font: 0.98rem/1.3 var(--lletra);
+		text-align: left;
+		cursor: pointer;
+	}
+	.index-capitol:hover {
+		background: rgb(143 37 35 / 0.07);
+	}
+	.index-capitol[aria-current] {
+		background: var(--accent);
+		color: var(--paper);
+	}
+	.index-capitol[data-brut]::after {
+		content: ' ●';
+		color: #c98a1b;
+		font-size: 0.7em;
+		vertical-align: 0.2em;
+	}
+	.ed-qui {
+		display: grid;
+		gap: 0.15rem;
+		padding: 0.8rem 1.1rem 1rem;
+		border-top: 1px solid var(--filet);
+		color: var(--tinta-suau);
+		font-size: 0.85rem;
+		overflow-wrap: anywhere;
+	}
+	.ed-qui .enllac {
+		justify-self: start;
+		margin-top: 0.3rem;
+	}
+
+	.ed-font {
+		grid-area: font;
+		display: flex;
+		flex-direction: column;
+		min-height: 0;
+		border-right: 1px solid var(--filet);
+		background: var(--ed-fons);
+	}
+	.ed-barra {
+		border-bottom: 1px solid var(--filet);
+	}
+	.ed-eines {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.2rem;
+		padding: 0.4rem 0.5rem 0;
+	}
+	.ed-eines button {
+		min-height: 2rem;
+		padding: 0.15rem 0.6rem;
+		border: 0;
+		border-radius: 3px;
+		background: none;
+		color: var(--tinta);
+		font: 0.95rem var(--lletra);
+		cursor: pointer;
+	}
+	.ed-eines button:hover {
+		background: rgb(143 37 35 / 0.08);
+		color: var(--accent);
+	}
+	.ed-sep {
+		width: 1px;
+		height: 1.2rem;
+		margin: 0 0.3rem;
+		background: var(--filet);
+	}
+	.ed-fitxer {
+		padding: 0.15rem 1.05rem 0.4rem;
+		overflow: hidden;
+		color: var(--tinta-suau);
+		font: 0.75rem var(--mono);
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.ed-codi {
+		flex: 1;
+		min-height: 0;
+	}
+	.ed-codi .cm-editor {
+		height: 100%;
+	}
+	.ed-codi .cm-editor.cm-focused {
+		outline: none;
+	}
+
+	.ed-previa {
+		grid-area: previa;
+		min-height: 0;
+		padding: 1.2rem clamp(1rem, 2.5vw, 2rem) 30vh;
+		overflow-y: auto;
+		background: var(--paper-fosc);
+	}
+	.ed-previa-titol {
+		max-width: 38rem;
+		margin: 0 auto 0.8rem;
+		color: var(--tinta-suau);
+		font-size: 0.85rem;
+		font-style: italic;
+	}
+	.pagina {
+		max-width: 38rem;
+		margin: 0 auto;
+		padding: clamp(1.8rem, 4vw, 3.2rem) clamp(1.3rem, 3.5vw, 2.8rem);
+		background: var(--paper);
+		box-shadow: var(--ombra);
+	}
+	.pagina .text-llibre {
+		font-size: 1.1rem;
+	}
+	.ed-avis {
+		max-width: 38rem;
+		margin: 1rem auto 0;
+		padding: 0.6rem 0.8rem;
+		border-left: 3px solid #c98a1b;
+		background: rgb(201 138 27 / 0.1);
+		color: var(--tinta);
+		font-size: 0.9rem;
+	}
+	.ed-avis[hidden] {
+		display: none;
+	}
+	.ed-pestanyes {
+		display: none;
+	}
+
+	/* Sense l'índex al costat: el tria la llista de dalt. */
+	@media (max-width: 68rem) {
+		.editor {
+			grid-template:
+				'cap cap' auto
+				'font previa' 1fr
+				/ minmax(0, 1fr) minmax(0, 1fr);
+		}
+		.ed-index {
+			display: none;
+		}
+		.ed-tria {
+			display: block;
+			max-width: 24rem;
+		}
+		.ed-nom span {
+			display: none;
+		}
+		.ed-surt {
+			display: inline;
+		}
+	}
+	/* En mòbil: una cosa cada vegada, amb pestanyes a baix. */
+	@media (max-width: 46rem) {
+		.editor {
+			grid-template:
+				'cap' auto
+				'panell' 1fr
+				'pestanyes' auto
+				/ minmax(0, 1fr);
+		}
+		.ed-cap {
+			flex-wrap: wrap;
+			gap: 0.5rem 0.7rem;
+		}
+		.ed-tria {
+			flex-basis: calc(100% - 3rem);
+			max-width: none;
+		}
+		.ed-estat {
+			flex: 1;
+			margin-left: 0;
+			text-align: left;
+		}
+		.ed-font,
+		.ed-previa {
+			grid-area: panell;
+			border: 0;
+		}
+		body[data-panell='codi'] .ed-previa,
+		body:not([data-panell='codi']) .ed-font {
+			display: none;
+		}
+		.ed-pestanyes {
+			grid-area: pestanyes;
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			border-top: 1px solid var(--filet);
+			background: var(--paper-fosc);
+		}
+		.ed-pestanyes button {
+			min-height: 3rem;
+			border: 0;
+			background: none;
+			color: var(--tinta-suau);
+			font: 600 1rem var(--lletra);
+		}
+		body[data-panell='codi'] [data-panell='codi'],
+		body:not([data-panell='codi']) [data-panell='previa'] {
+			box-shadow: inset 0 2px 0 var(--accent);
+			color: var(--accent);
+		}
+		.ed-accions #veure,
+		.boto kbd {
+			display: none;
+		}
+	}
+
+	.dialeg-conflicte {
+		width: min(calc(100% - 2rem), 30rem);
+		padding: 1.6rem;
+		border: 0;
+		border-top: 5px solid var(--accent);
+		background: var(--paper);
+		box-shadow: var(--ombra);
+		color: var(--tinta);
+	}
+	.dialeg-conflicte::backdrop {
+		background: rgb(43 27 24 / 0.45);
+	}
+	.dialeg-conflicte h2 {
+		margin-bottom: 0.6rem;
+		color: var(--accent);
+		font-size: 1.4rem;
+	}
+	.dialeg-accions {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		gap: 0.5rem;
+		margin-top: 1.2rem;
+	}
+</style>

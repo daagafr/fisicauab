@@ -29,7 +29,7 @@ export interface Categoria {
 }
 
 /** Els banners fets a mida. Cadascun és un fitxer a src/components/banners/. */
-export type Estil = 'onedrive' | 'club' | 'instagram' | 'mineuab' | 'niniapp' | 'dlv';
+export type Estil = 'onedrive' | 'club' | 'instagram' | 'mineuab' | 'niniapp' | 'dlv' | 'lnh';
 
 /** Els colors de marcador de la web (src/styles/global.css). */
 export type Color = 'groc' | 'blau' | 'taronja' | 'rosa';
@@ -183,6 +183,20 @@ export const entrades: Entrada[] = [
 		cta: 'Obre el diccionari',
 		destacat: true,
 		estil: 'dlv',
+	},
+	{
+		// El llibre viu dins d'aquest mateix web: /la-nostra-historia, fet amb els
+		// .tex de ../La Nostra Història.
+		id: 'la-nostra-historia',
+		nom: 'La Nostra Història',
+		categoria: 'hemeroteca',
+		descripcio: 'La crònica apòcrifa del OneDrive de Física, de l’Erik al Consell de Savis.',
+		url: '/la-nostra-historia',
+		sigles: 'LNH',
+		tipus: 'Llibre',
+		etiqueta: 'fisicauab.com',
+		cta: 'Llegeix el llibre',
+		estil: 'lnh',
 	},
 	{
 		// TODO: confirmar què és, descripció i enllaç.

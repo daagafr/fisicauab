@@ -1,0 +1,292 @@
+\documentclass[12pt, a5paper, twoside]{book}
+
+% ----------------------------------------------
+% Llengua i codificació
+% ----------------------------------------------
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{catalan}
+
+% ----------------------------------------------
+% Tipografia
+% ----------------------------------------------
+\setmainfont{EB Garamond} % o 'Cormorant Garamond', 'Crimson Text'
+
+% ----------------------------------------------
+% Disseny de pàgina
+% ----------------------------------------------
+\usepackage{geometry}
+\geometry{
+    paperwidth=148mm,
+    paperheight=210mm,
+    inner=25mm,
+    outer=20mm,
+    top=25mm,
+    bottom=25mm
+}
+\let\cleardoublepage\clearpage % evita pàgines buides
+
+\usepackage{wallpaper}
+
+% ----------------------------------------------
+% Capçaleres i peus
+% ----------------------------------------------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+
+% ----------------------------------------------
+% Estètica tipogràfica
+% ----------------------------------------------
+\usepackage{microtype}
+\usepackage{lettrine}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{quoting}
+\usepackage{tikz}
+
+\setstretch{1.3}
+
+% Format per a capítols numerats centrats
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\centering}
+  {\chaptername~\thechapter}
+  {1ex}
+  {
+    \Huge
+    \vspace{1ex}
+    \rule[0.5ex]{5cm}{0.5pt} \\[-1.5ex]
+  }
+\titlespacing*{\chapter}{0pt}{-10pt}{30pt}
+
+% ----------------------------------------------
+% Comandes personalitzades
+% ----------------------------------------------
+\newcommand{\epigraf}[2]{%
+    \begin{flushright}
+        \textit{#1}\\
+        {\small ---#2}
+    \end{flushright}
+    \vspace{2em}
+}
+
+\newcommand{\saltescena}{
+    \vspace{1.5em}
+    \begin{center}
+        \textasteriskcentered\ \textasteriskcentered\ \textasteriskcentered
+    \end{center}
+    \vspace{1.5em}
+}
+
+\newcommand{\vers}[1]{\hspace*{2em}#1\\}
+
+\usepackage{hyperref}
+
+% Comanda per a epíleg com un capítol sense número però amb mateix format
+\newcommand{\epileg}[1]{%
+  \cleardoublepage
+  \phantomsection
+  \thispagestyle{empty}
+  \addcontentsline{toc}{chapter}{Epíleg: #1}
+  {\centering
+    \normalfont\huge\bfseries Epíleg\par
+    \vspace{1ex}
+    \rule[0.5ex]{5cm}{0.5pt}\par
+    \vspace{-5mm}
+    \Huge #1\par
+    \vspace{4ex}
+  }
+}
+
+
+
+% ----------------------------------------------
+% Cos del document
+% ----------------------------------------------
+\begin{document}
+
+% ----------------------------------------------
+% Portada
+% ----------------------------------------------
+
+\begin{titlepage}
+\thispagestyle{empty}
+\ThisCenterWallPaper{1.0}{Portada.pdf}
+\vfill
+~
+\end{titlepage}
+\cleardoublepage
+
+% ----------------------------------------------
+% Pàgina de drets d'autor
+% ----------------------------------------------
+\thispagestyle{empty}
+\newpage
+\vspace*{5cm}
+\noindent\textcopyright\
+\the\year\ David Galan Franch.
+
+Tots els drets reservats. Cap part d’aquest llibre no pot ser reproduïda sense permís exprés de l'autor. Euclides sanxista.
+
+\cleardoublepage
+
+% ----------------------------------------------
+% Dedicatòria
+% ----------------------------------------------
+\chapter*{Dedicatòria}
+\vspace{2cm}
+
+\noindent
+A tots els físics que han estat i als que encara han de ser,\\
+custodis de la raó i servidors del càlcul,\\
+dedico aquest compendi digital ---modest, però persistent---\\
+on han quedat sedimentades, com estrats d’un antic manuscrit,\\
+les resolucions, els apunts i els exàmens que durant cursos successius\\
+han estat compilats, refinats i arxivats en aquest santuari virtual que és el nostre \textit{OneDrive}.\\
+
+\medskip
+
+\noindent
+Que aquesta crònica fragmentària de la lluita contra el caos i el suspens,\\
+sigui, si més no, una llum tènue per als que vindran,\\
+i un homenatge discret als que ja hi van deixar la seva empremta.
+
+\cleardoublepage
+
+% ----------------------------------------------
+% Agradiments
+% ----------------------------------------------
+\chapter*{Agradiments}
+
+\noindent
+Gràcies a les persones que m’han sostingut, escoltat i inspirat — dins i fora de l’aula, en els silencis i en les paraules, en els encerts i en l’errància.\\
+Als companys de travessia, que amb paciència i lucidesa van ajudar a escriure aquest recull de fragments d’una història compartida.\\
+A tots aquells que, de manera explícita o anònima, van contribuir a bastir aquest arxiu col·lectiu de coneixement, persistència i memòria — una mena de palimpsest digital d’una comunitat obstinada a comprendre.\\
+I als mestres —formals i informals— que, amb una idea suggerida, una pregunta incisiva o una absència eloqüent, em van fer entendre que la física no és tan sols una disciplina, sinó una forma d’interrogar el món amb esperit crític i reverència.
+
+\medskip
+
+\noindent
+Aquest llibre també és vostre. Potser no és més que l’eco digital d’un temps compartit,\\
+però dins d’aquestes pàgines hi batega la constància d’una generació que es va negar a naufragar entre PDF, exàmens escanejats i carpetes amb noms absurds.
+
+\cleardoublepage
+
+% ----------------------------------------------
+% Prefaci
+% ----------------------------------------------
+\chapter*{Prefaci}
+\vspace{0.5cm}
+
+\noindent
+Aquest llibre no és un índex de fitxers, ni una antologia d’apunts.\\
+És, en tot cas, la crònica apòcrifa d’allò que va passar al voltant del Drive:\\
+les històries que mai van quedar escrites en cap PDF, però que donen sentit a tot el que hi vam penjar.\\
+
+\medskip
+
+\noindent
+Aquí no trobareu una teoria unificada de la física,\\
+però potser sí una constel·lació dispersa de moments, figures i llocs\\
+que, durant un temps, van donar forma a una petita comunitat de resistència acadèmica.\\
+
+\medskip
+
+\noindent
+Aquest llibre és, en definitiva, una arqueologia sentimental del nostre estimat i benerat \textit{OneDrive}.
+
+\cleardoublepage
+
+% ----------------------------------------------
+% Índex (taula de continguts)
+% ----------------------------------------------
+\tableofcontents
+\cleardoublepage
+
+% ----------------------------------------------
+% Capítol 1
+% ----------------------------------------------
+\chapter{L'Aparició del Coneixement Compartit}
+
+\epigraf{Si he pogut veure més enllà, ha estat perquè m’he enfilat sobre les espatlles de gegants.}{Isaac Newton}
+
+\lettrine[loversize=0.2, lines=2]{A}{ls} confins d'una universitat, on la llum del saber resplendeix entre els murs de les aules i els passadissos retrunyen amb les equacions més enigmàtiques, va néixer una estirp d'estu-\\
+diants destinats a canviar el curs de la història. Entre ells, hi havia aquells que no només veien la Física com una disciplina, sinó com un art que havia de ser compartit per a tots aquells valents que s'atrevissin a enfrontar-la. Va ser en aquesta època de desafiament acadèmic quan va sorgir una llegenda: el Onedrive Física.\\
+
+Era un temps fosc per als estudiants de Física. S'enfrontaven a toms infinits d'informació, dispersa i desorganitzada, com partícules erràtiques sense trajectòria definida. La supervivència acadèmica semblava un repte solitari, on cada generació havia de lluitar amb les mateixes armes desgastades pel temps. Però llavors, un estudiant, guiat per la visió d'un futur on el saber fluís lliurement, va sorgir com el primer d'una gloriosa estirp: OneDrive Erik, El Creador.
+
+% ----------------------------------------------
+% Capítol 2
+% ----------------------------------------------
+\chapter{OneDrive Erik, El Creador}
+
+\epigraf{El tot és més que la suma de les seves parts.}{Aristòtil}
+
+\lettrine[loversize=0.2, lines=2]{L'}{}Erik, un jove de ment brillant i esperit indomable, va decidir que era moment de forjar un canvi. Anys de coneixement acumulat, escampat entre quaderns oblidats, correus extraviats i grups d'estudiants desorganitzats, demanaven a crits ser unificats sota una sola bandera. Inspirat per la grandesa de la física quàntica, en què totes les partícules semblen estar connectades en una dansa infinita, l'Erik va entendre que el coneixement havia de seguir el mateix principi: la unificació.\\
+
+Així va ser com l'Erik va crear el Onedrive Física. Un vast repositori on els exàmens, apunts, exercicis i secrets de cada assignatura van ser reunits. Cada arxiu era una peça d'un llegat que transcendia el temps, un pont entre el passat i el futur dels estudiants de Física. Durant quatre llargs anys, l'Erik va mantenir el Onedrive viu, alimentant-lo amb cada descobriment, amb cada fórmula desxifrada i cada repte superat. Sense descans, va protegir i expandir la seva creació, sabent que, al final de la seva missió, el seu destí el portaria a les estrelles.\\
+
+Avui, l'Erik ja no camina pels passadissos de la universitat, ja que ha estat cridat a una senda encara més elevada. Es troba submergit en els misteris de l'espai-temps, dedicant la seva ment a l'estu-\\
+di de la quàntica, on la mateixa naturalesa de la realitat és desafiada, als mateixos llocs on reposen les bèsties més temudes del GiQ. Però el seu llegat perdura. La flama del Onedrive, la seva gran creació, encara és ardent gràcies als que van venir després.
+
+% ----------------------------------------------
+% Capítol 3
+% ----------------------------------------------
+\chapter{OneDrive Eric, L'Homogeneïtzador}
+
+\epigraf{La ciència es construeix a base de fets, com una casa es construeix amb pedres; però una acumulació de fets no és ciència, de la mateixa manera que un munt de pedres no és una casa.}{Henri Poincaré}
+
+\lettrine[loversize=0.2, lines=2]{M}{olts} van creure que, després de la marxa de l'Erik, el Onedrive cauria en l'oblit, embolicat en la seva pròpia complexitat. Però no va ser així. Un nou Eric, conegut entre els iniciats com OneDrive Eric, L'Arquitecte de l'Ordre, va sorgir d'entre les files d'estudiants. No era només el seu nom el que el connectava amb el seu predecessor, sinó la seva visió. Mentre que l'Erik havia reunit la saviesa, l'Eric va veure que l'estructura del saber havia de ser refinada. Perquè el llegat perdurés i continués guiant generacions d'estudiants, havia d'existir ordre.\\
+
+L'Eric va dedicar la seva vida acadèmica a una tasca titànica: homogeneïtzar, estructurar i classificar cada recurs del Onedrive amb precisió matemàtica. Cada arxiu va ser etiquetat, cada carpeta organitzada, cada tema estructurat en una xarxa que reflectia la lògica impecable de les lleis de l'univers. Sota la seva direcció, el Onedrive no era només un magatzem de coneixements; es va convertir en una eina perfecta, un mapa on cada estudiant podia navegar amb facilitat, des dels conceptes més bàsics de mecànica fins als insondables misteris de la relativitat.\\
+
+L'Eric no només va ordenar els arxius; va construir un format únic, clar i accessible, on qualsevol estudiant podia trobar en segons allò que buscava. Així, mentre l'Erik havia creat la base d'aquest vast cosmos d'informació, OneDrive Eric el va transformar en una constel·lació perfectament alineada, guiant els futurs físics en el seu viatge pels intricats camins del coneixement.\\
+
+% ----------------------------------------------
+% Epíleg
+% ----------------------------------------------
+\epileg{El Llegat Indestructible}
+
+\epigraf{El temps és allò que impedeix que tot passi alhora.}{John Archibald Wheeler}
+
+\lettrine[loversize=0.2, lines=2]{A}{vui}, a les aules i biblioteques de la universitat, el Onedrive Física continua creixent, mantenint viva la flama que l'Erik va encendre i que l'Eric va organitzar amb cura. Cada generació d'estudiants afegeix noves peces a aquest vast trencaclosques del saber, i l'estirp dels Onedrive, aquells que vetllen per la seva preservació, encara és recordada.\\
+
+Es diu que, quan cau la nit i els exàmens s'acosten, alguns estudiants encara murmuren els noms d'Erik i Eric com una invocació, una pregària per trobar l'arxiu exacte que necessiten. I així, com una llegenda viva, el Onedrive Física perdura, fent de la carrera de Física no un camí de foscor, sinó una travessia il·luminada per la llum de generacions que, units pel coneixement, mai no van caminar sols.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% ----------------------------------------------
+% Colofó
+% ----------------------------------------------
+\cleardoublepage
+\chapter*{Colofó}
+Aquest llibre ha estat compost amb \textit{LaTeX} i maquetat amb el tipus de lletra \textit{EB Garamond}.
+
+Imprès a \textit{TETA Printing}, el mes d'\textit{Abril} de \textit{\the\year}.
+
+\cleardoublepage
+\begin{titlepage}
+\thispagestyle{empty}
+\ThisCenterWallPaper{1.0}{Contraportada.pdf}
+\vfill
+~
+\end{titlepage}
+
+\end{document}

@@ -6,3 +6,13 @@ marca/eines/_tmp/
 .claude/
 
 # El web: vegeu web/.gitignore (node_modules, dist, .astro)
+
+# LaTeX: els fitxers que deixa la compilació (el .tex és el que val)
+*.aux
+*.log
+*.toc
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.xdv

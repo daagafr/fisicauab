@@ -12,13 +12,14 @@ import Instagram from './banners/Instagram.astro';
 import Mineuab from './banners/Mineuab.astro';
 import Niniapp from './banners/Niniapp.astro';
 import Dlv from './banners/Dlv.astro';
+import Lnh from './banners/Lnh.astro';
 
 interface Props {
 	entrada: Entrada;
 }
 const { entrada } = Astro.props;
 
-const propis = { onedrive: Onedrive, club: Club, instagram: Instagram, mineuab: Mineuab, niniapp: Niniapp, dlv: Dlv };
+const propis = { onedrive: Onedrive, club: Club, instagram: Instagram, mineuab: Mineuab, niniapp: Niniapp, dlv: Dlv, lnh: Lnh };
 const Component = entrada.estil ? propis[entrada.estil] : Fisica;
 ---
 

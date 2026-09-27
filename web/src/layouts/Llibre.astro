@@ -1,0 +1,69 @@
+---
+// La closca de les pàgines de La Nostra Història. No fa servir la de Física UAB
+// (Base.astro): el llibre té el seu propi aspecte, el de la portada.
+//
+//   <Llibre titol="…" descripcio="…">…</Llibre>
+import '@fontsource/eb-garamond/400.css';
+import '@fontsource/eb-garamond/400-italic.css';
+import '@fontsource/eb-garamond/500.css';
+import '@fontsource/eb-garamond/600.css';
+import '@fontsource/eb-garamond/700.css';
+import '../styles/llibre.css';
+import { lloc } from '../config/lloc';
+
+interface Props {
+	titol: string;
+	descripcio: string;
+	indexar?: boolean; // l'editor no ha de sortir a Google
+}
+const { titol, descripcio, indexar = true } = Astro.props;
+
+const canonica = new URL(Astro.url.pathname, lloc.url);
+const imatge = new URL('/lnh/og.png', lloc.url);
+---
+
+<!doctype html>
+<html lang="ca" class="lnh">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{titol}</title>
+		<meta name="description" content={descripcio} />
+		<link rel="canonical" href={canonica} />
+		{!indexar && <meta name="robots" content="noindex, nofollow" />}
+
+		<link rel="icon" href="/lnh/favicon.ico" sizes="any" />
+		<link rel="icon" type="image/png" href="/lnh/icona.png" />
+		<link rel="apple-touch-icon" href="/lnh/icona.png" />
+		<meta name="theme-color" content="#dbc4a0" media="(prefers-color-scheme: light)" />
+		<meta name="theme-color" content="#211512" media="(prefers-color-scheme: dark)" />
+
+		<meta property="og:type" content="book" />
+		<meta property="og:site_name" content={lloc.nom} />
+		<meta property="og:title" content={titol} />
+		<meta property="og:description" content={descripcio} />
+		<meta property="og:url" content={canonica} />
+		<meta property="og:image" content={imatge} />
+		<meta property="og:locale" content="ca_ES" />
+		<meta name="twitter:card" content="summary_large_image" />
+
+		<script is:inline>
+			// El text va justificat només si el navegador parteix paraules en català:
+			// posem una paraula llarga en una columna estreta i mirem si trenca.
+			(function () {
+				var d = document.createElement('div');
+				d.lang = 'ca';
+				d.textContent = 'homogeneïtzador';
+				d.style.cssText = 'position:absolute;visibility:hidden;width:4em;font-size:20px;hyphens:auto;-webkit-hyphens:auto';
+				document.documentElement.appendChild(d);
+				var alt = d.offsetHeight;
+				d.style.hyphens = d.style.webkitHyphens = 'manual';
+				if (alt > d.offsetHeight) document.documentElement.classList.add('guionet');
+				d.remove();
+			})();
+		</script>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>

@@ -1,0 +1,120 @@
+\documentclass[12pt, a4paper, twoside]{book}
+
+% ----------------------------------------------
+% Disseny de pàgina
+% ----------------------------------------------
+\usepackage{geometry}
+\geometry{
+    paperwidth=148mm,
+    paperheight=210mm,
+    left=20mm,    % Per a que el marge sigui el mateix a dues bandes
+    right=20mm,
+    top=25mm,
+    bottom=25mm
+}
+\let\cleardoublepage\clearpage % evita pàgines buides
+
+\usepackage{wallpaper}
+
+% ----------------------------------------------
+% Capçaleres i peus
+% ----------------------------------------------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+
+% ----------------------------------------------
+% Estètica tipogràfica
+% ----------------------------------------------
+\usepackage{microtype}
+\usepackage{lettrine}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{quoting}
+\usepackage{tikz}
+
+\setstretch{1.3}
+
+% Format per a capítols numerats centrats
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\centering}
+  {\chaptername~\thechapter}
+  {1ex}
+  {
+    \Huge
+    \vspace{1ex}
+    \rule[0.5ex]{5cm}{0.5pt} \\[-1.5ex]
+  }
+\titlespacing{\subsection}{0pt}{1.5em plus 1em minus 0.2em}{0.8em}
+
+% ----------------------------------------------
+% Comandes personalitzades
+% ----------------------------------------------
+\newcommand{\epigraf}[2]{%
+    \begin{flushright}
+        \textit{#1}\\
+        {\small ---#2}
+    \end{flushright}
+    \vspace{2em}
+}
+
+\newcommand{\saltescena}{
+    \vspace{1.5em}
+    \begin{center}
+        \textasteriskcentered\ \textasteriskcentered\ \textasteriskcentered
+    \end{center}
+    \vspace{1.5em}
+}
+
+\newcommand{\vers}[1]{\hspace*{2em}#1\\}
+
+\usepackage{hyperref}
+
+% Comanda per a epíleg com un capítol sense número però amb mateix format
+\newcommand{\epileg}[1]{%
+  \cleardoublepage
+  \phantomsection
+  \thispagestyle{empty}
+  \addcontentsline{toc}{chapter}{Epíleg: #1}
+  {\centering
+    \normalfont\huge\bfseries Epíleg\par
+    \vspace{1ex}
+    \rule[0.5ex]{5cm}{0.5pt}\par
+    \vspace{-5mm}
+    \Huge #1\par
+    \vspace{4ex}
+  }
+}
+
+% ----------------------------------------------
+% Llengua i codificació
+% ----------------------------------------------
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{catalan}
+\setotherlanguage{hebrew}
+\newfontfamily\hebrewfont[Script=Hebrew]{Ezra SIL} % O una font hebrea que tinguis
+\setmainfont{EB Garamond} % o 'Cormorant Garamond', 'Crimson Text'
+
+% ----------------------------------------------
+% Cos del document
+% ----------------------------------------------
+\begin{document}
+
+\input{Tohu va-bohu}
+
+\newpage
+
+\input{Umbra Futura}
+
+\newpage
+
+\input{Targus}
+
+\end{document}
+
+
+

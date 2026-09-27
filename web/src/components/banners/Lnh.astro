@@ -1,0 +1,155 @@
+---
+// La Nostra Història — recrea la portada del llibre (Recursos/Portada.pdf): fons
+// de pergamí, el marc doble granat, el títol en EB Garamond, el filet i el lotus.
+// Com un llibre a la prestatgeria. De nit, com la pàgina, es torna «vespertí».
+// Porta a /la-nostra-historia, dins del mateix web: s'obre a la mateixa pestanya.
+import '@fontsource/eb-garamond/400-italic.css';
+import '@fontsource/eb-garamond/700.css';
+import type { Entrada } from '../../data/phihub';
+import Lotus from '../lnh/Lotus.astro';
+
+interface Props {
+	entrada: Entrada;
+}
+const { entrada: e } = Astro.props;
+---
+
+<a class="lnh-b" href={e.url}>
+	<span class="lnh-b-marc">
+		<span class="lnh-b-dins">
+			<span class="lnh-b-tipus">{e.tipus ?? 'Llibre'}</span>
+			<h3 class="lnh-b-titol">La Nostra <span>Història</span></h3>
+			<span class="lnh-b-filet"></span>
+			<Lotus class="lnh-b-lotus" />
+			<p class="lnh-b-text">{e.descripcio}</p>
+			<span class="lnh-b-cta">{e.cta ?? 'Llegeix el llibre'} <span aria-hidden="true">→</span></span>
+		</span>
+	</span>
+</a>
+
+<style>
+	.lnh-b {
+		/* Els colors de la portada; els mateixos que src/styles/llibre.css. */
+		--fons: #dbc4a0;
+		--tinta: #8f2523;
+		--text: #4a2b25;
+		--gruix: 4px;
+
+		display: block;
+		height: 100%;
+		container-type: inline-size;
+		padding: 0.55rem;
+		border-radius: 4px;
+		background:
+			url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .18 0 0 0 0 .1 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E"),
+			var(--fons);
+		box-shadow:
+			0 1px 2px rgb(43 27 24 / 0.1),
+			0 14px 30px -18px rgb(43 27 24 / 0.5);
+		color: var(--tinta);
+		font-family: 'EB Garamond', Garamond, 'Palatino Linotype', Georgia, serif;
+		text-align: center;
+		text-decoration: none;
+		transition:
+			transform 0.25s,
+			box-shadow 0.25s;
+	}
+	@media (prefers-color-scheme: dark) {
+		:global(:root:not([data-theme='light'])) .lnh-b {
+			--fons: #211512;
+			--tinta: #dcc39c;
+			--text: #cdb9a0;
+		}
+	}
+	:global(:root[data-theme='dark']) .lnh-b {
+		--fons: #211512;
+		--tinta: #dcc39c;
+		--text: #cdb9a0;
+	}
+	.lnh-b:hover {
+		box-shadow:
+			0 2px 4px rgb(43 27 24 / 0.12),
+			0 24px 40px -18px rgb(43 27 24 / 0.6);
+		color: var(--tinta);
+		transform: translateY(-3px);
+	}
+
+	/* El marc doble: dues línies gruixudes amb pergamí al mig. */
+	.lnh-b-marc {
+		display: block;
+		height: 100%;
+		padding: calc(var(--gruix) * 0.85);
+		border: var(--gruix) solid currentColor;
+	}
+	.lnh-b-dins {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 0.7rem;
+		height: 100%;
+		padding: clamp(1.3rem, 7cqi, 2rem) 1.1rem;
+		border: var(--gruix) solid currentColor;
+	}
+
+	.lnh-b-tipus {
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 0.24em;
+		text-transform: uppercase;
+		opacity: 0.8;
+	}
+	.lnh-b-titol {
+		font-family: inherit;
+		font-size: clamp(1.6rem, 10cqi, 2.15rem);
+		font-weight: 700;
+		line-height: 1.08;
+		letter-spacing: 0.03em;
+		text-transform: uppercase;
+	}
+	.lnh-b-titol span {
+		display: block;
+	}
+	.lnh-b-filet {
+		width: 72%;
+		border-top: 3px solid currentColor;
+	}
+	.lnh-b :global(.lnh-b-lotus) {
+		width: min(9.5rem, 52%);
+		margin: 0.2rem 0;
+	}
+	/* En passar-hi, el lotus s'obre una mica més. */
+	.lnh-b :global(.lnh-b-lotus path) {
+		transition: transform 0.6s cubic-bezier(0.2, 0.75, 0.25, 1);
+	}
+	.lnh-b:hover :global(.lnh-b-lotus path) {
+		transform: rotate(calc(var(--r) * -0.3));
+	}
+	.lnh-b-text {
+		max-width: 22rem;
+		color: var(--text);
+		font-size: 1.02rem;
+		font-style: italic;
+		line-height: 1.4;
+		text-wrap: balance;
+	}
+	.lnh-b-cta {
+		margin-top: 0.2rem;
+		font-size: 1.05rem;
+		font-style: italic;
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.2em;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.lnh-b,
+		.lnh-b :global(*) {
+			transition: none !important;
+		}
+		.lnh-b:hover,
+		.lnh-b:hover :global(.lnh-b-lotus path) {
+			transform: none;
+		}
+	}
+</style>

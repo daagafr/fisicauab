@@ -1,7 +1,8 @@
 # fisicauab.com
 
 El web de la comunitat de física de la UAB. Fet amb [Astro](https://astro.build):
-genera HTML estàtic, no necessita servidor ni base de dades, i Vercel el publica sol.
+genera HTML estàtic, no necessita base de dades, i Vercel el publica sol. L'única part
+que corre al servidor és l'editor de La Nostra Història (tres rutes a `src/pages/api/lnh/`).
 
 La marca surt de la carpeta del costat, `../marca`. El web no redibuixa res: copia
 els fitxers i pinta el dibuix amb el color del tema.
@@ -29,13 +30,18 @@ web/
 │   ├── data/phihub.ts        ★ tot el phihub: categories i entrades
 │   ├── content/avisos/       ★ el tauler: un .md per avís
 │   ├── pages/                una pàgina per fitxer (index, phihub, comunitat…)
+│   │   ├── la-nostra-historia/   el llibre (index.astro) i el seu editor (editor.astro)
+│   │   └── api/lnh/              entrar, llegir i desar per a l'editor
+│   ├── lnh/                  La Nostra Història: de LaTeX a HTML, sessions, desar
 │   ├── components/           capçalera, peu, banner, segell de sigles…
 │   ├── layouts/Base.astro    la closca de totes les pàgines (<head>, capçalera, peu)
 │   └── styles/global.css     colors, tipografia, botons
 ├── public/                   es publica tal qual: marca/, favicon, og.png
 └── eines/
     ├── marca.mjs             copia ../marca dins del web  (npm run marca)
-    └── og.py                 genera public/og.png, la imatge de WhatsApp
+    ├── og.py                 genera public/og.png, la imatge de WhatsApp
+    ├── og-lnh.py             el mateix per al llibre: public/lnh/og.png
+    └── lnh-admin.mjs         dona d'alta un admin de l'editor (npm run lnh:admin)
 ```
 
 Les dues carpetes amb ★ són les que tocareu més. No cal saber Astro per fer-ho.
@@ -149,11 +155,77 @@ Colors, tipografia i regles d'ús: `../marca/LLEGEIX-ME.md`. Al web:
 
 ---
 
+## La Nostra Història
+
+El llibre és a `fisicauab.com/la-nostra-historia`, i al phihub, a l'Hemeroteca. La
+pàgina **no té el text copiat**: cada vegada que es construeix el web, llegeix els
+`.tex` de la carpeta del costat (`../La Nostra Història`), a partir de
+`La Nostra Història.tex` i dels seus `\input`. Si canvies el llibre, canvia la web.
+
+- **Les parts** (Chaos, Genesis…) i el seu subtítol surten de les pàgines de part del
+  fitxer principal. **Els capítols**, de cada `\chapter`, `\chapter*` i `\epileg`.
+- **La sinopsi** és a `Recursos/Sinopsi.pdf`, no a cap `.tex`: per això és escrita a
+  `src/pages/la-nostra-historia/index.astro`. Si la canvies, canvia-la als dos llocs.
+- **El traductor** (`src/lnh/latex.ts`) entén les ordres que fa servir el llibre:
+  `\epigraf`, `\lettrine`, `\saltescena`, `\textit`, `\\`, els diàlegs, notes al peu…
+  Si n'hi poseu una de nova, al web en sortirà el text sense format (i l'editor ho avisa)
+  fins que l'afegiu allà.
+
+### L'editor
+
+A `fisicauab.com/la-nostra-historia/editor` (o «Accés d'edició», al peu del llibre).
+Només hi entren els admins, amb correu i contrasenya. A l'esquerra hi ha el LaTeX del
+capítol i a la dreta, com quedarà. **Ctrl S** desa.
+
+Desar escriu el `.tex` de veritat, només el tros del capítol que has tocat:
+
+- **En local** (`npm run dev`), al disc. Després el pots compilar a PDF com sempre.
+- **Al web publicat**, fa un commit a GitHub amb el teu nom. Vercel el veu i torna a
+  publicar el web: el text nou surt en un parell de minuts.
+
+Si dues persones editen el mateix fitxer alhora, el segon que desa rep un avís i no
+trepitja res.
+
+### Posar-lo en marxa
+
+Tot va en variables d'entorn: a Vercel (**Settings → Environment Variables**) i, per
+provar-ho en local, a `web/.env` (no es puja mai; és a `.gitignore`).
+
+1. **Els admins.** Per a cadascun:
+
+   ```bash
+   npm run lnh:admin -- nom@exemple.com
+   ```
+
+   Et demana la contrasenya i t'escriu una línia. Posa-les totes a `LNH_ADMINS`,
+   separades per comes. La primera vegada també et dona un `LNH_SECRET`: posa'l tal
+   qual (és el mateix per a tothom). Per treure algú, esborra la seva línia.
+2. **El token de GitHub** (només a Vercel; en local es desa al disc). A GitHub:
+   **Settings → Developer settings → Fine-grained tokens → Generate new token**. Tria
+   només el repositori `daagafr/fisicauab` i, a **Repository permissions**, posa
+   **Contents: Read and write**. Enganxa'l a `LNH_GITHUB_TOKEN`.
+3. Si el repositori o la branca no són `daagafr/fisicauab` i `main`, posa'ls a
+   `LNH_GITHUB_REPO` i `LNH_GITHUB_BRANCA`.
+
+| Variable | Què és |
+|---|---|
+| `LNH_ADMINS` | `correu:sal:hash` per a cada admin, separats per comes |
+| `LNH_SECRET` | signa les sessions; si el canvies, tothom ha de tornar a entrar |
+| `LNH_GITHUB_TOKEN` | per fer els commits des del web publicat |
+| `LNH_GITHUB_REPO`, `LNH_GITHUB_BRANCA` | opcionals |
+
+La imatge per compartir (`public/lnh/og.png`) es fa amb `python eines/og-lnh.py`.
+
+---
+
 ## Publicar a Vercel amb fisicauab.com
 
 1. Puja la carpeta `Física UAB` sencera a un repositori de GitHub.
 2. A [vercel.com](https://vercel.com) → **Add New… → Project** → importa el repo.
-3. A **Root Directory** posa `web`. Vercel detecta Astro sol; no cal tocar res més.
+3. A **Root Directory** posa `web`. Vercel detecta Astro sol. Deixa marcada
+   l'opció **Include files outside the root directory in the Build Step**: el web
+   llegeix La Nostra Història de la carpeta del costat. (Si no la troba, la
+   publicació s'atura i ho diu.)
 4. **Deploy**. Cada `git push` a `main` torna a publicar.
 5. **Settings → Domains** → afegeix `fisicauab.com` i `www.fisicauab.com`. Vercel
    et dirà quins registres DNS has de posar on vau comprar el domini.
@@ -163,6 +235,8 @@ Colors, tipografia i regles d'ús: `../marca/LLEGEIX-ME.md`. Al web:
 ## Pendent
 
 - [ ] `correu` a `src/config/lloc.ts`: crear-lo o canviar-lo.
+- [ ] La Nostra Història: pujar la carpeta `La Nostra Història/` al repositori i posar
+      les variables de l'editor a Vercel (vegeu més amunt).
 - [ ] NiniApp, el joc i el Frasario: descripció i enllaç (`src/data/phihub.ts`).
 - [ ] Logos dels clubs i projectes a `public/phihub/`, si en voleu en comptes de sigles.
 - [ ] Els logos del GdeE RSEF i d'Optica't són els dels seus webs; si en teniu una
