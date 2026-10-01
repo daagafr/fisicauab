@@ -1,0 +1,433 @@
+---
+// L'editor del Frasari: només per als admins (els mateixos de La Nostra
+// Història, amb el mateix correu i contrasenya). La pàgina és estàtica; tot el que
+// és privat passa per /api/frasari/, que comprova la sessió a cada petició. La
+// lògica és a src/frasari/editor.ts.
+import Pissarra from '../../layouts/Pissarra.astro';
+import Estrelles from '../../components/frasari/Estrelles.astro';
+---
+
+<Pissarra titol="Editor · Frasari" descripcio="Accés d’edició del Frasari.">
+	{/* Mentre mira si has entrat, o si falla la lectura */}
+	<div class="pantalla" id="vista-carregant">
+		<p class="pantalla-titol">Frasari</p>
+		<p id="carregant-text" role="status">Obrint el frasari…</p>
+	</div>
+
+	{/* Entrar */}
+	<div class="pantalla" id="vista-entrada" hidden>
+		<form class="targeta" id="form-entrada">
+			<h1 class="targeta-titol">Accés d’edició</h1>
+			<p class="targeta-text">El Frasari l’editen els mateixos admins que La Nostra Història.</p>
+			<label class="camp">
+				<span>Correu</span>
+				<input id="correu" type="email" autocomplete="username" required />
+			</label>
+			<label class="camp">
+				<span>Contrasenya</span>
+				<input id="contrasenya" type="password" autocomplete="current-password" required />
+			</label>
+			<p class="error" id="entrada-error" role="alert" hidden></p>
+			<button class="boto-guix ple" id="entra" type="submit">Entra</button>
+			<a class="torna" href="/frasari">← Torna al frasari</a>
+		</form>
+	</div>
+
+	{/* Encara no hi ha admins */}
+	<div class="pantalla" id="vista-configura" hidden>
+		<div class="targeta">
+			<h1 class="targeta-titol">L’editor encara no està obert</h1>
+			<p class="targeta-text">
+				Falten els admins. Cal posar <code>LNH_ADMINS</code> i <code>LNH_SECRET</code> a les variables d’entorn (a
+				Vercel, o a <code>web/.env</code> en local). Ho explica el README del web.
+			</p>
+			<a class="torna" href="/frasari">← Torna al frasari</a>
+		</div>
+	</div>
+
+	{/* L'editor */}
+	<div class="editor" id="vista-editor" hidden>
+		<header class="ed-cap">
+			<div class="mida ed-cap-dins">
+				<a class="ed-nom" href="/frasari" target="_blank" rel="noopener" title="Obre el frasari">Frasari <span>· editor</span></a>
+				<p class="ed-estat" id="estat" role="status" aria-live="polite"></p>
+				<a class="ed-commit" id="commit" href="#" target="_blank" rel="noopener" hidden>Veure el commit</a>
+				<div class="ed-accions">
+					<button class="boto-guix" id="desfes" type="button" disabled title="Desfés l’últim canvi (Ctrl Z)">Desfés</button>
+					<button class="boto-guix ple" id="desa" type="button" disabled title="Desa (Ctrl S)">Desa</button>
+					<button class="enllac" type="button" data-surt>Surt</button>
+				</div>
+			</div>
+		</header>
+
+		<main class="mida">
+			<form class="targeta nova" id="form-nova">
+				<h1 class="nova-titol">Afegeix una frase</h1>
+				<div class="nova-fila">
+					<label class="camp" id="camp-grup" hidden>
+						<span>Grup</span>
+						<select id="nova-grup"></select>
+					</label>
+					<label class="camp">
+						<span>Qui la va dir</span>
+						<select id="nova-persona"></select>
+					</label>
+					<label class="camp" id="camp-nom" hidden>
+						<span>Nom de la persona nova</span>
+						<input type="text" id="nova-nom" maxlength="80" autocomplete="off" />
+					</label>
+				</div>
+				<label class="camp">
+					<span>La frase</span>
+					<textarea id="nova-text" rows="3" maxlength="3000" placeholder="“Com al frasari: entre cometes, i el context entre parèntesis.”"
+					></textarea>
+				</label>
+				<p class="ajuda">
+					Diàlegs: una línia per persona, «Unai: …». Dins del text: **<strong>negreta</strong>**,
+					_<em>cursiva</em>_ i *accions*.
+				</p>
+				<div class="nova-peu">
+					<fieldset class="tria-estrelles">
+						<legend>Estrelles</legend>
+						<label><input type="radio" name="nova-estrelles" value="0" checked /><span>Cap</span></label>
+						{
+							[1, 2, 3].map((n) => (
+								<label>
+									<input type="radio" name="nova-estrelles" value={n} aria-label={`${n} ${n === 1 ? 'estrella' : 'estrelles'}`} />
+									<span>
+										<Estrelles n={n} />
+									</span>
+								</label>
+							))
+						}
+					</fieldset>
+					<button class="boto-guix ple" type="submit">Afegeix-la</button>
+				</div>
+				<p class="error" id="nova-error" role="alert" hidden></p>
+			</form>
+
+			<div class="ed-eines">
+				<label class="ed-cerca">
+					<span class="visualment-amagat">Busca</span>
+					<input type="search" id="busca" placeholder="Busca una frase o un profe…" autocomplete="off" />
+				</label>
+				<p class="ed-xifres" id="xifres"></p>
+			</div>
+			<div id="persones"></div>
+		</main>
+	</div>
+</Pissarra>
+
+<script>
+	import '../../frasari/editor';
+</script>
+
+<style is:global>
+	/* ── Pantalles d'entrada i de càrrega ── */
+	.frasari .pantalla {
+		display: grid;
+		place-items: center;
+		align-content: center;
+		gap: 1rem;
+		min-height: 100vh;
+		padding: 2rem var(--marge);
+		text-align: center;
+	}
+	.frasari .pantalla-titol {
+		font: 700 clamp(3rem, 10vw, 5rem) / 1 var(--lletra-guix);
+		filter: url(#guix);
+	}
+	.frasari .targeta {
+		display: grid;
+		gap: 1rem;
+		width: min(100%, 28rem);
+		padding: clamp(1.5rem, 5vw, 2.25rem);
+		border: 2px solid var(--guix-tenue);
+		border-radius: var(--a-ma);
+		background: rgb(0 0 0 / 0.08);
+		text-align: left;
+	}
+	.frasari .targeta-titol {
+		font-size: 2.2rem;
+		filter: url(#guix);
+	}
+	.frasari .targeta-text {
+		color: var(--guix-suau);
+	}
+	.frasari .targeta code {
+		color: var(--groc);
+		font-size: 0.9em;
+	}
+	.frasari .targeta .boto-guix {
+		justify-self: start;
+	}
+	.frasari .torna {
+		color: var(--guix-suau);
+		font-size: 0.92rem;
+	}
+	.frasari .error {
+		color: var(--rosa);
+		font-weight: 600;
+	}
+	.frasari .enllac {
+		padding: 0;
+		border: 0;
+		background: none;
+		color: var(--blau);
+		font: inherit;
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
+		cursor: pointer;
+	}
+	.frasari .enllac:hover {
+		color: var(--guix);
+	}
+	.frasari .enllac.perill {
+		color: var(--rosa);
+	}
+
+	/* ── La barra de dalt ── */
+	.frasari .ed-cap {
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		border-bottom: 1px dashed var(--guix-pols);
+		background: color-mix(in srgb, var(--pissarra) 92%, transparent);
+		backdrop-filter: blur(6px);
+		-webkit-backdrop-filter: blur(6px);
+	}
+	.frasari .ed-cap-dins {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.6rem 1.25rem;
+		padding-block: 0.75rem;
+	}
+	.frasari .ed-nom {
+		color: var(--guix);
+		font: 700 1.6rem/1 var(--lletra-guix);
+		text-decoration: none;
+	}
+	.frasari .ed-nom span {
+		color: var(--guix-tenue);
+		font-size: 1.1rem;
+	}
+	.frasari .ed-estat {
+		flex: 1;
+		min-width: 10rem;
+		color: var(--guix-suau);
+		font-size: 0.92rem;
+	}
+	.frasari .ed-estat[data-to='brut'] {
+		color: var(--groc);
+	}
+	.frasari .ed-estat[data-to='error'] {
+		color: var(--rosa);
+	}
+	.frasari .ed-commit {
+		font-size: 0.92rem;
+	}
+	.frasari .ed-accions {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+	}
+
+	/* ── Afegeix una frase ── */
+	.frasari .nova {
+		width: 100%;
+		max-width: none;
+		margin-top: 2rem;
+	}
+	.frasari .nova-titol {
+		font-size: 2rem;
+		filter: url(#guix);
+	}
+	.frasari .nova-fila {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+		gap: 1rem;
+	}
+	.frasari .ajuda {
+		margin-top: -0.4rem;
+		color: var(--guix-tenue);
+		font-size: 0.86rem;
+	}
+	.frasari .ajuda strong,
+	.frasari .ajuda em {
+		color: var(--guix-suau);
+	}
+	.frasari .nova-peu {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+	.frasari .tria-estrelles {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.3rem;
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+	.frasari .tria-estrelles legend {
+		float: left;
+		margin-right: 0.5rem;
+		color: var(--guix-suau);
+		font-size: 0.92rem;
+	}
+	.frasari .tria-estrelles label {
+		position: relative;
+		cursor: pointer;
+	}
+	.frasari .tria-estrelles input {
+		position: absolute;
+		opacity: 0;
+	}
+	.frasari .tria-estrelles span {
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.1rem;
+		padding: 0.25rem 0.7rem;
+		border: 2px solid transparent;
+		border-radius: var(--a-ma);
+		color: var(--guix-suau);
+		font-size: 0.92rem;
+	}
+	.frasari .tria-estrelles span .estrelles svg {
+		width: 1rem;
+		height: 1rem;
+	}
+	.frasari .tria-estrelles input:checked + span {
+		border-color: var(--guix-suau);
+		color: var(--guix);
+	}
+	.frasari .tria-estrelles input:focus-visible + span {
+		outline: 2px dashed var(--groc);
+	}
+
+	/* ── La llista ── */
+	.frasari .ed-eines {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem 1.5rem;
+		margin-top: 2.5rem;
+	}
+	.frasari .ed-cerca {
+		flex: 1 1 18rem;
+		max-width: 28rem;
+	}
+	.frasari .ed-xifres {
+		color: var(--guix-tenue);
+		font-size: 0.9rem;
+	}
+	.frasari .ed-persona {
+		margin-top: 2.25rem;
+	}
+	.frasari .ed-persona-cap {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.3rem 1rem;
+		padding-bottom: 0.5rem;
+		border-bottom: 2px solid var(--guix-pols);
+	}
+	.frasari .ed-persona-cap h2 {
+		font-size: 1.7rem;
+		filter: url(#guix);
+	}
+	.frasari .ed-persona-cap .compte {
+		color: var(--guix-tenue);
+		font-size: 0.88rem;
+	}
+	.frasari .ed-persona-cap .enllac {
+		font-size: 0.88rem;
+	}
+	.frasari .ed-frases {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.frasari .ed-frase {
+		position: relative;
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		gap: 0.4rem 1rem;
+		align-items: start;
+		padding: 0.7rem 0.5rem;
+		border-bottom: 1px dashed var(--guix-pols);
+		border-radius: 6px;
+	}
+	.frasari .ed-frase.nova-frase,
+	.frasari .ed-frase.canviada {
+		background: rgb(246 216 107 / 0.07);
+	}
+	.frasari .ed-marca {
+		position: absolute;
+		top: 0.15rem;
+		right: 0.5rem;
+		color: var(--groc);
+		font-size: 0.72rem;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+	}
+	.frasari .ed-estrelles {
+		display: flex;
+	}
+	.frasari .ed-estrella {
+		display: grid;
+		place-items: center;
+		width: 1.75rem;
+		height: 1.75rem;
+		padding: 0;
+		border: 0;
+		background: none;
+		cursor: pointer;
+	}
+	.frasari .ed-estrella svg {
+		width: 1.25rem;
+		height: 1.25rem;
+		fill: transparent;
+		stroke: var(--guix-tenue);
+		stroke-width: 1.4;
+		stroke-linejoin: round;
+		transition:
+			transform 0.15s,
+			fill 0.15s;
+	}
+	.frasari .ed-estrella[aria-pressed='true'] svg {
+		fill: rgb(246 216 107 / 0.6);
+		stroke: var(--groc);
+		filter: url(#guix);
+	}
+	.frasari .ed-estrella:hover svg {
+		transform: scale(1.18) rotate(-8deg);
+		stroke: var(--groc);
+	}
+	.frasari .ed-botons {
+		display: flex;
+		gap: 0.8rem;
+		padding-top: 0.15rem;
+		font-size: 0.88rem;
+	}
+	.frasari .ed-frase.editant {
+		grid-template-columns: 1fr;
+	}
+	.frasari .ed-frase.editant .ed-botons {
+		gap: 0.6rem;
+	}
+	.frasari .ed-buit {
+		margin-top: 2rem;
+		color: var(--guix-suau);
+	}
+	@media (max-width: 40rem) {
+		.frasari .ed-frase {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

@@ -1,0 +1,157 @@
+---
+// Frasari — una pissarra petita, com la pàgina: el verd amb pols de guix, el títol
+// en Cabin Sketch, una frase de les bones escrita amb guix i la safata a sota.
+// Porta a /frasari, dins del mateix web: s'obre a la mateixa pestanya.
+import '@fontsource/cabin-sketch/700.css';
+import '@fontsource-variable/shantell-sans';
+import type { Entrada } from '../../data/phihub';
+import { frasariDelDisc } from '../../frasari/diposit';
+import { htmlDe, totes } from '../../frasari/frasari';
+
+interface Props {
+	entrada: Entrada;
+}
+const { entrada: e } = Astro.props;
+
+// La frase: de les que tenen més estrelles, la més curta d'una sola línia.
+const frases = totes(frasariDelDisc());
+const triada = frases
+	.filter(({ frase }) => !frase.text.includes('\n') && frase.text.length <= 120)
+	.sort((a, b) => b.frase.estrelles - a.frase.estrelles || a.frase.text.length - b.frase.text.length)[0];
+const persones = new Set(frases.map(({ persona }) => persona.id)).size;
+---
+
+<a class="fr" href={e.url}>
+	<span class="fr-dins">
+		<span class="fr-cap">
+			<span class="fr-titol">Frasari</span>
+			<span class="fr-xifres">{frases.length} frases · {persones} profes</span>
+		</span>
+		{
+			triada && (
+				<span class="fr-frase">
+					<span set:html={htmlDe(triada.frase.text)} />
+					<span class="fr-qui">— {triada.persona.nom}</span>
+				</span>
+			)
+		}
+		<span class="fr-cta">{e.cta ?? 'Obre el frasari'} <span aria-hidden="true">→</span></span>
+	</span>
+	<span class="fr-safata" aria-hidden="true"><span></span><span></span></span>
+</a>
+
+<style>
+	.fr {
+		/* Els colors de la pàgina: src/styles/frasari.css. */
+		--pissarra: #2c4a3e;
+		--guix: #f2f0e6;
+		--guix-suau: rgb(242 240 230 / 0.72);
+		--groc: #f6d86b;
+		--rosa: #f5a8bd;
+		--alumini: #c6cbcf;
+
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		min-height: 15rem;
+		overflow: hidden;
+		border-top: 8px solid var(--alumini);
+		border-radius: 10px;
+		background:
+			radial-gradient(18rem 8rem at 20% 20%, rgb(242 240 230 / 0.07), transparent 70%),
+			radial-gradient(16rem 7rem at 85% 70%, rgb(242 240 230 / 0.05), transparent 70%),
+			var(--pissarra);
+		box-shadow: 0 1px 2px rgb(0 0 0 / 0.1), 0 14px 30px -16px rgb(0 0 0 / 0.45);
+		color: var(--guix);
+		font-family: 'Shantell Sans Variable', 'Segoe Print', system-ui, sans-serif;
+		text-decoration: none;
+		text-shadow: 0 0 1px rgb(242 240 230 / 0.25);
+		transition:
+			transform 0.2s,
+			box-shadow 0.2s;
+	}
+	.fr:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 2px 4px rgb(0 0 0 / 0.12), 0 22px 40px -18px rgb(0 0 0 / 0.55);
+		color: var(--guix);
+	}
+	.fr-dins {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		gap: 0.9rem;
+		padding: 1.3rem 1.4rem 1.1rem;
+	}
+	.fr-cap {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 0.25rem 1rem;
+	}
+	.fr-titol {
+		font: 700 2.3rem/1 'Cabin Sketch', cursive;
+	}
+	.fr-xifres {
+		color: var(--groc);
+		font-size: 0.85rem;
+	}
+	.fr-frase {
+		display: grid;
+		gap: 0.4rem;
+		font-size: 1.05rem;
+		line-height: 1.45;
+	}
+	.fr-frase :global(.linia) {
+		display: block;
+	}
+	.fr-frase :global(.context),
+	.fr-frase :global(.accio) {
+		color: var(--guix-suau);
+		font-style: italic;
+	}
+	.fr-qui {
+		color: var(--rosa);
+		font-size: 0.9rem;
+	}
+	.fr-cta {
+		margin-top: auto;
+		color: var(--guix-suau);
+		font-size: 0.92rem;
+		font-weight: 600;
+	}
+	.fr:hover .fr-cta {
+		color: var(--guix);
+	}
+	/* La safata, amb un guix blanc i un de groc. */
+	.fr-safata {
+		position: relative;
+		height: 0.7rem;
+		background: linear-gradient(#c6cbcf, #8e959a);
+	}
+	.fr-safata span {
+		position: absolute;
+		bottom: 100%;
+		left: 1.4rem;
+		width: 2.2rem;
+		height: 0.42rem;
+		border-radius: 2px 4px 4px 2px;
+		background: linear-gradient(#fbfaf4, #d9d6c8);
+		rotate: -3deg;
+	}
+	.fr-safata span + span {
+		left: 4.1rem;
+		width: 1.5rem;
+		background: linear-gradient(#fbe596, #d9bd5a);
+		rotate: 2deg;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.fr {
+			transition: none;
+		}
+		.fr:hover {
+			transform: none;
+		}
+	}
+</style>

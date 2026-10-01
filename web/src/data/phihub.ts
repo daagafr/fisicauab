@@ -29,7 +29,7 @@ export interface Categoria {
 }
 
 /** Els banners fets a mida. Cadascun és un fitxer a src/components/banners/. */
-export type Estil = 'onedrive' | 'club' | 'instagram' | 'mineuab' | 'niniapp' | 'dlv' | 'lnh';
+export type Estil = 'onedrive' | 'club' | 'instagram' | 'mineuab' | 'niniapp' | 'dlv' | 'lnh' | 'frasari';
 
 /** Els colors dels calaixos: les línies d'un gràfic de matplotlib (src/styles/global.css). */
 export type Color = 'blau' | 'taronja' | 'verd' | 'vermell';
@@ -199,13 +199,17 @@ export const entrades: Entrada[] = [
 		estil: 'lnh',
 	},
 	{
-		// TODO: confirmar què és, descripció i enllaç.
-		id: 'frasario',
-		nom: 'Frasario',
+		// Viu dins d'aquest mateix web: /frasari, fet amb ../Frasari/frasari.json.
+		id: 'frasari',
+		nom: 'Frasari',
 		categoria: 'hemeroteca',
-		descripcio: 'El recull de frases de Física UAB. Aviat, a l’hemeroteca.',
+		descripcio: 'Les frases dels profes, apuntades a classe. Les millors, amb estrelles.',
+		url: '/frasari',
 		sigles: 'FR',
 		tipus: 'Recull',
+		etiqueta: 'fisicauab.com',
+		cta: 'Obre el frasari',
+		estil: 'frasari',
 	},
 ];
 

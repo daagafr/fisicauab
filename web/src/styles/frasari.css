@@ -1,0 +1,239 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Frasari — l'estil de la pissarra
+   Verd de pissarra amb pols de guix i esborrades, el marc d'alumini a dalt i la
+   safata dels guixos a baix. Els títols en Cabin Sketch (guix), el text en
+   Shantell Sans (lletra de mà que es llegeix bé) i tres guixos de color: groc per
+   a les estrelles, rosa per a qui parla i blau per als enllaços.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.frasari {
+	--pissarra: #2c4a3e;
+	--pissarra-fosc: #223a31;
+	--guix: #f2f0e6;
+	--guix-suau: rgb(242 240 230 / 0.74);
+	--guix-tenue: rgb(242 240 230 / 0.5);
+	--guix-pols: rgb(242 240 230 / 0.14);
+	--groc: #f6d86b;
+	--rosa: #f5a8bd;
+	--blau: #a6d6ee;
+	--alumini: #c6cbcf;
+	--alumini-fosc: #8e959a;
+
+	--lletra: 'Shantell Sans Variable', 'Segoe Print', 'Comic Sans MS', system-ui, sans-serif;
+	--lletra-guix: 'Cabin Sketch', 'Shantell Sans Variable', 'Segoe Print', cursive;
+	--ample: 60rem;
+	--marge: clamp(1rem, 4vw, 2.5rem);
+	/* Una vora feta a mà, per a caixes i botons. */
+	--a-ma: 255px 14px 225px 14px / 14px 225px 14px 255px;
+
+	/* La pols del guix: soroll blanc molt suau per sobre del verd. */
+	--pols: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 .96 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
+	/* Un traç de guix tremolós, per subratllar. */
+	--subratllat: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 12' preserveAspectRatio='none'%3E%3Cpath d='M2 7C30 3 52 9 84 6s62-4 92 0 44 2 62-1' fill='none' stroke='%23f6d86b' stroke-width='2.6' stroke-linecap='round' opacity='.85'/%3E%3C/svg%3E");
+
+	color-scheme: dark;
+	background: var(--pissarra-fosc);
+}
+
+.frasari *,
+.frasari *::before,
+.frasari *::after {
+	box-sizing: border-box;
+}
+
+.frasari {
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+	scroll-padding-top: 1.5rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+	.frasari {
+		scroll-behavior: smooth;
+	}
+}
+
+.frasari body {
+	margin: 0;
+	min-height: 100vh;
+	border-top: 12px solid var(--alumini);
+	box-shadow: inset 0 6px 10px -6px rgb(0 0 0 / 0.5);
+	/* El verd, la pols i unes quantes esborrades que no s'acaben d'anar. */
+	background:
+		var(--pols),
+		radial-gradient(42rem 16rem at 12% 9rem, rgb(242 240 230 / 0.06), transparent 70%),
+		radial-gradient(34rem 14rem at 88% 30rem, rgb(242 240 230 / 0.04), transparent 70%),
+		radial-gradient(48rem 18rem at 40% 70%, rgb(242 240 230 / 0.035), transparent 70%),
+		linear-gradient(var(--pissarra), #2f4f42 60%, var(--pissarra));
+	color: var(--guix);
+	font-family: var(--lletra);
+	font-size: 1.0625rem;
+	line-height: 1.55;
+	text-shadow: 0 0 1px rgb(242 240 230 / 0.25);
+	-webkit-font-smoothing: antialiased;
+	overflow-x: clip;
+}
+
+/* Els elements amagats s'amaguen encara que el seu estil digui display: grid. */
+.frasari [hidden] {
+	display: none !important;
+}
+
+.frasari .defs {
+	position: absolute;
+	width: 0;
+	height: 0;
+	overflow: hidden;
+}
+
+.frasari h1,
+.frasari h2,
+.frasari h3 {
+	margin: 0;
+	font-family: var(--lletra-guix);
+	font-weight: 700;
+	line-height: 1.1;
+	text-wrap: balance;
+}
+.frasari p {
+	margin: 0;
+	text-wrap: pretty;
+}
+.frasari a {
+	color: var(--blau);
+	text-decoration-thickness: 1.5px;
+	text-underline-offset: 0.2em;
+}
+.frasari a:hover {
+	color: var(--guix);
+}
+.frasari :focus-visible {
+	outline: 2px dashed var(--groc);
+	outline-offset: 3px;
+}
+.frasari ::selection {
+	background: rgb(246 216 107 / 0.35);
+	color: var(--guix);
+}
+
+.frasari .mida {
+	width: 100%;
+	max-width: var(--ample);
+	margin-inline: auto;
+	padding-inline: var(--marge);
+}
+.frasari .visualment-amagat {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+}
+
+/* ── Botons i camps de guix ──────────────────────────────────────────────── */
+
+.frasari .boto-guix {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.45em;
+	padding: 0.5em 1.05em;
+	border: 2px solid var(--guix-suau);
+	border-radius: var(--a-ma);
+	background: transparent;
+	color: var(--guix);
+	font: 600 0.98rem/1.2 var(--lletra);
+	text-decoration: none;
+	text-shadow: inherit;
+	cursor: pointer;
+	transition:
+		background-color 0.15s,
+		border-color 0.15s,
+		transform 0.15s;
+}
+.frasari .boto-guix:hover:not(:disabled) {
+	border-color: var(--guix);
+	background: var(--guix-pols);
+	color: var(--guix);
+	transform: rotate(-0.6deg);
+}
+.frasari .boto-guix:disabled {
+	opacity: 0.45;
+	cursor: default;
+}
+/* Ple: com si l'haguessis pintat amb el guix de pla. */
+.frasari .boto-guix.ple {
+	border-color: var(--guix);
+	background: var(--guix);
+	color: var(--pissarra);
+	text-shadow: none;
+}
+.frasari .boto-guix.ple:hover:not(:disabled) {
+	background: #fffdf4;
+	color: var(--pissarra);
+}
+
+.frasari .camp {
+	display: grid;
+	gap: 0.3rem;
+	color: var(--guix-suau);
+	font-size: 0.92rem;
+}
+.frasari input[type='text'],
+.frasari input[type='email'],
+.frasari input[type='password'],
+.frasari input[type='search'],
+.frasari select,
+.frasari textarea {
+	width: 100%;
+	padding: 0.55rem 0.75rem;
+	border: 2px solid var(--guix-tenue);
+	border-radius: 10px 4px 12px 5px / 5px 12px 4px 10px;
+	background: rgb(0 0 0 / 0.14);
+	color: var(--guix);
+	font: 1rem/1.45 var(--lletra);
+}
+.frasari input::placeholder,
+.frasari textarea::placeholder {
+	color: var(--guix-tenue);
+}
+.frasari select option {
+	background: var(--pissarra-fosc);
+	color: var(--guix);
+}
+
+/* ── Les frases (la pàgina i l'editor) ───────────────────────────────────── */
+
+.frasari .estrelles {
+	display: inline-flex;
+	gap: 1px;
+}
+.frasari .estrelles svg,
+.frasari .estrella-buida svg {
+	width: 1.2rem;
+	height: 1.2rem;
+	fill: rgb(246 216 107 / 0.55);
+	stroke: var(--groc);
+	stroke-width: 1.5;
+	stroke-linejoin: round;
+	filter: url(#guix);
+}
+
+.frasari .frase-text .linia {
+	display: block;
+}
+.frasari .frase-text .linia + .linia {
+	margin-top: 0.15rem;
+}
+/* El context, entre parèntesis: més fluix, com el guix mig esborrat. */
+.frasari .frase-text .context,
+.frasari .frase-text .accio {
+	color: var(--guix-tenue);
+	font-style: italic;
+}
+.frasari .frase-text .qui {
+	color: var(--rosa);
+	font-weight: 650;
+}
+.frasari .frase-text strong {
+	font-weight: 750;
+}

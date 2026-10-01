@@ -1,0 +1,1168 @@
+{
+	"grups": [
+		{
+			"id": "profes",
+			"nom": "Profes",
+			"persones": [
+				{
+					"id": "alejandro-andalu-de-lab",
+					"nom": "Alejandro (Andalú de lab)",
+					"frases": [
+						{
+							"id": "b8miek001n",
+							"text": "“abé, decihme, kabeiexo?”",
+							"estrelles": 0
+						},
+						{
+							"id": "atpzioji9y",
+							"text": "“Lo que teneih que comprah eh una guillotina, asi jugai a la revolucion francesa con vuestroh ojoh”",
+							"estrelles": 0
+						},
+						{
+							"id": "jwvd7ndo4k",
+							"text": "“Qué habéih comio’? A lah 12?? Que no zoi inglezeh ehto eh españa”",
+							"estrelles": 0
+						},
+						{
+							"id": "trmpzz23wq",
+							"text": "(Coge una chaqueta) “De quien eh ehte shaqueton? Lo puedo vendé en wallapó?”",
+							"estrelles": 0
+						},
+						{
+							"id": "qbozjzbwx3",
+							"text": "(Se acerca al Hector, se pone al lado y llama a Martina)\nAlejandro: “A que noh parezemoh?”\nMartina: “Pues tenéis un aire eh”",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "carles-domingo",
+					"nom": "Carles Domingo",
+					"frases": [
+						{
+							"id": "rhz0gkwdo9",
+							"text": "“Lord Kelvin va triar el seu nom pel riu que passava pel campus de la universitat de Glasgow. És com si algú d’aquí fes un descobriment important i es digués… el Conde de la UAB.”",
+							"estrelles": 0
+						},
+						{
+							"id": "rtczojot5w",
+							"text": "“Un plat de llenties a 8000K no existiria, directament.”",
+							"estrelles": 2
+						},
+						{
+							"id": "qjyd6kwbki",
+							"text": "“Jure usted, con la mano en la Biblia y en el nombre del Señor, que nunca se dedicará a trabajar en calderas, porque en este ejercicio hizo usted una explosión que ni el Big Bang.”",
+							"estrelles": 1
+						},
+						{
+							"id": "m8m0hmffyd",
+							"text": "“Això no és IFE. Això és IFE plus plus plus plus.”",
+							"estrelles": 0
+						},
+						{
+							"id": "h3sqpv3p34",
+							"text": "“Ara vaig a dir una cosa que és políticament incorrecta: No sigueu troglodites.”",
+							"estrelles": 0
+						},
+						{
+							"id": "ytvz56ml3p",
+							"text": "“A l’hora d’acabar, poseu-vos pesats.”",
+							"estrelles": 0
+						},
+						{
+							"id": "gs4hd24my4",
+							"text": "(David HC intenta respondre una pregunta del Domingo) “M’estàs dient que la definició de freqüència d’ona depèn de l’ona? No me jodas”",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "carles-navau",
+					"nom": "Carles Navau",
+					"frases": [
+						{
+							"id": "kfpngltt1p",
+							"text": "“(Parlant de 21€ d’un becari) Es que gastar-se tot el sou d’un mes…”",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "carlos-heras",
+					"nom": "Carlos Heras",
+					"frases": [
+						{
+							"id": "hr4uul3pe7",
+							"text": "“(El Sergi li dona un glop de vodka) Ui, està fort. *Fa un altre glop*”",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "carmelo",
+					"nom": "Carmelo",
+					"frases": [
+						{
+							"id": "616f43ekb5",
+							"text": "“Els que no heu fet les enquestes, tots a geologia. Segur que els geòlogs fan més enquestes”",
+							"estrelles": 0
+						},
+						{
+							"id": "vyz2g8vw8l",
+							"text": "Unai: “Yo siempre he querido ser monje”\nCarmelo: “Fora de la meva classe, i no tornis mai. Tinc l’autoritat”",
+							"estrelles": 2
+						}
+					]
+				},
+				{
+					"id": "cosimo-nigro",
+					"nom": "Cosimo Nigro",
+					"frases": [
+						{
+							"id": "s7xctjfnfp",
+							"text": "“Theta punto es mi amigo. Me gusta.”",
+							"estrelles": 0
+						},
+						{
+							"id": "59kpcqqtpf",
+							"text": "“Teta quadro”",
+							"estrelles": 0
+						},
+						{
+							"id": "fbt4576rk8",
+							"text": "Unai: *surt a la pissarra i fa un exercici* “Perdón, lo he hecho muy mal…”\nCosimo: Sí.",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "donaire",
+					"nom": "Donaire",
+					"frases": [
+						{
+							"id": "9tpo7z3cdz",
+							"text": "“Integrar divisions de polinomis és una cosa soporífera. Foteu-vos cocaïna, cafè a soles no és prou. O foteu-vos Red Bull, però dos litros mínim.”",
+							"estrelles": 3
+						},
+						{
+							"id": "4inpl0mwv6",
+							"text": "“I ara, ja hem acabat” (comença la demostració)",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "eduardo-gallego",
+					"nom": "Eduardo Gallego",
+					"frases": [
+						{
+							"id": "dm2vsthpjl",
+							"text": "“Bibliografía per Álgebra II??? Cosmos de Carl Sagan. Y también Cien Años de Soledad, por qué no.”",
+							"estrelles": 1
+						},
+						{
+							"id": "kx9rhmkrii",
+							"text": "“Estic a punt d’acabar.”",
+							"estrelles": 0
+						},
+						{
+							"id": "6hqg1fd754",
+							"text": "“(A mitja classe es recolza sobre la pissarra) Perdó, m’ha vingut una baixada de tensió.”",
+							"estrelles": 0
+						},
+						{
+							"id": "bmj0yt7w6o",
+							"text": "“(Girant les mans agressivament) Jo vaig movent això. Vuuuuuuuuuuuuuuuuuuuuuuuu (soroll indescriptible semblant a un vibrador).”",
+							"estrelles": 2
+						},
+						{
+							"id": "8qwuog2mbb",
+							"text": "“No he acabado”",
+							"estrelles": 0
+						},
+						{
+							"id": "7sc3vgjg4n",
+							"text": "“Ya hemos acabado”",
+							"estrelles": 0
+						},
+						{
+							"id": "enw4klcspy",
+							"text": "“(Veu sin(dx)=dx a la pissarra) Sinus d’una cosa petita és una cosa petita.”",
+							"estrelles": 0
+						},
+						{
+							"id": "9sjp3ce0kw",
+							"text": "“Toma! Osti què bé! Ohhh! Toma, toma, toma! (...) Superheroiii!!!!”",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "emili-bagan",
+					"nom": "Emili Bagan",
+					"frases": [
+						{
+							"id": "wumsyrj1ob",
+							"text": "“Això ho hauríeu de saber fer amb els ulls tancats, els braços lligats, i bevent Cacaolat.”",
+							"estrelles": 1
+						},
+						{
+							"id": "mt36ok2rc2",
+							"text": "“En honor als químics (fent referència als fisquims), imaginem que és un electró gordo.”",
+							"estrelles": 0
+						},
+						{
+							"id": "u0kb11a28x",
+							"text": "“Ets un objecte.”",
+							"estrelles": 1
+						},
+						{
+							"id": "fc1bmvq79o",
+							"text": "“Aquest noi és un pervertit”",
+							"estrelles": 0
+						},
+						{
+							"id": "l88qrihj3l",
+							"text": "“Brrr.”",
+							"estrelles": 0
+						},
+						{
+							"id": "4yheihxns7",
+							"text": "“Ser gay no és el mateix que ser maricón”",
+							"estrelles": 0
+						},
+						{
+							"id": "o2bqmi4wnp",
+							"text": "“De veritat us creieu que soc homòfob?”",
+							"estrelles": 0
+						},
+						{
+							"id": "8xg4wkbw2q",
+							"text": "“De fet, m’encanten els gays”",
+							"estrelles": 0
+						},
+						{
+							"id": "cp7nj808vh",
+							"text": "“Jo tinc amics gays”",
+							"estrelles": 0
+						},
+						{
+							"id": "67cf7p17kq",
+							"text": "“Això no es una mariconada, bno potser es una mariconada, però una mariconada amb gracia”",
+							"estrelles": 0
+						},
+						{
+							"id": "cne1yile7v",
+							"text": "“Ficar-li a aquests coeficients pp, pp… bueno, ni pp ni Vox!”",
+							"estrelles": 0
+						},
+						{
+							"id": "opxcp52zme",
+							"text": "“Veureu que aquí us he fet una petita broma. Òbviament el meu despatx no té aquest número (C5/666), que és el número de la bèstia (li dona una tecla i es converteix en C5/222) té aquest que s’hi assembla molt, és el número de la semibèstia”",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "enric-nart",
+					"nom": "Enric Nart",
+					"frases": [
+						{
+							"id": "vqya53q7xj",
+							"text": "“Òmega”",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "esteve-fabregas",
+					"nom": "Esteve Fabregas",
+					"frases": [
+						{
+							"id": "z66trxhnyz",
+							"text": "“Te un oxigen penjant com un xoriço”",
+							"estrelles": 1
+						},
+						{
+							"id": "z5egqrivx8",
+							"text": "“Les sals i els àcids forts no existeixen.”",
+							"estrelles": 0
+						},
+						{
+							"id": "a0f8gu770r",
+							"text": "“Per als de la doble titulació, teniu prohibidíssim utilitzar la fórmula per resoldre equacions de tercer grau”",
+							"estrelles": 1
+						},
+						{
+							"id": "ijbf29g6ru",
+							"text": "“Resoldre aquesta equació ens pot donar molts problemes (se’n va la llum de tota la península ibèrica) veieu els problemes?”",
+							"estrelles": 0
+						},
+						{
+							"id": "nwoy0xe29y",
+							"text": "“Tenim un equilibri més putejat que la mare que el va parir”",
+							"estrelles": 0
+						},
+						{
+							"id": "76w8in1ti3",
+							"text": "“No existeixen les coses petites i grans, tot depèn”",
+							"estrelles": 0
+						},
+						{
+							"id": "7agvh1esrd",
+							"text": "“És petita però dins de les petites no és molt petita”",
+							"estrelles": 0
+						},
+						{
+							"id": "a3imm2s2bg",
+							"text": "“Els clorurs són els protons que venen de l’aigua.”",
+							"estrelles": 0
+						},
+						{
+							"id": "muw5bm7eb9",
+							"text": "“En comptes d’anar d’aquí a rectorat, hi has anat passant per Terrassa, Sevilla i Bilbao.”",
+							"estrelles": 0
+						},
+						{
+							"id": "x0o6tzxsy0",
+							"text": "“Els enginyers químics no saben una merda.”",
+							"estrelles": 1
+						},
+						{
+							"id": "dowftobl9e",
+							"text": "“A Suècia hi han casos de dones que denuncien els seus homes per estafar a Hisenda. Aquí un home estafa a Hisenda i tos li diuen ‘Ets el puto amo, el rei del mambo! Ets un rei! Vull un fill teu!’”",
+							"estrelles": 3
+						},
+						{
+							"id": "qihheaf846",
+							"text": "“Només hi han dos problemes amb això: que no és veritat i que no serveix per res.”",
+							"estrelles": 2
+						},
+						{
+							"id": "ujx70qqidh",
+							"text": "“No esteu mamats encara”",
+							"estrelles": 1
+						},
+						{
+							"id": "cdn5oyfuh0",
+							"text": "“Si oloreu aquest àcid (hidrogencianur) primer començareu a sentir un olor a ametlles amargues i després a no sentir res”",
+							"estrelles": 1
+						},
+						{
+							"id": "6plya7vu4u",
+							"text": "“Això us ho explicaré l’any que ve, si no s’ha mort ningú.”",
+							"estrelles": 1
+						},
+						{
+							"id": "7621kxpc0m",
+							"text": "“Tenim classe demà, si els déus són favorables.”",
+							"estrelles": 1
+						},
+						{
+							"id": "yy9gokrg7t",
+							"text": "“Què són els antioxidants? Una porqueriada colossal.”",
+							"estrelles": 0
+						},
+						{
+							"id": "e2ypyoz65e",
+							"text": "“El nombre ‘e’ és un número estrafalari, només serveix per integrar el logaritme natural”",
+							"estrelles": 1
+						}
+					]
+				},
+				{
+					"id": "francisco-javier-bafaluy-bafaluy",
+					"nom": "Francisco Javier Bafaluy Bafaluy",
+					"frases": [
+						{
+							"id": "ytj4fphz2p",
+							"text": "“Uh?”",
+							"estrelles": 0
+						},
+						{
+							"id": "aeg5yopz0y",
+							"text": "“Mmh? Mm!”",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "javier-fernandez",
+					"nom": "Javier Fernández",
+					"frases": [
+						{
+							"id": "t89rj570j7",
+							"text": "“Me vengo aqui”",
+							"estrelles": 0
+						},
+						{
+							"id": "ybciucvzoh",
+							"text": "“Que no me llames profe, coño!”",
+							"estrelles": 0
+						},
+						{
+							"id": "36xq6auva2",
+							"text": "“Vamos a coger esta referencia (fa el gest de ‘el poder de Cristo te obliga’), una referencia divina.”",
+							"estrelles": 1
+						},
+						{
+							"id": "otx3wb54fl",
+							"text": "“Esta imagen está a la derecha. Y esta otra no sé, en el multiverso.”",
+							"estrelles": 0
+						},
+						{
+							"id": "7b3rr3fi3v",
+							"text": "“Si quieres ver una estrella está en el infinito. Pero tu vecino no.”",
+							"estrelles": 2
+						}
+					]
+				},
+				{
+					"id": "javier-garcia",
+					"nom": "Javier García",
+					"frases": [
+						{
+							"id": "gn9zsjaai6",
+							"text": "“Los químicos son también personas respetables”",
+							"estrelles": 0
+						},
+						{
+							"id": "blbtsamvbk",
+							"text": "“No sé si tengo tiempo, tardaré un minuto… o más”",
+							"estrelles": 0
+						},
+						{
+							"id": "c2zrz0gg99",
+							"text": "“Hasta el infinito y más allá. Espera no, eso era con la otra clase. Que la fuerza os acompañe.”",
+							"estrelles": 0
+						},
+						{
+							"id": "d68rd6h2fr",
+							"text": "“(Simplificant una fracció) Medio pollo y medio pollo da un pollo entero.”",
+							"estrelles": 0
+						},
+						{
+							"id": "jpb1iumr5b",
+							"text": "“Ah mira yo no lo he hecho. Pero puedo no hacerlo, porque soy el profe. Seguramente estaría harto de hacer estas cosas… …tan triviales…”",
+							"estrelles": 0
+						},
+						{
+							"id": "h3vk0st66x",
+							"text": "“Me pongo aquí para que grites”",
+							"estrelles": 0
+						},
+						{
+							"id": "0an5r3ttvm",
+							"text": "“Hazlo como te gustaría que te lo hiciese un profesor”",
+							"estrelles": 0
+						},
+						{
+							"id": "dbz1ds1ktp",
+							"text": "“Un agujero negro no es tan negro”",
+							"estrelles": 0
+						},
+						{
+							"id": "9tvm2qucas",
+							"text": "“Ya sabéis cuál es la versión feminista del teorema de Stokes, no? ‘Mírame y no me Stokes’”",
+							"estrelles": 0
+						},
+						{
+							"id": "8cdtmqh5al",
+							"text": "“No sé per què li diuen ESborrar i no CATborrar”",
+							"estrelles": 0
+						},
+						{
+							"id": "hnzy5w7lep",
+							"text": "“Esta función se comporta malamente, como la canción”",
+							"estrelles": 0
+						},
+						{
+							"id": "w151ouktms",
+							"text": "“Como dijo Yoda en El Imperio Contraataca, ‘hay alguien más’”",
+							"estrelles": 0
+						},
+						{
+							"id": "6jbq224kas",
+							"text": "“Vigilad que no haga un _mistake_. Un _mistake_ con patatas…”",
+							"estrelles": 0
+						},
+						{
+							"id": "66fl2hemrg",
+							"text": "“Antes de hacer el ejercicio hay que averiguar por qué he escrito el enunciado en amarillo… Pero en realidad no lo sé, así que vamos a empezar. (...) Me gusta el amarillo”",
+							"estrelles": 0
+						},
+						{
+							"id": "oqi7p7vhhc",
+							"text": "“Us recomano molt jugar amb funcions holomorfes quan estigueu per casa”",
+							"estrelles": 0
+						},
+						{
+							"id": "goi2bxov13",
+							"text": "“Queréis algo de un minuto y placentero o nos vamos ya?”",
+							"estrelles": 0
+						},
+						{
+							"id": "idpfrfsfkz",
+							"text": "“Una cosa es un cosinus que es una cosa rancia, en cambio la exponencial es amable y se deja derivar e integrar. La exponencial se hace querer.”",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "jose-flix",
+					"nom": "José Flix",
+					"frases": [
+						{
+							"id": "zhfipdf0lt",
+							"text": "“Porto fent aquesta assignatura desde 2017 i mai canvio aquesta part perquè els sous no canvien gaire… Podriem deixar-ho així fins 2050 i seguiria valent.”",
+							"estrelles": 1
+						},
+						{
+							"id": "hqn41b1zmi",
+							"text": "“Treballo al CERN”",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "juan-ignacio-pedro-campos-coloma",
+					"nom": "Juan Ignacio Pedro Campos Coloma",
+					"frases": [
+						{
+							"id": "4wg0shummq",
+							"text": "“La derivada segunda de la posición respecto al tiempo… dos veces”",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "lindber-ivan-salas-escobar",
+					"nom": "Lindber Ivan Salas Escobar",
+					"frases": [
+						{
+							"id": "m4oxg8r5bk",
+							"text": "“Chicos no suspendan, que no quiero corregir más exámenes.”",
+							"estrelles": 1
+						},
+						{
+							"id": "qiu7zucp7s",
+							"text": "“Chicos, no se martiricen.”",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "marcel-alguero",
+					"nom": "Marcel Alguero",
+					"frases": [
+						{
+							"id": "0tf29ivv0n",
+							"text": "“Pros de tindre’m com a profe: soc de Terrassa. Contres: soc de Terrassa.”",
+							"estrelles": 0
+						},
+						{
+							"id": "mkcehmz84x",
+							"text": "“El ChatGPT no té ànima, no feu servir ChatGPT.”",
+							"estrelles": 1
+						},
+						{
+							"id": "1lo69thg59",
+							"text": "“No me hagáis muchas preguntas hoy no he dormido mucho (perdió el barça)”",
+							"estrelles": 0
+						},
+						{
+							"id": "xwopxogbyc",
+							"text": "“(Després de que li preguntin quants joules va rebre Carrero Blanco) No els suficients.”",
+							"estrelles": 1
+						},
+						{
+							"id": "e6gxfz3130",
+							"text": "“És imprescindible que el David Galan estigui despullat?”",
+							"estrelles": 1
+						},
+						{
+							"id": "k9zvnxhjqy",
+							"text": "“Això és una dictadura. Comunista, perquè mano jo, però una dictadura. Soc l’Stalin de Càlcul.”",
+							"estrelles": 1
+						}
+					]
+				},
+				{
+					"id": "markus-gaug",
+					"nom": "Markus Gaug",
+					"frases": [
+						{
+							"id": "czs83o0l7w",
+							"text": "“Ara us explicaré que és l’astigmatisme!”",
+							"estrelles": 0
+						},
+						{
+							"id": "mp5ak7ev09",
+							"text": "“Per exemple, els soldats americans quan van a caçar a, no sé, Nicolàs Maduro…”",
+							"estrelles": 0
+						},
+						{
+							"id": "3dxbxfxrrk",
+							"text": "“No hi ha prou negre”",
+							"estrelles": 0
+						},
+						{
+							"id": "abef5hni4r",
+							"text": "“Boltzmann era el de la barba de Taliban”",
+							"estrelles": 0
+						},
+						{
+							"id": "ngpfev8xep",
+							"text": "“No patiu, ja arriba la jacobiana”",
+							"estrelles": 0
+						},
+						{
+							"id": "99n6eq48k9",
+							"text": "“(Busca una integral infumable) Benvinguts la matemàtica”",
+							"estrelles": 0
+						},
+						{
+							"id": "0qav74n9cl",
+							"text": "“No sé si tothom ho vol saber, però la capacitat calorífica d’una estrella de neutrons…”",
+							"estrelles": 0
+						},
+						{
+							"id": "aqz6k8pk8y",
+							"text": "“El positró ràpidament troba la seva media naranja i *soroll d’explosió amb la boca en accent austríac*”",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "nuria-del-valle",
+					"nom": "Núria del Valle",
+					"frases": [
+						{
+							"id": "5ecevxw38r",
+							"text": "“Això no s’explica amb el blablablabla clàssic, es necessita un blablablabla quàntic.”",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "oscar-palacios",
+					"nom": "Oscar Palacios",
+					"frases": [
+						{
+							"id": "jdi5quvlip",
+							"text": "“Si us equivoqueu de permutació se us dividirà la nota entre dos. O sigui, si treieu un 0, 0 entre 2, infinit”",
+							"estrelles": 0
+						},
+						{
+							"id": "xhww44edo1",
+							"text": "“Si vais a engordar como yo que no sea por grasas saturadas, que sea por chuletones y cerveza”",
+							"estrelles": 0
+						},
+						{
+							"id": "ohuabls2f7",
+							"text": "“En castellà acabem sempre en ‘ano’ (pica l’ullet), que mola més”",
+							"estrelles": 0
+						},
+						{
+							"id": "vo5cuglv5d",
+							"text": "“L’hidrur de bor no existeix, és com el papa noel, els reis mags, o el ratoncito pérez”",
+							"estrelles": 0
+						},
+						{
+							"id": "ku137uh76g",
+							"text": "“Es com te iaia, a casa et diu ‘tu que guapo eres’, hasta que sales de casa.”",
+							"estrelles": 0
+						},
+						{
+							"id": "hwbjhbkqnm",
+							"text": "“No soc Dua Lipa”",
+							"estrelles": 0
+						},
+						{
+							"id": "ch3gh1goqv",
+							"text": "“Només hi ha dues coses més febles que les forces de Van der Waals: el govern de Pedro Sanchez i la barborrea de Rajoy.”",
+							"estrelles": 0
+						},
+						{
+							"id": "6dl8kamubq",
+							"text": "“(A la panchi) Tu estas on fire avui, tu te has metido algo de aluminio hoy”",
+							"estrelles": 0
+						},
+						{
+							"id": "1y7ibvzar7",
+							"text": "“Interacciona tipus Pedro Sanchez: lo mes febles possibles… Tampoc es que el govern catala estigui com per tirar coets, pero Pedro Sanchez fa mes gracia”",
+							"estrelles": 0
+						},
+						{
+							"id": "jsyvgw5jrz",
+							"text": "“Aquest era un rei que potser depèn del mite no era tan tonto. No era Borbó, era… d’una altra raça”",
+							"estrelles": 0
+						},
+						{
+							"id": "po69j7gqyi",
+							"text": "“Si heu de fer un refugi nuclear fiqueu un tirador de cervesa i menjar a dojo, que al menys els últims moments us ho passeu bé. I una bona ampolla de whisky, però la sogra no”",
+							"estrelles": 0
+						},
+						{
+							"id": "31u0r5qiut",
+							"text": "“Hay que tener ácido sulfúrico concentrado por casa, si la suegra te pide vino bueno le pones eso”",
+							"estrelles": 0
+						},
+						{
+							"id": "e9l7b88qg0",
+							"text": "“No feu pràctiques (d’aire sense oxigen) amb la sogra, que després es mor. Això se’n diu homicidi”",
+							"estrelles": 0
+						},
+						{
+							"id": "7haz0u3ret",
+							"text": "“Estudieu massa, no sortiu gaire”",
+							"estrelles": 0
+						},
+						{
+							"id": "9sh6vselct",
+							"text": "“Jo formalment tinc nòvia: un dia una, un altre dia una altra… O nòvio.”",
+							"estrelles": 0
+						},
+						{
+							"id": "rea5hlojgy",
+							"text": "“Si mai us heu de fer un implant (mamari) gasteu-vos una mica més de diners que val la pena”",
+							"estrelles": 0
+						},
+						{
+							"id": "s0ph3phypf",
+							"text": "“Hi han dues coses que ens agraden molt: els Orbitals Moleculars i el Donald Trump.”",
+							"estrelles": 0
+						},
+						{
+							"id": "axjh0fb1gt",
+							"text": "“A Irán només es fan servir aquests elements per fer bombes nuclears o... Què fa servir molta energia? Mmmhh... La marihuana”",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "rafel-escribano",
+					"nom": "Rafel Escribano",
+					"frases": [
+						{
+							"id": "vy10pq3mid",
+							"text": "“Ara vaig a descriure matí.”",
+							"estrelles": 0
+						},
+						{
+							"id": "cwoctyro9r",
+							"text": "“Aquesta expressió és bastant complexa”",
+							"estrelles": 0
+						},
+						{
+							"id": "vaq3ljddlf",
+							"text": "“Anirem del cas més senzill al més… _complex_”",
+							"estrelles": 0
+						},
+						{
+							"id": "hc9bbs6yi0",
+							"text": "“EEEdos què és?”",
+							"estrelles": 0
+						},
+						{
+							"id": "0arlnnc2pn",
+							"text": "“Què passaria si passo-passo? Si passo al quadrat?”",
+							"estrelles": 0
+						},
+						{
+							"id": "p6naswptfv",
+							"text": "“Els economistes no se’n surten, però té gràcia el que fan.”",
+							"estrelles": 0
+						},
+						{
+							"id": "wa6wva52te",
+							"text": "“Al Javier se li ha punxat la roda i m’ha trucat a mi. Que ya somos mayorcitos, Javier!”",
+							"estrelles": 0
+						},
+						{
+							"id": "x02p8xfdwl",
+							"text": "“Aquí acabo molt ràpidament quan veig què passa”",
+							"estrelles": 0
+						},
+						{
+							"id": "hz7u4h5301",
+							"text": "Rafel: Com es diu la part de dins del logaritme?\nTothom: Argument\nHC: No ho sé\nRafel: Jo tampoc",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "ramon-munoz",
+					"nom": "Ramón Muñoz",
+					"frases": [
+						{
+							"id": "vc7rg2ybpn",
+							"text": "(Després de dir que π = 3 i que g = 10 = 9) “La pluja cau a uns tres-cents metres per segon, que ara que ha guanyat el Trump allà als Estats Units (fa un salut nazi) és la velocitat amb la que surt (fa una pistola amb la mà) la bala del canó d’una Smith and Wesson.”",
+							"estrelles": 2
+						},
+						{
+							"id": "rws1mdwt4v",
+							"text": "“Com més petites les boles, més triguen a caure.”",
+							"estrelles": 0
+						},
+						{
+							"id": "sp0om4oieq",
+							"text": "“Deixa que **destrueixi** a l’Emili.”",
+							"estrelles": 1
+						},
+						{
+							"id": "031v5pjhae",
+							"text": "(Fent el gest amb les mans) “No és gaire gran, trenta centímetres.”",
+							"estrelles": 1
+						},
+						{
+							"id": "byedthd5zs",
+							"text": "“La tecnologia dels microones és **HÍPER sofisticada!**”",
+							"estrelles": 1
+						},
+						{
+							"id": "xjo2icqrfn",
+							"text": "“Si jo fos un fotó, nyo. No val la pena agafar cap cinta transportadora: tot a la mateixa velocitat!”",
+							"estrelles": 0
+						},
+						{
+							"id": "5fs39cw9ah",
+							"text": "“No heu de mirar mai cap a l’esquerra, que no és cap missatge polític.”",
+							"estrelles": 1
+						},
+						{
+							"id": "ye95gv3e56",
+							"text": "“Si tu vas a una marató sense entrenar, se’t farà eterna: moriràs a mig camí.”",
+							"estrelles": 1
+						},
+						{
+							"id": "ls2iflrvf5",
+							"text": "“Tu ets un esclau encara de l’Emili!”",
+							"estrelles": 1
+						},
+						{
+							"id": "hszfvdg0b0",
+							"text": "“**_DOS ÉS U MÉS U!!!!_**”",
+							"estrelles": 1
+						},
+						{
+							"id": "qre46ig3ze",
+							"text": "“No sé si mai heu provat de tirar-vos d’un cinquè pis.”",
+							"estrelles": 1
+						},
+						{
+							"id": "f2axua3p20",
+							"text": "“Si una girafa fós ideal, al baixar el cap li explotaria el cor.”",
+							"estrelles": 0
+						},
+						{
+							"id": "d4jqwerprg",
+							"text": "“Ell diu que parla català, però jo crec que parla mallorquí”",
+							"estrelles": 0
+						},
+						{
+							"id": "17ds0omwv3",
+							"text": "“Sommer-(feld), amb o. Si fos amb u seria estiu”",
+							"estrelles": 0
+						},
+						{
+							"id": "3g3ricfw8n",
+							"text": "“El que passa es que és esquizofrénic! Tu a la teva matriu li dius A i als teus vectors propis li dius B. TU NO ESTAS **B**!!”",
+							"estrelles": 0
+						},
+						{
+							"id": "j2dod05l4u",
+							"text": "_Sant Jordi:_\n“Sant Jordi la té petita.”\n“El drac li diu que quina espasa més petita.”\n“(l’espasa) és petita, però s’allarga.”\n“No! No s’està allargant físicament: esteu mirant punts en l’espai-temps.”\n“La tenia amagada, però us l’ensenyo.”",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "ricard-gelabert",
+					"nom": "Ricard Gelabert",
+					"frases": [
+						{
+							"id": "l62xu9zlwz",
+							"text": "“...un monstre, Lord Kelvin.”",
+							"estrelles": 0
+						},
+						{
+							"id": "fwq6oezf9o",
+							"text": "“La funció d’ona ha de ser unívoca, contínua, i de quadrat sumable. I vosaltres com no sabeu una merda podeu demanar que sigui rosa i faci olor a maduixa”",
+							"estrelles": 0
+						},
+						{
+							"id": "zbtdz9tqpn",
+							"text": "“Em puc fer les palles mentals que vulgui.”",
+							"estrelles": 0
+						},
+						{
+							"id": "17zzoqrcbt",
+							"text": "“Heu de conèixer les vostres calculadores. Tampoc cal que les convideu a fer el cafè o els hi demaneu com va la família.”",
+							"estrelles": 0
+						},
+						{
+							"id": "0sr55wti47",
+							"text": "“Aquest exercici és el mateix, l’únic que canvia és la partícula a la que li feu la… anava a dir fimosis… Volia dir l’autopsia”",
+							"estrelles": 0
+						},
+						{
+							"id": "vrbn48zid6",
+							"text": "“Sé que les matemàtiques us causen diarrea i altres mals de panxa”",
+							"estrelles": 0
+						},
+						{
+							"id": "kx5h2bygho",
+							"text": "“Demà us ensenyaré la foto de la víctima, oberta en canal”",
+							"estrelles": 0
+						},
+						{
+							"id": "wi4q4q7v4u",
+							"text": "“Què és l’espín, papa?”",
+							"estrelles": 0
+						},
+						{
+							"id": "50ibnw7nv6",
+							"text": "“Com són les 9 del matí, li puc dir ‘i’, li puc dir’j’, com si li vull dir ‘pernil serranu’ (...) Si voleu, vosaltres podeu posar albergínies.”",
+							"estrelles": 0
+						},
+						{
+							"id": "zgc8zmb4p4",
+							"text": "“Em podeu denunciar per abús infantil si això us sembla massa complicat”",
+							"estrelles": 0
+						},
+						{
+							"id": "v1wuy2jwf9",
+							"text": "“Com a químic quàntic, no em puc controlar: vaig a resoldre l’equació de valors propis de la funció d’ona”",
+							"estrelles": 0
+						},
+						{
+							"id": "wiojskzxjl",
+							"text": "“Els electrons la tenen MOLT GRAN”",
+							"estrelles": 0
+						},
+						{
+							"id": "3upjhhvmya",
+							"text": "“Lo que farem ara ho farem a velocitat ultrarràpida. Jo segurament augmentaré la meva massa per efectes relativistes”",
+							"estrelles": 0
+						},
+						{
+							"id": "3n62lsuwdx",
+							"text": "“Jo no puc augmentar l’entropia del meu calaix de mitjons per molt que els desendreci”",
+							"estrelles": 0
+						},
+						{
+							"id": "ymtuyg5mud",
+							"text": "“La química es masa difícil pels químics”",
+							"estrelles": 0
+						},
+						{
+							"id": "0gzx918mxp",
+							"text": "“El sentit químic brilla per la seva absència”",
+							"estrelles": 0
+						},
+						{
+							"id": "4kl3rdnxw9",
+							"text": "Pau: “Per què hem d’avaluar la funció entre els límits d’integració?”\nRicard: “Perquè pomes no és igual a plàtans més peres”",
+							"estrelles": 0
+						},
+						{
+							"id": "c2g4zhu7a5",
+							"text": "Runxi: “Hay que escribir los enunciados?”\nRicard: “Si quieres practicar caligrafia si”",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "robert-manucharyan",
+					"nom": "Robert Manucharyan",
+					"frases": [
+						{
+							"id": "nq20aoap16",
+							"text": "“Això es diu ‘àlgebra de Clifford’. Com el gos gran vermell, ho va inventar el gos.”",
+							"estrelles": 0
+						},
+						{
+							"id": "v4n01zeq2a",
+							"text": "“(Després de fer un exercici trivial) Sabeu la típica de ‘això no és _rocket science_’? Doncs això és _rocket science_”",
+							"estrelles": 0
+						},
+						{
+							"id": "mg0xmm3j6g",
+							"text": "“Les galàxies son enormes, per si no ho sabieu”",
+							"estrelles": 0
+						},
+						{
+							"id": "igf3nold36",
+							"text": "“Un detector de muons el que fa és detectar muons”",
+							"estrelles": 0
+						},
+						{
+							"id": "zfil9qb8k9",
+							"text": "“c és casi 1”",
+							"estrelles": 0
+						},
+						{
+							"id": "ccaaa3g2a0",
+							"text": "“Ara podeu vindre a tocar les joguines si voleu”",
+							"estrelles": 0
+						},
+						{
+							"id": "l7ln4he3rt",
+							"text": "“Ens donen un cp”",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "rosa-camps",
+					"nom": "Rosa Camps",
+					"frases": [
+						{
+							"id": "94akffaycx",
+							"text": "“La probabilitat de que us equivoqueu és 1.”",
+							"estrelles": 0
+						},
+						{
+							"id": "o8klqh5svx",
+							"text": "“Si ho intentes fer a mà, _antes palmarías_.”",
+							"estrelles": 0
+						},
+						{
+							"id": "o193hopc8x",
+							"text": "“Com diríem al carrer, la matriu està completament determinada.”",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "santi-peris",
+					"nom": "Santi Peris",
+					"frases": [
+						{
+							"id": "gltwkd2icj",
+							"text": "“Hi ha molts productes escalars al mercat de productes escalars”",
+							"estrelles": 0
+						},
+						{
+							"id": "vzy1klxdfo",
+							"text": "“No confungueu acostar-se amb estar al damunt.”",
+							"estrelles": 0
+						},
+						{
+							"id": "6rcmm369j6",
+							"text": "“Si totes les funcions fossin lineals la vida seria molt fàcil”",
+							"estrelles": 0
+						},
+						{
+							"id": "09q2k13llv",
+							"text": "“No tenim ganes de patir, i menys en públic.”",
+							"estrelles": 0
+						},
+						{
+							"id": "8z7hw0tbgc",
+							"text": "“Les nostres bases són ortonormals pel mateix preu”",
+							"estrelles": 0
+						},
+						{
+							"id": "zafo3uogvt",
+							"text": "“Això ho puc fer, és un país lliure”",
+							"estrelles": 0
+						},
+						{
+							"id": "7sjp491yg3",
+							"text": "“Que vol dir ‘segueix, segueix!’?”",
+							"estrelles": 0
+						},
+						{
+							"id": "erqxxhslhr",
+							"text": "“(Seductivament) Oi que us agraden les primitives?”",
+							"estrelles": 0
+						},
+						{
+							"id": "k5r8vck73a",
+							"text": "“(Senyalant a g(a,y)) Aixo seria la condició inicial”",
+							"estrelles": 0
+						},
+						{
+							"id": "r8eybqdmd7",
+							"text": "“(Foten un portasso i comença a sonar la alarma d’incendis) Ale (continua la classe com si res)”",
+							"estrelles": 0
+						},
+						{
+							"id": "aoezg868s0",
+							"text": "“Phi determina si la paella és de duralex o de teflón.”",
+							"estrelles": 0
+						},
+						{
+							"id": "cjix41odxi",
+							"text": "“Nomes faltaria anar a la ferreteria i demanar 3 metres de corda i que et demanin en quina parametrització.”",
+							"estrelles": 0
+						},
+						{
+							"id": "fwryuqf3i4",
+							"text": "“Ara mirarem un conjunt com el que seria el formatge Emmental, perquè té forats. No digueu mai que el Gruyère té forats, mai.”",
+							"estrelles": 0
+						},
+						{
+							"id": "8g9yxz681i",
+							"text": "“Aquí hi ha l’acudit que diu: Deriva i venceràs.”",
+							"estrelles": 0
+						},
+						{
+							"id": "8iszay8zgn",
+							"text": "“Diferencial de x és diferencial de x”",
+							"estrelles": 0
+						},
+						{
+							"id": "6ybfpl8mmd",
+							"text": "“Per cert, per si no ho sabíeu, es diu meridià de greenwich (/grinitx/) i no de greenwich (/grinuitx/)”",
+							"estrelles": 0
+						},
+						{
+							"id": "t0djuqh6ly",
+							"text": "“El jacobià flipa el signe”",
+							"estrelles": 0
+						},
+						{
+							"id": "ymrdpkddes",
+							"text": "“La paraula ‘donut’ no sé com l’escriviu però an anglès s’escriu ‘dough nut’: ‘femella de pasta’. ‘Dough’ vol dir ‘pasta’, també vol dir (frota els dits d’una mà) pasta, calers. ‘Nut’ vol dir ‘femella’, com la femella d’un cargol”",
+							"estrelles": 0
+						},
+						{
+							"id": "ru6s8qo41q",
+							"text": "“El tensor de Levi-Civita us acompanyarà tota la vida”",
+							"estrelles": 0
+						},
+						{
+							"id": "qohg7cfgqu",
+							"text": "“Quan has acabat, se’t queda cara de tonto”",
+							"estrelles": 0
+						},
+						{
+							"id": "oobj5z55i7",
+							"text": "“(Dibuixa un quadrat) Això no és un cercle”",
+							"estrelles": 0
+						},
+						{
+							"id": "djxivg2n7t",
+							"text": "“Si tu tens una base pitiflàutica, tindràs vectors pitiflàutics”",
+							"estrelles": 0
+						}
+					]
+				},
+				{
+					"id": "xavier-alvarez",
+					"nom": "Xavier Álvarez",
+					"frases": [
+						{
+							"id": "yqj0dl18wp",
+							"text": "“...els 4 pals del poker: piques, trèbols, rombos i… diamants…”",
+							"estrelles": 1
+						}
+					]
+				}
+			]
+		}
+	]
+}

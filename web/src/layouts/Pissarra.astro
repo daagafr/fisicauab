@@ -1,0 +1,61 @@
+---
+// La closca de les pàgines del Frasari. No fa servir la de Física UAB
+// (Base.astro): el frasari té el seu propi aspecte, el d'una pissarra de guix,
+// que és on parlen els profes.
+//
+//   <Pissarra titol="…" descripcio="…">…</Pissarra>
+//
+// No surt a Google (noindex): són frases de gent amb nom i cognoms, dites a classe
+// i fora de context. Si algun dia ho voleu indexar, passeu-hi `indexar`.
+import '@fontsource/cabin-sketch/700.css';
+import '@fontsource-variable/shantell-sans';
+import '@fontsource-variable/shantell-sans/wght-italic.css';
+import '../styles/frasari.css';
+import { lloc } from '../config/lloc';
+
+interface Props {
+	titol: string;
+	descripcio: string;
+	indexar?: boolean;
+}
+const { titol, descripcio, indexar = false } = Astro.props;
+
+const canonica = new URL(Astro.url.pathname, lloc.url);
+---
+
+<!doctype html>
+<html lang="ca" class="frasari">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{titol}</title>
+		<meta name="description" content={descripcio} />
+		<link rel="canonical" href={canonica} />
+		{!indexar && <meta name="robots" content="noindex, nofollow" />}
+
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<meta name="theme-color" content="#2c4a3e" />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={lloc.nom} />
+		<meta property="og:title" content={titol} />
+		<meta property="og:description" content={descripcio} />
+		<meta property="og:url" content={canonica} />
+		<meta property="og:image" content={new URL('/og.png', lloc.url)} />
+		<meta property="og:locale" content="ca_ES" />
+	</head>
+	<body>
+		{/* El guix: una vora rugosa per als títols i les estrelles, i l’estrella dibuixada a mà. */}
+		<svg class="defs" aria-hidden="true" focusable="false">
+			<filter id="guix" x="-5%" y="-10%" width="110%" height="120%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="soroll"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" in2="soroll" scale="2.4" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+			</filter>
+			<symbol id="estrella" viewBox="0 0 24 24">
+				<path d="M12 2.4 14.7 8.7 21.5 9.2 16.3 13.6 18.1 20.4 12.1 16.8 5.8 20.6 7.6 13.8 2.4 9.4 9.3 8.6Z"></path>
+			</symbol>
+		</svg>
+		<slot />
+	</body>
+</html>

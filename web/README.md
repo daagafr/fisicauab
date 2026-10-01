@@ -2,7 +2,8 @@
 
 El web de la comunitat de física de la UAB. Fet amb [Astro](https://astro.build):
 genera HTML estàtic, no necessita base de dades, i Vercel el publica sol. L'única part
-que corre al servidor és l'editor de La Nostra Història (tres rutes a `src/pages/api/lnh/`).
+que corre al servidor són els editors de La Nostra Història i del Frasari (les rutes de
+`src/pages/api/lnh/` i `src/pages/api/frasari/`).
 
 La marca surt de la carpeta del costat, `../marca`. El web no redibuixa res: copia
 els fitxers i pinta el dibuix amb el color del tema.
@@ -31,8 +32,10 @@ web/
 │   ├── content/avisos/       ★ el tauler: un .md per avís
 │   ├── pages/                una pàgina per fitxer (index, phihub, comunitat…)
 │   │   ├── la-nostra-historia/   el llibre (index.astro) i el seu editor (editor.astro)
-│   │   └── api/lnh/              entrar, llegir i desar per a l'editor
+│   │   ├── frasari/              el frasari (index.astro) i el seu editor (editor.astro)
+│   │   └── api/                  entrar, llegir i desar per als editors (lnh/, frasari/)
 │   ├── lnh/                  La Nostra Història: de LaTeX a HTML, sessions, desar
+│   ├── frasari/              el Frasari: les dades, l'editor i on es desa
 │   ├── components/           capçalera, peu, banner, segell de sigles, l'àtom…
 │   ├── layouts/Base.astro    la closca de totes les pàgines (<head>, capçalera, peu)
 │   └── styles/global.css     colors, tipografia, botons, paper mil·limetrat
@@ -42,7 +45,8 @@ web/
     ├── og.py                 genera public/og.png, la imatge de WhatsApp
     ├── og-lnh.py             el mateix per al llibre: public/lnh/og.png
     ├── cmu.py                retalla la CMU Serif per al web
-    └── lnh-admin.mjs         dona d'alta un admin de l'editor (npm run lnh:admin)
+    ├── frasari-importa.py    bolca una secció sencera de frases al Frasari
+    └── lnh-admin.mjs         dona d'alta un admin dels editors (npm run lnh:admin)
 ```
 
 Les dues carpetes amb ★ són les que tocareu més. No cal saber Astro per fer-ho.
@@ -85,6 +89,8 @@ colors, tipografies, logos i fotos. Són a `src/components/banners/`:
 | `mineuab` | `Mineuab.astro` | la portada de mineuab.org (`tailwind.config.ts`, logo, captura) |
 | `niniapp` | `Niniapp.astro` | la portada de niniapp.org (icona, Lora, botó lila) |
 | `dlv` | `Dlv.astro` | la capçalera del diccionari (`dlv.css`, logo DLV, segell RAV) |
+| `lnh` | `Lnh.astro` | la portada de La Nostra Història (pergamí, marc granat, lotus) |
+| `frasari` | `Frasari.astro` | la pissarra del Frasari, amb una frase de les bones |
 | — | `Fisica.astro` | el de Física UAB, per a tot el que no en té de propi |
 
 Per fer-ne un de nou: copia'n un de semblant, posa'l a `components/Banner.astro` i
@@ -226,14 +232,71 @@ La imatge per compartir (`public/lnh/og.png`) es fa amb `python eines/og-lnh.py`
 
 ---
 
+## El Frasari
+
+Les frases dels profes, a `fisicauab.com/frasari`, i al phihub, a l'Hemeroteca. Té
+l'aspecte d'una pissarra de guix, amb un buscador, un filtre d'estrelles, un rànquing
+i una frase a l'atzar a dalt de tot.
+
+Totes les frases són en un sol fitxer, `Frasari/frasari.json`, a la carpeta del
+costat del web (com La Nostra Història). Hi ha grups (ara només **Profes**), dins de
+cada grup les persones i, dins de cada persona, les frases, cadascuna amb 0, 1, 2 o 3
+estrelles. La pàgina el llegeix quan es construeix el web.
+
+### L'editor
+
+A `fisicauab.com/frasari/editor` (o «Accés d'edició», al peu del frasari). Hi entren
+**els mateixos admins que a La Nostra Història**, amb el mateix correu i contrasenya, i
+no cal configurar res més: fa servir les mateixes variables d'entorn.
+
+- **Afegir**: tria qui la va dir (o «Una persona nova…»), escriu la frase i les
+  estrelles.
+- **Estrelles**: clica la primera, la segona o la tercera estrella d'una frase. Si
+  cliques la que ja és l'última encesa, n'hi treus una.
+- **Editar** i **esborrar**: a cada frase. **Canvia el nom**: a cada persona. Si una
+  persona es queda sense frases, desapareix.
+- **Desfés** (Ctrl Z) treu l'últim canvi. Res no es desa fins que cliques **Desa**
+  (Ctrl S), i aleshores es desa tot de cop: al disc en local, i amb un commit a GitHub
+  al web publicat, que surt al web en un parell de minuts.
+
+Si dos admins desen alhora no es trepitgen: l'editor no envia el fitxer sencer sinó la
+llista de canvis, i el servidor l'aplica al frasari tal com estigui en aquell moment.
+
+Com s'escriuen les frases, tal com al frasari en paper:
+
+- Entre cometes, i el context entre parèntesis: `(Coge una chaqueta) “De quien…”`.
+  El que va entre parèntesis surt més fluix.
+- Els diàlegs, una línia per persona: `Unai: “…”` (el nom surt en rosa).
+- `**negreta**`, `_cursiva_` i `*accions*`.
+
+### Bolcar-hi una secció sencera
+
+Per a les altres seccions del frasari en paper (Fisquims, Sótano…), és més ràpid
+escriure-les en un `.txt` i importar-les de cop. El format és a
+`eines/frasari-importa.py`:
+
+```bash
+python eines/frasari-importa.py fisquims.txt --grup fisquims --nom Fisquims
+```
+
+Si el grup ja existeix, el substitueix sencer.
+
+### No surt a Google
+
+Les pàgines del Frasari porten `noindex`: són frases de gent amb nom i cognoms, dites a
+classe i fora de context. Si algun dia ho voleu canviar, és `indexar` a
+`src/layouts/Pissarra.astro`.
+
+---
+
 ## Publicar a Vercel amb fisicauab.com
 
 1. Puja la carpeta `Física UAB` sencera a un repositori de GitHub.
 2. A [vercel.com](https://vercel.com) → **Add New… → Project** → importa el repo.
 3. A **Root Directory** posa `web`. Vercel detecta Astro sol. Deixa marcada
    l'opció **Include files outside the root directory in the Build Step**: el web
-   llegeix La Nostra Història de la carpeta del costat. (Si no la troba, la
-   publicació s'atura i ho diu.)
+   llegeix La Nostra Història i el Frasari de les carpetes del costat. (Si no les
+   troba, la publicació s'atura i ho diu.)
 4. **Deploy**. Cada `git push` a `main` torna a publicar.
 5. **Settings → Domains** → afegeix `fisicauab.com` i `www.fisicauab.com`. Vercel
    et dirà quins registres DNS has de posar on vau comprar el domini.
@@ -245,7 +308,8 @@ La imatge per compartir (`public/lnh/og.png`) es fa amb `python eines/og-lnh.py`
 - [ ] `correu` a `src/config/lloc.ts`: crear-lo o canviar-lo.
 - [ ] La Nostra Història: pujar la carpeta `La Nostra Història/` al repositori i posar
       les variables de l'editor a Vercel (vegeu més amunt).
-- [ ] NiniApp, el joc i el Frasario: descripció i enllaç (`src/data/phihub.ts`).
+- [ ] NiniApp i el joc: descripció i enllaç (`src/data/phihub.ts`).
+- [ ] El Frasari: la resta de seccions del frasari en paper, si les voleu publicar.
 - [ ] Logos dels clubs i projectes a `public/phihub/`, si en voleu en comptes de sigles.
 - [ ] Els logos del GdeE RSEF i d'Optica't són els dels seus webs; si en teniu una
       versió millor (la de l'Instagram), substituïu `gdee-emblema.png` i

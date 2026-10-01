@@ -1,0 +1,20 @@
+---
+// Les estrelles d'una frase, dibuixades amb guix groc. Amb 0, no surt res.
+interface Props {
+	n: number;
+	class?: string;
+}
+const { n, class: classe } = Astro.props;
+---
+
+{
+	n > 0 && (
+		<span class:list={['estrelles', classe]} role="img" aria-label={`${n} ${n === 1 ? 'estrella' : 'estrelles'}`}>
+			{Array.from({ length: n }, () => (
+				<svg viewBox="0 0 24 24" aria-hidden="true">
+					<use href="#estrella" />
+				</svg>
+			))}
+		</span>
+	)
+}

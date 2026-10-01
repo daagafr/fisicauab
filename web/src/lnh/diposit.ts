@@ -101,16 +101,17 @@ function local(arrel: string): Diposit {
 
 // ── Publicat: GitHub ────────────────────────────────────────────────────────
 
-function github(token: string): Diposit {
+/** `carpeta`: des de l'arrel del repositori, amb barres (pot tenir subcarpetes). */
+function github(token: string, carpeta: string, agent: string): Diposit {
 	const repo = LNH_GITHUB_REPO || 'daagafr/fisicauab';
 	const branca = LNH_GITHUB_BRANCA || 'main';
 	const url = (cami: string) =>
-		`https://api.github.com/repos/${repo}/contents/${[CARPETA, ...cami.split('/')].map(encodeURIComponent).join('/')}`;
+		`https://api.github.com/repos/${repo}/contents/${[...carpeta.split('/'), ...cami.split('/')].map(encodeURIComponent).join('/')}`;
 	const capcaleres = {
 		Authorization: `Bearer ${token}`,
 		Accept: 'application/vnd.github+json',
 		'X-GitHub-Api-Version': '2022-11-28',
-		'User-Agent': 'fisicauab-la-nostra-historia',
+		'User-Agent': agent,
 	};
 
 	return {
@@ -143,15 +144,20 @@ function github(token: string): Diposit {
 	};
 }
 
-/** On es desa: al disc en local, a GitHub al web publicat. */
-export function diposit(): Diposit {
-	if (import.meta.env.DEV) {
-		const arrel = arrelLocal();
-		if (arrel) return local(arrel);
-	}
-	if (LNH_GITHUB_TOKEN) return github(LNH_GITHUB_TOKEN);
+/**
+ * On es desa una carpeta del repositori: al disc en local (si `arrel`, la mateixa
+ * carpeta al disc, existeix), a GitHub al web publicat. També el fa servir el
+ * Frasari (src/frasari/diposit.ts), amb els mateixos admins i el mateix token.
+ */
+export function obreDiposit(carpeta: string, arrel: string | null, agent: string): Diposit {
+	if (import.meta.env.DEV && arrel) return local(arrel);
+	if (LNH_GITHUB_TOKEN) return github(LNH_GITHUB_TOKEN, carpeta, agent);
 	throw new NoConfigurat('Falta LNH_GITHUB_TOKEN');
 }
+
+/** On es desa el llibre. */
+export const diposit = (): Diposit =>
+	obreDiposit(CARPETA, import.meta.env.DEV ? arrelLocal() : null, 'fisicauab-la-nostra-historia');
 
 /** El fitxer principal i tots els que inclou, amb el seu sha. */
 export async function fitxersDelLlibre(d: Diposit): Promise<Record<string, Fitxer>> {

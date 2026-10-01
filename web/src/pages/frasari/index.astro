@@ -1,0 +1,540 @@
+---
+// El Frasari: les frases dels profes, apuntades a classe. La pàgina es construeix
+// amb ../Frasari/frasari.json; els admins (els mateixos de La Nostra Història)
+// l'editen a /frasari/editor.
+import Pissarra from '../../layouts/Pissarra.astro';
+import Estrelles from '../../components/frasari/Estrelles.astro';
+import { frasariDelDisc } from '../../frasari/diposit';
+import { htmlDe, perBuscar, perNom, totes } from '../../frasari/frasari';
+
+const frasari = frasariDelDisc();
+const frases = totes(frasari);
+const persones = frasari.grups.flatMap((g) => g.persones);
+const ranquing = frases
+	.filter(({ frase }) => frase.estrelles > 0)
+	.sort((a, b) => b.frase.estrelles - a.frase.estrelles || perNom(a.persona, b.persona));
+// La de dalt: sense JavaScript, la primera del rànquing; amb, una a l'atzar.
+const destacada = ranquing[0];
+const nFrases = (n: number) => `${n} ${n === 1 ? 'frase' : 'frases'}`;
+---
+
+<Pissarra titol="Frasari · Física UAB" descripcio="Les frases dels profes de Física UAB, apuntades a classe.">
+	<header class="cap mida">
+		<nav class="cap-nav" aria-label="Física UAB">
+			<a href="/phihub#hemeroteca">← Phihub</a>
+			<a href="/">fisicauab.com</a>
+		</nav>
+		<h1 class="titol">Frasari</h1>
+		<p class="subtitol">Les frases dels profes, apuntades a classe.</p>
+		<p class="xifres">
+			{nFrases(frases.length)} · {persones.length} profes · {ranquing.length} amb estrella
+		</p>
+	</header>
+
+	{
+		destacada && (
+			<section class="mida" aria-label="Una frase a l’atzar">
+				<figure class="destacada" id="destacada">
+					<blockquote class="destacada-frase" id="destacada-frase">
+						<span class="frase-estrelles">
+							<Estrelles n={destacada.frase.estrelles} />
+						</span>
+						<p class="frase-text" set:html={htmlDe(destacada.frase.text)} />
+					</blockquote>
+					<figcaption class="destacada-qui" id="destacada-qui">
+						— {destacada.persona.nom}
+					</figcaption>
+					<button class="boto-guix" type="button" id="una-altra" hidden>
+						Una altra <span aria-hidden="true">↻</span>
+					</button>
+				</figure>
+			</section>
+		)
+	}
+
+	<div class="mida eines" role="search">
+		<label class="cerca">
+			<span class="visualment-amagat">Busca</span>
+			<input type="search" id="busca" placeholder="Busca una frase o un profe…" autocomplete="off" />
+		</label>
+		<fieldset class="tria">
+			<legend class="visualment-amagat">Quantes estrelles</legend>
+			<label><input type="radio" name="min" value="0" checked /><span>Totes</span></label>
+			{
+				[1, 2, 3].map((n) => (
+					<label>
+						<input type="radio" name="min" value={n} aria-label={n === 3 ? 'Només les de tres estrelles' : `Amb ${n} estrelles o més`} />
+						<span>
+							<Estrelles n={n} />
+						</span>
+					</label>
+				))
+			}
+		</fieldset>
+		<fieldset class="tria">
+			<legend class="visualment-amagat">Com les ordenem</legend>
+			<label><input type="radio" name="vista" value="profes" checked /><span>Per profe</span></label>
+			<label><input type="radio" name="vista" value="ranquing" /><span>Rànquing</span></label>
+		</fieldset>
+	</div>
+
+	<nav class="mida index" id="index" aria-label="Profes">
+		<ol>
+			{
+				persones.map((p) => (
+					<li>
+						<a href={`#${p.id}`}>{p.nom}</a>
+					</li>
+				))
+			}
+		</ol>
+	</nav>
+
+	<main class="mida" id="llista">
+		{
+			persones.map((p) => (
+				<section class="persona" id={p.id} aria-labelledby={`nom-${p.id}`}>
+					<header class="persona-cap">
+						<h2 class="persona-nom" id={`nom-${p.id}`}>
+							{p.nom}
+						</h2>
+						<span class="persona-compte">{nFrases(p.frases.length)}</span>
+					</header>
+					<ol class="frases">
+						{p.frases.map((f) => (
+							<li class="frase" id={`f-${f.id}`} data-estrelles={f.estrelles} data-cerca={perBuscar(`${f.text} ${p.nom}`)}>
+								<span class="frase-estrelles">
+									<Estrelles n={f.estrelles} />
+								</span>
+								<p class="frase-text" set:html={htmlDe(f.text)} />
+							</li>
+						))}
+					</ol>
+				</section>
+			))
+		}
+	</main>
+
+	<section class="mida" id="ranquing" aria-label="Rànquing" hidden>
+		<ol class="frases">
+			{
+				ranquing.map(({ frase: f, persona: p }) => (
+					<li class="frase" data-estrelles={f.estrelles} data-cerca={perBuscar(`${f.text} ${p.nom}`)}>
+						<span class="frase-estrelles">
+							<Estrelles n={f.estrelles} />
+						</span>
+						<div>
+							<p class="frase-text" set:html={htmlDe(f.text)} />
+							<p class="frase-qui">— {p.nom}</p>
+						</div>
+					</li>
+				))
+			}
+		</ol>
+	</section>
+
+	<p class="mida buit" id="buit" role="status" hidden>
+		Res a la pissarra. Prova una altra paraula o treu-li estrelles al filtre.
+	</p>
+
+	<footer class="peu">
+		<div class="safata" aria-hidden="true">
+			<div class="mida safata-dins">
+				<span class="guix"></span>
+				<span class="guix groc"></span>
+				<span class="guix rosa curt"></span>
+				<span class="esborrador"></span>
+			</div>
+		</div>
+		<div class="mida peu-dins">
+			<p>Frasari de Física UAB. Frases dites a classe i apuntades per qui hi era.</p>
+			<p><a href="/frasari/editor" id="edita">Accés d’edició</a> · <a href="/">fisicauab.com</a></p>
+		</div>
+	</footer>
+</Pissarra>
+
+<script>
+	import { perBuscar } from '../../frasari/frasari';
+
+	const $ = <T extends HTMLElement = HTMLElement>(s: string) => document.querySelector<T>(s);
+	const llista = $('#llista')!;
+	const ranquing = $('#ranquing')!;
+	const index = $('#index')!;
+	const buit = $('#buit')!;
+	const busca = $<HTMLInputElement>('#busca')!;
+	const triat = (nom: string) => document.querySelector<HTMLInputElement>(`input[name="${nom}"]:checked`)!.value;
+
+	// ── Buscar i filtrar ──
+	function filtra() {
+		const q = perBuscar(busca.value.trim());
+		const min = Number(triat('min'));
+		const vista = triat('vista');
+		llista.hidden = vista !== 'profes';
+		ranquing.hidden = vista !== 'ranquing';
+		index.hidden = vista !== 'profes';
+
+		let visibles = 0;
+		for (const f of (vista === 'profes' ? llista : ranquing).querySelectorAll<HTMLElement>('.frase')) {
+			const es = Number(f.dataset.estrelles) >= min && (!q || f.dataset.cerca!.includes(q));
+			f.hidden = !es;
+			if (es) visibles++;
+		}
+		for (const p of llista.querySelectorAll<HTMLElement>('.persona')) {
+			p.hidden = !p.querySelector('.frase:not([hidden])');
+		}
+		buit.hidden = visibles > 0;
+	}
+	busca.addEventListener('input', filtra);
+	document.querySelectorAll('input[name="min"], input[name="vista"]').forEach((r) => r.addEventListener('change', filtra));
+	filtra();
+
+	// ── Una frase a l'atzar, d'entre les de dues o tres estrelles ──
+	const destacada = $('#destacada');
+	if (destacada) {
+		const frase = $('#destacada-frase')!;
+		const qui = $('#destacada-qui')!;
+		const boto = $<HTMLButtonElement>('#una-altra')!;
+		const candidates = [...llista.querySelectorAll<HTMLElement>('.frase')].filter((f) => Number(f.dataset.estrelles) >= 2);
+		const quiet = matchMedia('(prefers-reduced-motion: reduce)');
+		let actual: HTMLElement | null = null;
+
+		const posa = (f: HTMLElement) => {
+			actual = f;
+			frase.innerHTML = f.innerHTML;
+			qui.textContent = `— ${f.closest('.persona')!.querySelector('.persona-nom')!.textContent!.trim()}`;
+		};
+		const altra = () => {
+			const opcions = candidates.filter((f) => f !== actual);
+			if (!opcions.length) return;
+			const f = opcions[Math.floor(Math.random() * opcions.length)];
+			if (quiet.matches) return posa(f);
+			// L'esborrador hi passa per sobre i torna a escriure.
+			destacada.classList.add('esborrant');
+			setTimeout(() => {
+				posa(f);
+				destacada.classList.remove('esborrant');
+			}, 220);
+		};
+		if (candidates.length > 1) {
+			posa(candidates[Math.floor(Math.random() * candidates.length)]);
+			boto.hidden = false;
+			boto.addEventListener('click', altra);
+		}
+	}
+
+	// Si has entrat a l'editor (de La Nostra Història o d'aquí), el peu t'hi porta.
+	if (document.cookie.split('; ').includes('lnh_admin=1')) {
+		const edita = $('#edita');
+		if (edita) edita.textContent = 'Edita el frasari';
+	}
+</script>
+
+<style>
+	/* ── Capçalera ── */
+	.cap {
+		padding-block: clamp(1.25rem, 4vw, 2rem) clamp(2rem, 5vw, 3rem);
+		text-align: center;
+	}
+	.cap-nav {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		font-size: 0.95rem;
+	}
+	.cap-nav a {
+		color: var(--guix-suau);
+		text-decoration: none;
+	}
+	.cap-nav a:hover {
+		color: var(--guix);
+		text-decoration: underline;
+	}
+	.titol {
+		margin-top: clamp(1.5rem, 5vw, 2.5rem);
+		font-size: clamp(4.2rem, 15vw, 9rem);
+		letter-spacing: 0.02em;
+		line-height: 0.95;
+		filter: url(#guix);
+	}
+	.subtitol {
+		margin-top: 0.75rem;
+		color: var(--guix-suau);
+		font-size: clamp(1.15rem, 2.6vw, 1.45rem);
+	}
+	.xifres {
+		margin-top: 0.6rem;
+		color: var(--groc);
+		font-size: 0.95rem;
+	}
+
+	/* ── La frase a l'atzar: emmarcada amb guix ── */
+	.destacada {
+		position: relative;
+		display: grid;
+		justify-items: center;
+		gap: 0.9rem;
+		max-width: 46rem;
+		margin: 0 auto;
+		padding: clamp(1.5rem, 4vw, 2.25rem) clamp(1.25rem, 4vw, 2.5rem);
+		border: 2px solid var(--guix-tenue);
+		border-radius: var(--a-ma);
+		text-align: center;
+		transition:
+			opacity 0.2s,
+			filter 0.2s;
+	}
+	.destacada.esborrant {
+		opacity: 0;
+		filter: blur(3px);
+	}
+	.destacada-frase {
+		display: grid;
+		justify-items: center;
+		gap: 0.7rem;
+		margin: 0;
+		font-size: clamp(1.2rem, 2.8vw, 1.6rem);
+		line-height: 1.45;
+	}
+	.destacada-frase :global(.estrelles svg) {
+		width: 1.5rem;
+		height: 1.5rem;
+	}
+	.destacada-qui {
+		color: var(--rosa);
+		font-size: 1.05rem;
+	}
+	.destacada .boto-guix {
+		margin-top: 0.3rem;
+	}
+
+	/* ── Eines: buscar, estrelles i ordre ── */
+	.eines {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		gap: 0.9rem 1.5rem;
+		margin-top: clamp(2.5rem, 6vw, 3.5rem);
+	}
+	.cerca {
+		flex: 1 1 18rem;
+		max-width: 26rem;
+	}
+	.cerca input {
+		border-width: 0 0 2px;
+		border-radius: 0;
+		background: transparent;
+		font-size: 1.05rem;
+	}
+	.cerca input:focus {
+		outline: none;
+		border-color: var(--groc);
+	}
+	.tria {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.35rem;
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+	.tria label {
+		position: relative;
+		cursor: pointer;
+	}
+	.tria input {
+		position: absolute;
+		opacity: 0;
+		pointer-events: none;
+	}
+	.tria span {
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.25rem;
+		padding: 0.3rem 0.8rem;
+		border: 2px solid transparent;
+		border-radius: var(--a-ma);
+		color: var(--guix-suau);
+		font-size: 0.95rem;
+	}
+	.tria span :global(.estrelles svg) {
+		width: 1rem;
+		height: 1rem;
+	}
+	.tria label:hover span {
+		color: var(--guix);
+	}
+	/* El que està triat, encerclat amb guix. */
+	.tria input:checked + span {
+		border-color: var(--guix-suau);
+		color: var(--guix);
+	}
+	.tria input:focus-visible + span {
+		outline: 2px dashed var(--groc);
+		outline-offset: 2px;
+	}
+
+	/* ── Índex de profes ── */
+	.index ol {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.2rem 1.1rem;
+		margin: clamp(1.75rem, 4vw, 2.5rem) 0 0;
+		padding: 0;
+		list-style: none;
+		font-size: 0.95rem;
+	}
+	.index a {
+		color: var(--guix-suau);
+		text-decoration: none;
+	}
+	.index a:hover {
+		color: var(--guix);
+		text-decoration: underline;
+		text-decoration-color: var(--groc);
+	}
+
+	/* ── Cada profe ── */
+	.persona {
+		margin-top: clamp(2.75rem, 6vw, 4rem);
+		scroll-margin-top: 1.5rem;
+	}
+	.persona-cap {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.25rem 0.9rem;
+		margin-bottom: 0.9rem;
+	}
+	.persona-nom {
+		padding-bottom: 0.35rem;
+		background: var(--subratllat) left bottom / 100% 10px no-repeat;
+		font-size: clamp(1.8rem, 4.2vw, 2.4rem);
+		filter: url(#guix);
+	}
+	.persona-compte {
+		color: var(--guix-tenue);
+		font-size: 0.9rem;
+	}
+
+	/* ── Les frases ── */
+	.frases {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.frase {
+		display: grid;
+		grid-template-columns: 4rem 1fr;
+		gap: 0.9rem;
+		align-items: start;
+		padding-block: 0.8rem;
+		border-bottom: 1px dashed var(--guix-pols);
+	}
+	.frase:last-child {
+		border-bottom: 0;
+	}
+	.frase-estrelles {
+		display: flex;
+		justify-content: flex-end;
+		padding-top: 0.15rem;
+	}
+	.frase-qui {
+		margin-top: 0.3rem;
+		color: var(--rosa);
+		font-size: 0.92rem;
+	}
+	#ranquing .frases {
+		margin-top: clamp(2rem, 5vw, 3rem);
+	}
+	@media (max-width: 34rem) {
+		.frase {
+			grid-template-columns: 1fr;
+			gap: 0.2rem;
+		}
+		.frase-estrelles {
+			justify-content: flex-start;
+		}
+		.frase-estrelles:empty {
+			display: none;
+		}
+	}
+
+	.buit {
+		margin-top: 3rem;
+		color: var(--guix-suau);
+		text-align: center;
+	}
+
+	/* ── Peu: la safata dels guixos ── */
+	/* Sota la safata ja no hi ha pissarra: hi ha la paret de l'aula. */
+	.peu {
+		margin-top: clamp(4rem, 9vw, 6rem);
+		background: linear-gradient(transparent 1.1rem, #e7e2d6 1.1rem);
+		text-shadow: none;
+	}
+	.safata {
+		height: 1.1rem;
+		background: linear-gradient(var(--alumini), var(--alumini-fosc));
+		box-shadow:
+			0 -3px 0 rgb(0 0 0 / 0.2),
+			0 6px 12px rgb(0 0 0 / 0.35);
+	}
+	.safata-dins {
+		position: relative;
+		height: 100%;
+	}
+	.guix,
+	.esborrador {
+		position: absolute;
+		bottom: 100%;
+	}
+	.guix {
+		left: 12%;
+		width: 3.4rem;
+		height: 0.6rem;
+		border-radius: 3px 5px 5px 3px;
+		background: linear-gradient(#fbfaf4, #d9d6c8);
+		box-shadow: 0 1px 1px rgb(0 0 0 / 0.3);
+		rotate: -3deg;
+	}
+	.guix.groc {
+		left: calc(12% + 4.4rem);
+		background: linear-gradient(#fbe596, #d9bd5a);
+		rotate: 2deg;
+	}
+	.guix.rosa {
+		left: calc(12% + 8.3rem);
+		background: linear-gradient(#f9c6d4, #d991a6);
+		rotate: -1deg;
+	}
+	.guix.curt {
+		width: 1.9rem;
+	}
+	.esborrador {
+		right: 14%;
+		width: 6rem;
+		height: 1.45rem;
+		border-radius: 4px;
+		background:
+			linear-gradient(#7a5233, #5f3e26) top / 100% 62% no-repeat,
+			linear-gradient(#3b3b3b, #2a2a2a) bottom / 100% 38% no-repeat;
+		box-shadow: 0 2px 3px rgb(0 0 0 / 0.35);
+	}
+	.peu-dins {
+		display: grid;
+		gap: 0.3rem;
+		padding-block: 1.75rem 2.25rem;
+		color: #4d5a53;
+		font-size: 0.9rem;
+		text-align: center;
+	}
+	.peu-dins a {
+		color: var(--pissarra);
+		font-weight: 600;
+	}
+	.peu-dins a:hover {
+		color: #15261f;
+	}
+</style>

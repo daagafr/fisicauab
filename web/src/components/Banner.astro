@@ -13,13 +13,14 @@ import Mineuab from './banners/Mineuab.astro';
 import Niniapp from './banners/Niniapp.astro';
 import Dlv from './banners/Dlv.astro';
 import Lnh from './banners/Lnh.astro';
+import Frasari from './banners/Frasari.astro';
 
 interface Props {
 	entrada: Entrada;
 }
 const { entrada } = Astro.props;
 
-const propis = { onedrive: Onedrive, club: Club, instagram: Instagram, mineuab: Mineuab, niniapp: Niniapp, dlv: Dlv, lnh: Lnh };
+const propis = { onedrive: Onedrive, club: Club, instagram: Instagram, mineuab: Mineuab, niniapp: Niniapp, dlv: Dlv, lnh: Lnh, frasari: Frasari };
 const Component = entrada.estil ? propis[entrada.estil] : Fisica;
 
 // .banner no fa caixa (display: contents): només marca on comença el banner,
