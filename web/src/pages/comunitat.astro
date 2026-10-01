@@ -12,7 +12,7 @@ import { lloc } from '../config/lloc';
 >
 	<header class="pagina-cap">
 		<div class="contenidor">
-			<p class="xip" style="--c: var(--rosa)">Qui som</p>
+			<p class="xip">Qui som</p>
 			<h1>Comunitat</h1>
 			<p class="entrada">
 				Física UAB som la gent que estudia, ha estudiat o fa física a la Universitat Autònoma de
@@ -23,7 +23,7 @@ import { lloc } from '../config/lloc';
 
 	<!-- ── Què és això ───────────────────────────────────────────────── -->
 	<section class="contenidor seccio">
-		<Seccio>Què és <mark>això</mark>?</Seccio>
+		<Seccio num={1}>Què és <mark>això</mark>?</Seccio>
 		<div class="dues">
 			<p class="gran">Un lloc per a tot el que la carrera fa fora de l’horari de classe.</p>
 			<div class="prosa">
@@ -43,7 +43,7 @@ import { lloc } from '../config/lloc';
 
 	<!-- ── La mascota ────────────────────────────────────────────────── -->
 	<section class="contenidor seccio">
-		<Seccio id="mascota">La <mark style="--m: var(--taronja)">mascota</mark></Seccio>
+		<Seccio id="mascota" num={2}>La <mark>mascota</mark></Seccio>
 		<div class="mascota">
 			<Marca class="mascota-marca" titol="La gallina de Física UAB, en flames i glaçada, amb la pinya" />
 			<div>
@@ -71,7 +71,7 @@ import { lloc } from '../config/lloc';
 
 	<!-- ── Participa ─────────────────────────────────────────────────── -->
 	<section class="contenidor seccio">
-		<Seccio id="participa">Afegeix-hi el <mark style="--m: var(--rosa)">teu projecte</mark></Seccio>
+		<Seccio id="participa" num={3}>Afegeix-hi el <mark>teu projecte</mark></Seccio>
 		<div class="participa">
 			<div>
 				<p class="gran">El phihub és de tothom qui estudia o ha estudiat física a la UAB.</p>
@@ -98,10 +98,11 @@ import { lloc } from '../config/lloc';
 		scroll-margin-top: 6rem;
 	}
 	.gran {
-		font-size: clamp(1.35rem, 2.6vw, 1.8rem);
+		font-family: var(--lletra-titol);
+		font-size: clamp(1.45rem, 2.7vw, 1.95rem);
 		font-weight: 700;
-		letter-spacing: -0.02em;
 		line-height: 1.25;
+		text-wrap: balance;
 	}
 	.dues {
 		display: grid;
@@ -143,9 +144,9 @@ import { lloc } from '../config/lloc';
 		display: grid;
 		gap: 1.5rem 4rem;
 		padding: clamp(1.75rem, 5vw, 3rem);
-		border-radius: 24px;
-		background: var(--groc);
-		color: var(--tinta);
+		border: 1px solid var(--linia);
+		border-radius: var(--radi);
+		background: var(--fons-suau);
 	}
 	@media (min-width: 56rem) {
 		.participa {
@@ -154,7 +155,9 @@ import { lloc } from '../config/lloc';
 	}
 	.participa-entrada {
 		margin-top: 0.8rem;
+		color: var(--text-suau);
 	}
+	/* Numerats com les equacions: (1), (2)… */
 	.passos {
 		margin: 0;
 		padding: 0;
@@ -164,22 +167,21 @@ import { lloc } from '../config/lloc';
 	.passos li {
 		counter-increment: pas;
 		position: relative;
-		padding: 0.75rem 0 0.75rem 2.6rem;
-		border-bottom: 1px solid rgb(26 20 22 / 0.15);
+		padding: 0.8rem 0 0.8rem 2.75rem;
+		border-bottom: 1px solid var(--linia);
 	}
 	.passos li::before {
-		content: counter(pas);
+		content: '(' counter(pas) ')';
 		position: absolute;
 		left: 0;
-		top: 0.7rem;
-		display: grid;
-		place-items: center;
-		width: 1.8rem;
-		height: 1.8rem;
-		border-radius: 50%;
-		background: rgb(255 255 255 / 0.7);
-		font-size: 0.85rem;
-		font-weight: 700;
+		top: 0.75rem;
+		color: var(--accent);
+		font-family: var(--lletra-titol);
+		font-size: 1.1rem;
+		font-weight: 500;
+	}
+	.passos strong {
+		font-weight: 650;
 	}
 	.participa .boto {
 		justify-self: start;

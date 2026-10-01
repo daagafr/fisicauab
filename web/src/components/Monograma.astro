@@ -1,12 +1,12 @@
 ---
-// Les sigles d'una entrada dins d'un cercle del color del seu calaix, amb un filet
-// interior com el segell. Si l'entrada té logo propi (`imatge`), surt el logo.
+// Les sigles d'una entrada dins d'un cercle tenyit del color del seu calaix. Si
+// l'entrada té logo propi (`imatge`), surt el logo.
 interface Props {
 	sigles: string;
 	imatge?: string;
-	color?: string; // un color de marcador: 'groc', 'blau'…
+	color?: string; // un color de calaix: 'blau', 'taronja'…
 }
-const { sigles, imatge, color = 'groc' } = Astro.props;
+const { sigles, imatge, color = 'blau' } = Astro.props;
 const llarg = sigles.length > 2;
 ---
 
@@ -23,11 +23,13 @@ const llarg = sigles.length > 2;
 		width: 3.25rem;
 		aspect-ratio: 1;
 		overflow: hidden;
+		border: 1px solid color-mix(in srgb, var(--c) 40%, transparent);
 		border-radius: 50%;
-		background: var(--c);
-		color: var(--tinta);
-		font-size: 1rem;
-		font-weight: 800;
+		background: color-mix(in srgb, var(--c) 10%, var(--superficie));
+		color: color-mix(in srgb, var(--c) 75%, var(--tinta));
+		font-family: var(--lletra-titol);
+		font-size: 1.05rem;
+		font-weight: 700;
 		letter-spacing: 0.02em;
 	}
 	.monograma.llarg {

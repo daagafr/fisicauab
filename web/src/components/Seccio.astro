@@ -1,17 +1,19 @@
 ---
-// Capçalera de secció: un títol (el que va dins; pot portar <mark>), una icona
-// opcional del color del calaix i, si cal, un enllaç a la dreta.
-//   <Seccio enllac={{ text: 'Tot el phihub', href: '/phihub' }}>Què hi <mark>trobaràs</mark></Seccio>
+// Capçalera de secció, numerada com un \section de LaTeX: el número, el títol (el
+// que va dins; pot portar <mark>), una icona opcional del color del calaix i, si
+// cal, un enllaç a la dreta. A sota, una ona.
+//   <Seccio num={1} enllac={{ text: 'Tot el phihub', href: '/phihub' }}>Què hi <mark>trobaràs</mark></Seccio>
 import Fletxa from './Fletxa.astro';
 import Icona from './Icona.astro';
 
 interface Props {
 	id?: string;
+	num?: number | string;
 	icona?: 'nuvol' | 'persones' | 'eina' | 'diari';
-	color?: string; // un color de marcador: 'groc', 'blau'…
+	color?: string; // un color de calaix: 'blau', 'taronja'…
 	enllac?: { text: string; href: string };
 }
-const { id, icona, color, enllac } = Astro.props;
+const { id, num, icona, color, enllac } = Astro.props;
 ---
 
 <header class="seccio-cap" id={id} style={color ? `--c: var(--${color})` : undefined}>
@@ -23,7 +25,10 @@ const { id, icona, color, enllac } = Astro.props;
 				</span>
 			)
 		}
-		<h2><slot /></h2>
+		<h2>
+			{num !== undefined && <span class="seccio-num">{num}</span>}
+			<span><slot /></span>
+		</h2>
 	</div>
 	{
 		enllac && (
@@ -32,6 +37,7 @@ const { id, icona, color, enllac } = Astro.props;
 			</a>
 		)
 	}
+	<div class="ona seccio-ona" aria-hidden="true"></div>
 </header>
 
 <style>
@@ -49,24 +55,31 @@ const { id, icona, color, enllac } = Astro.props;
 		gap: 0.85rem;
 	}
 	h2 {
-		font-size: clamp(1.8rem, 3.8vw, 2.5rem);
-		letter-spacing: -0.025em;
+		display: flex;
+		align-items: baseline;
+		gap: 0.6em;
+		font-size: clamp(1.85rem, 3.8vw, 2.6rem);
+	}
+	.seccio-num {
+		color: var(--accent);
 	}
 	.seccio-icona {
 		display: grid;
 		place-items: center;
 		flex: none;
-		width: 2.75rem;
-		height: 2.75rem;
-		border-radius: 12px;
-		background: var(--c, var(--groc));
-		color: var(--tinta);
-		font-size: 1.15rem;
+		width: 2.6rem;
+		height: 2.6rem;
+		border: 1px solid color-mix(in srgb, var(--c, var(--borgonya)) 35%, transparent);
+		border-radius: 8px;
+		background: color-mix(in srgb, var(--c, var(--borgonya)) 9%, var(--superficie));
+		color: color-mix(in srgb, var(--c, var(--borgonya)) 75%, var(--tinta));
+		font-size: 1.1rem;
 	}
 	.seccio-enllac {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.4rem;
+		margin-bottom: 0.2rem;
 		font-weight: 600;
 		text-decoration: none;
 	}
@@ -76,5 +89,8 @@ const { id, icona, color, enllac } = Astro.props;
 	}
 	.seccio-enllac:hover :global(.fletxa) {
 		transform: translateX(3px);
+	}
+	.seccio-ona {
+		flex: 1 0 100%;
 	}
 </style>

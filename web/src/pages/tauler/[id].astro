@@ -18,8 +18,8 @@ const { Content } = await render(avis);
 		<header class="pagina-cap">
 			<div class="contenidor">
 				<p class="meta">
-					<a class="xip" style="--c: var(--taronja)" href="/tauler">Tauler</a>
-					<span class="xip" style="--c: var(--rosa)">{avis.data.etiqueta}</span>
+					<a class="xip" href="/tauler">Tauler</a>
+					<span class="xip">{avis.data.etiqueta}</span>
 					<time class="mono" datetime={dataIso(avis.data.data)}>{data(avis.data.data)}</time>
 				</p>
 				<h1 class="titol">{avis.data.titol}</h1>

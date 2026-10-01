@@ -1,9 +1,41 @@
 /* ─────────────────────────────────────────────────────────────────────────────
    Física UAB — estils globals
-   Net i amb color: paper quadriculat de llibreta de fons, el borgonya de la marca
-   com a tinta principal i quatre colors de marcador (groc, blau, taronja, rosa),
-   un per a cada calaix del phihub.
+   Paper de laboratori: fons blanc, paper mil·limetrat a les capçaleres, els
+   títols en Computer Modern (la lletra de LaTeX), un àtom de decoració i el
+   borgonya de la marca com a única tinta de color. Els calaixos del phihub es
+   distingeixen com les línies d'un gràfic: amb els quatre primers colors de
+   matplotlib.
+   Sempre en clar: el web no segueix el mode fosc del sistema.
    ───────────────────────────────────────────────────────────────────────────── */
+
+@font-face {
+	font-family: 'CMU Serif';
+	font-style: normal;
+	font-weight: 500;
+	font-display: swap;
+	src: url('../assets/fonts/cmu/cmu-serif-500-roman.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'CMU Serif';
+	font-style: italic;
+	font-weight: 500;
+	font-display: swap;
+	src: url('../assets/fonts/cmu/cmu-serif-500-italic.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'CMU Serif';
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	src: url('../assets/fonts/cmu/cmu-serif-700-roman.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'CMU Serif';
+	font-style: italic;
+	font-weight: 700;
+	font-display: swap;
+	src: url('../assets/fonts/cmu/cmu-serif-700-italic.woff2') format('woff2');
+}
 
 :root {
 	/* La marca (marca/LLEGEIX-ME.md) */
@@ -12,74 +44,60 @@
 	--os: #f4efe6;
 	--tinta: #1a1416;
 
-	/* Els marcadors. Sempre amb text en --tinta a sobre. */
-	--groc: #ffd23f;
-	--blau: #8ccfff;
-	--taronja: #ffa062;
-	--rosa: #ff9cc2;
+	/* Les línies d'un gràfic: C0, C1, C2 i C3 de matplotlib, un per calaix.
+	   Són per a línies, vores i fons molt aigualits; el text va en --tinta. */
+	--blau: #1f77b4;
+	--taronja: #ff7f0e;
+	--verd: #2ca02c;
+	--vermell: #d62728;
 
-	/* Tokens del tema clar */
-	--fons: var(--os);
-	--superficie: #fffdf8;
+	/* Les flames i el gel de la gallina, a les figures. */
+	--calent: var(--vermell);
+	--fred: var(--blau);
+
+	/* Paper i tinta */
+	--fons: #ffffff;
+	--fons-suau: #f6f7f9;
+	--superficie: #ffffff;
 	--text: var(--tinta);
-	--text-suau: #5e5157;
+	--text-suau: #5a5f6b;
 	--accent: var(--borgonya);
 	--accent-fort: var(--borgonya-fosc);
 	--marca-color: var(--borgonya);
-	--ple: var(--borgonya);
-	--sobre-ple: var(--os);
-	--linia: rgb(26 20 22 / 0.12);
-	--linia-forta: rgb(26 20 22 / 0.4);
-	--quadricula: rgb(60 130 210 / 0.13); /* llibreta quadriculada, en blau */
-	--ombra: 0 1px 2px rgb(26 20 22 / 0.06), 0 12px 28px -14px rgb(26 20 22 / 0.28);
-	--ombra-forta: 0 2px 4px rgb(26 20 22 / 0.08), 0 24px 40px -16px rgb(26 20 22 / 0.4);
+	--linia: #e3e5ea;
+	--linia-forta: #b3b8c3;
+	--ombra: 0 1px 2px rgb(26 20 22 / 0.05), 0 8px 24px -12px rgb(26 20 22 / 0.18);
+	--ombra-forta: 0 2px 4px rgb(26 20 22 / 0.06), 0 18px 36px -16px rgb(26 20 22 / 0.26);
+
+	/* Paper mil·limetrat: un quadre cada mil·límetre (8 px) i un de més marcat
+	   cada centímetre (40 px). background-image: var(--milimetrat) i
+	   background-size: var(--milimetrat-mida). */
+	--quadricula: rgb(31 119 180 / 0.07);
+	--quadricula-forta: rgb(31 119 180 / 0.15);
+	--milimetrat:
+		linear-gradient(var(--quadricula-forta) 1px, transparent 1px),
+		linear-gradient(90deg, var(--quadricula-forta) 1px, transparent 1px),
+		linear-gradient(var(--quadricula) 1px, transparent 1px),
+		linear-gradient(90deg, var(--quadricula) 1px, transparent 1px);
+	--milimetrat-mida: 40px 40px, 40px 40px, 8px 8px, 8px 8px;
+
+	/* L'àtom de les capçaleres: tres òrbites, un electró a cadascuna i el nucli. */
+	--atom: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-120 -120 240 240'%3E%3Cg fill='none' stroke='%2370143d' stroke-width='1.6'%3E%3Cellipse rx='110' ry='38'/%3E%3Cellipse rx='110' ry='38' transform='rotate(60)'/%3E%3Cellipse rx='110' ry='38' transform='rotate(120)'/%3E%3C/g%3E%3Cg fill='%2370143d' stroke='%23fff' stroke-width='2.5'%3E%3Ccircle cx='-103.4' cy='-13' r='5.5'/%3E%3Ccircle cx='95.3' cy='19' r='5.5' transform='rotate(60)'/%3E%3Ccircle cx='-55' cy='32.9' r='5.5' transform='rotate(120)'/%3E%3Ccircle r='12' stroke='none'/%3E%3C/g%3E%3C/svg%3E");
 
 	/* Tipografia */
-	--lletra: 'Rubik Variable', Rubik, system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--lletra: 'IBM Plex Sans Variable', 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--lletra-titol: 'CMU Serif', 'Latin Modern Roman', 'Computer Modern Serif', 'Times New Roman', serif;
 	--lletra-marca: 'Palatino Linotype', Palatino, 'Book Antiqua', 'EB Garamond', Georgia, serif;
-	--mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, monospace;
+	--mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, monospace;
 
 	/* Mides */
 	--ample: 74rem;
 	--ample-text: 40rem;
 	--marge: clamp(1rem, 4vw, 2.5rem);
 	--espai: clamp(4.5rem, 10vw, 7.5rem); /* entre seccions */
-	--radi: 16px;
+	--radi: 10px;
 
 	color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-	:root:not([data-theme='light']) {
-		--fons: #161013;
-		--superficie: #221a1e;
-		--text: var(--os);
-		--text-suau: #c4b5bb;
-		--accent: #ff9cc2;
-		--accent-fort: #ffc4db;
-		--marca-color: var(--os);
-		--linia: rgb(244 239 230 / 0.12);
-		--linia-forta: rgb(244 239 230 / 0.4);
-		--quadricula: rgb(140 207 255 / 0.07);
-		--ombra: 0 12px 28px -14px rgb(0 0 0 / 0.7);
-		--ombra-forta: 0 24px 40px -16px rgb(0 0 0 / 0.8);
-		color-scheme: dark;
-	}
-}
-:root[data-theme='dark'] {
-	--fons: #161013;
-	--superficie: #221a1e;
-	--text: var(--os);
-	--text-suau: #c4b5bb;
-	--accent: #ff9cc2;
-	--accent-fort: #ffc4db;
-	--marca-color: var(--os);
-	--linia: rgb(244 239 230 / 0.12);
-	--linia-forta: rgb(244 239 230 / 0.4);
-	--quadricula: rgb(140 207 255 / 0.07);
-	--ombra: 0 12px 28px -14px rgb(0 0 0 / 0.7);
-	--ombra-forta: 0 24px 40px -16px rgb(0 0 0 / 0.8);
-	color-scheme: dark;
 }
 
 /* ── Base ─────────────────────────────────────────────────────────────────── */
@@ -119,8 +137,14 @@ h4 {
 	margin: 0;
 	font-weight: 700;
 	line-height: 1.12;
-	letter-spacing: -0.02em;
+	letter-spacing: -0.01em;
 	text-wrap: balance;
+}
+/* Els títols, en Computer Modern. Els banners del phihub en queden fora:
+   porten la lletra del web de cada projecte. */
+:where(h1, h2, h3, h4):not(.banner *) {
+	font-family: var(--lletra-titol);
+	word-spacing: -0.05em; /* la CM té l'espai ample, pensat per al cos de text */
 }
 
 p {
@@ -130,11 +154,12 @@ p {
 
 a {
 	color: var(--accent);
-	text-decoration-thickness: 2px;
+	text-decoration-thickness: 1px;
 	text-underline-offset: 0.2em;
 }
 a:hover {
 	color: var(--accent-fort);
+	text-decoration-thickness: 2px;
 }
 
 img,
@@ -144,29 +169,21 @@ svg {
 }
 
 :focus-visible {
-	outline: 3px solid var(--blau);
+	outline: 2px solid var(--blau);
 	outline-offset: 3px;
 }
 
 ::selection {
-	background: var(--groc);
+	background: color-mix(in srgb, var(--borgonya) 16%, transparent);
 	color: var(--tinta);
 }
 
-/* El marcador: una franja de color sota la paraula.
-   Amb --m es canvia de color: <mark style="--m: var(--rosa)"> */
+/* L'èmfasi dels títols: en cursiva i en borgonya, com una variable en una
+   equació. <h1>Tot Física UAB, <mark>en un sol lloc</mark>.</h1> */
 mark {
-	--m: var(--groc);
-	padding: 0 0.08em;
-	background: linear-gradient(transparent 58%, var(--m) 58%, var(--m) 92%, transparent 92%);
-	color: inherit;
-	-webkit-box-decoration-break: clone;
-	box-decoration-break: clone;
-}
-@media (prefers-color-scheme: dark) {
-	:root:not([data-theme='light']) mark {
-		background: linear-gradient(transparent 58%, color-mix(in srgb, var(--m) 55%, transparent) 58%, color-mix(in srgb, var(--m) 55%, transparent) 92%, transparent 92%);
-	}
+	background: none;
+	color: var(--accent);
+	font-style: italic;
 }
 
 /* ── Utilitats ────────────────────────────────────────────────────────────── */
@@ -193,10 +210,10 @@ mark {
 	top: -4rem;
 	z-index: 100;
 	padding: 0.6rem 1rem;
-	border-radius: 999px;
-	background: var(--groc);
-	color: var(--tinta);
-	font-weight: 700;
+	border-radius: 8px;
+	background: var(--borgonya);
+	color: #fff;
+	font-weight: 600;
 }
 .salta:focus {
 	top: 0.75rem;
@@ -209,19 +226,21 @@ mark {
 	font-weight: 700;
 }
 
-/* Xip de color: <span class="xip" style="--c: var(--blau)">…</span> */
+/* Etiqueta de dades, com les d'un aparell: <span class="xip">Club</span>.
+   Agafa el color de --c (el del calaix, si en té); si no, borgonya. */
 .xip {
-	--c: var(--groc);
 	display: inline-flex;
 	align-items: center;
-	gap: 0.4em;
-	padding: 0.3em 0.8em;
-	border-radius: 999px;
-	background: var(--c);
-	color: var(--tinta);
-	font-size: 0.85rem;
-	font-weight: 600;
-	line-height: 1.3;
+	gap: 0.45em;
+	width: fit-content;
+	padding: 0.4em 0.7em;
+	border: 1px solid color-mix(in srgb, var(--c, var(--borgonya)) 28%, transparent);
+	border-radius: 4px;
+	background: color-mix(in srgb, var(--c, var(--borgonya)) 7%, var(--superficie));
+	color: color-mix(in srgb, var(--c, var(--borgonya)) 70%, var(--tinta));
+	font: 500 0.72rem/1.25 var(--mono);
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
 }
 
 .mono {
@@ -230,13 +249,18 @@ mark {
 	font-variant-numeric: tabular-nums;
 }
 
-/* Paper de llibreta quadriculada. */
-.llibreta {
-	background-image:
-		linear-gradient(var(--quadricula) 1px, transparent 1px),
-		linear-gradient(90deg, var(--quadricula) 1px, transparent 1px);
-	background-size: 26px 26px;
+/* Paper mil·limetrat. */
+.milimetrat {
+	background-image: var(--milimetrat);
+	background-size: var(--milimetrat-mida);
 	background-position: -1px -1px;
+}
+
+/* Una ona, per subratllar: <div class="ona"></div>. Una longitud d'ona fa 48 px. */
+.ona {
+	height: 10px;
+	background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 10'%3E%3Cpath d='M0 5C8 0 16 0 24 5S40 10 48 5' fill='none' stroke='%23b3b8c3' stroke-width='1.3'/%3E%3C/svg%3E")
+		left center / 48px 10px repeat-x;
 }
 
 /* ── Botons ───────────────────────────────────────────────────────────────── */
@@ -244,13 +268,13 @@ mark {
 .boto {
 	display: inline-flex;
 	align-items: center;
-	gap: 0.5em;
-	padding: 0.75em 1.3em;
-	border: 1.5px solid var(--linia-forta);
-	border-radius: 999px;
+	gap: 0.55em;
+	padding: 0.72em 1.15em;
+	border: 1px solid var(--linia-forta);
+	border-radius: 8px;
 	background: var(--superficie);
 	color: var(--text);
-	font: 600 1rem/1.1 var(--lletra);
+	font: 600 0.98rem/1.1 var(--lletra);
 	text-decoration: none;
 	white-space: nowrap;
 	transition:
@@ -264,6 +288,7 @@ mark {
 	box-shadow: var(--ombra);
 	transform: translateY(-1px);
 	color: var(--text);
+	text-decoration: none;
 }
 .boto:active {
 	transform: translateY(1px);
@@ -272,25 +297,15 @@ mark {
 .boto-ple {
 	border-color: var(--borgonya);
 	background: var(--borgonya);
-	color: var(--os);
+	color: #fff;
 }
 .boto-ple:hover {
 	border-color: var(--borgonya-fosc);
 	background: var(--borgonya-fosc);
-	color: var(--os);
-}
-.boto-groc {
-	border-color: var(--groc);
-	background: var(--groc);
-	color: var(--tinta);
-}
-.boto-groc:hover {
-	border-color: #f5c21a;
-	background: #f5c21a;
-	color: var(--tinta);
+	color: #fff;
 }
 .boto-petit {
-	padding: 0.55em 1em;
+	padding: 0.5em 0.9em;
 	font-size: 0.9rem;
 }
 .boto svg {
@@ -311,16 +326,44 @@ mark {
 	position: absolute;
 	inset: 0;
 	z-index: -1;
-	background-image:
-		linear-gradient(var(--quadricula) 1px, transparent 1px),
-		linear-gradient(90deg, var(--quadricula) 1px, transparent 1px);
-	background-size: 26px 26px;
-	mask-image: linear-gradient(to bottom, #000 40%, transparent);
+	background-image: var(--milimetrat);
+	background-size: var(--milimetrat-mida);
+	background-position: -1px -1px;
+	mask-image: linear-gradient(to bottom, #000 35%, transparent);
+}
+/* Un àtom gran a la dreta, de decoració, que gira molt a poc a poc. */
+.pagina-cap::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	right: max(var(--marge), calc((100% - var(--ample)) / 2 + var(--marge)));
+	z-index: -1;
+	display: none;
+	width: clamp(16rem, 28vw, 23rem);
+	aspect-ratio: 1;
+	translate: 0 -50%;
+	background: var(--atom) center / contain no-repeat;
+	opacity: 0.3;
+	pointer-events: none;
+}
+@media (min-width: 56rem) {
+	.pagina-cap::after {
+		display: block;
+	}
+}
+@media (min-width: 56rem) and (prefers-reduced-motion: no-preference) {
+	.pagina-cap::after {
+		animation: gira-atom 120s linear infinite;
+	}
+}
+@keyframes gira-atom {
+	to {
+		rotate: 1turn;
+	}
 }
 .pagina-cap h1 {
-	margin-top: 1rem;
+	margin-top: 1.1rem;
 	font-size: clamp(2.6rem, 7vw, 4.4rem);
-	letter-spacing: -0.03em;
 }
 .pagina-cap .entrada {
 	max-width: 38rem;
@@ -339,11 +382,11 @@ mark {
 }
 .prosa h2 {
 	margin-top: 2em;
-	font-size: 1.5rem;
+	font-size: 1.6rem;
 }
 .prosa h3 {
 	margin-top: 1.6em;
-	font-size: 1.2rem;
+	font-size: 1.3rem;
 }
 .prosa ul,
 .prosa ol {
@@ -359,9 +402,9 @@ mark {
 .prosa blockquote {
 	margin-inline: 0;
 	padding-left: 1.2em;
-	border-left: 4px solid var(--groc);
+	border-left: 3px solid color-mix(in srgb, var(--borgonya) 40%, transparent);
 	color: var(--text-suau);
 }
 .prosa strong {
-	font-weight: 700;
+	font-weight: 650;
 }

@@ -21,6 +21,17 @@ const { entrada } = Astro.props;
 
 const propis = { onedrive: Onedrive, club: Club, instagram: Instagram, mineuab: Mineuab, niniapp: Niniapp, dlv: Dlv, lnh: Lnh };
 const Component = entrada.estil ? propis[entrada.estil] : Fisica;
+
+// .banner no fa caixa (display: contents): només marca on comença el banner,
+// perquè els títols del web, en Computer Modern, no hi entrin.
 ---
 
-<Component entrada={entrada} />
+<div class="banner">
+	<Component entrada={entrada} />
+</div>
+
+<style>
+	.banner {
+		display: contents;
+	}
+</style>

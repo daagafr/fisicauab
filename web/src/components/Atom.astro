@@ -1,0 +1,306 @@
+---
+// Un àtom de dibuix, decoratiu: tres òrbites el·líptiques i un electró a cadascuna.
+// El que hi posis dins fa de nucli (el segell, a la portada) i tapa les òrbites
+// pel mig, com si passessin per darrere.
+//   <Atom><img src="/marca/segell.svg" alt="…" /></Atom>
+//
+//   - `nucli`: el radi del nucli, sobre 520 (la mitja amplada del dibuix).
+//   - `excitable`: si cliques el nucli, l'àtom s'excita: els electrons s'acceleren,
+//     salten a una òrbita més gran i, en tornar a baix, deixen anar un fotó.
+//   - `fuig`: a una òrbita li falta l'electró, que s'escapa en línia recta.
+//
+// Els electrons els mou el JavaScript de sota. Sense, o amb «reduir el moviment»
+// activat, es queden quiets on els deixa l'HTML.
+
+interface Props {
+	nucli?: number;
+	excitable?: boolean;
+	fuig?: boolean;
+}
+const { nucli = 350, excitable = false, fuig = false } = Astro.props;
+
+const MIG = 520;
+const RX = 500;
+const RY = 168;
+const R_ELECTRO = 17;
+// `vel`: radiants per segon; `fase`: on comença cada electró.
+const orbites = [
+	{ angle: 0, vel: (2 * Math.PI) / 7, fase: 0.35 },
+	{ angle: 60, vel: (2 * Math.PI) / 9, fase: 3.6 },
+	{ angle: 120, vel: (2 * Math.PI) / 11, fase: 2.2 },
+];
+const n = (v: number) => Math.round(v * 10) / 10;
+
+// L'electró que s'escapa surt de la punta dreta de l'òrbita horitzontal, per la
+// tangent, cap amunt i a la dreta.
+const T_FUGA = 0.3;
+const sortida = { x: RX * Math.cos(T_FUGA), y: RY * Math.sin(T_FUGA) };
+const tangent = { x: RX * Math.sin(T_FUGA), y: -RY * Math.cos(T_FUGA) };
+const llarg = Math.hypot(tangent.x, tangent.y);
+const fuga = { x: sortida.x + (tangent.x / llarg) * 270, y: sortida.y + (tangent.y / llarg) * 270 };
+---
+
+<div
+	class="atom"
+	data-atom
+	data-rx={RX}
+	data-ry={RY}
+	data-excitable={excitable || undefined}
+	style={`--nucli: ${((nucli * 2) / (MIG * 2)) * 100}%`}
+>
+	<svg viewBox={`${-MIG} ${-MIG} ${MIG * 2} ${MIG * 2}`} aria-hidden="true">
+		{
+			orbites.map((o, i) => (
+				<g transform={`rotate(${-o.angle})`}>
+					<ellipse class="orbita" rx={RX} ry={RY} />
+					{!(fuig && i === 0) && (
+						<circle
+							class="electro"
+							r={R_ELECTRO}
+							cx={n(RX * Math.cos(o.fase))}
+							cy={n(RY * Math.sin(o.fase))}
+							data-vel={o.vel}
+							data-fase={o.fase}
+							data-angle={o.angle}
+						/>
+					)}
+				</g>
+			))
+		}
+		{
+			fuig && (
+				<g>
+					<line class="traca" x1={n(sortida.x)} y1={n(sortida.y)} x2={n(fuga.x)} y2={n(fuga.y)} />
+					<circle
+						class="electro"
+						r={R_ELECTRO}
+						cx={n(fuga.x)}
+						cy={n(fuga.y)}
+						data-fugitiu
+						data-x0={n(sortida.x)}
+						data-y0={n(sortida.y)}
+						data-x1={n(fuga.x)}
+						data-y1={n(fuga.y)}
+					/>
+				</g>
+			)
+		}
+		<g class="fotons"></g>
+	</svg>
+	<div class="atom-nucli">
+		<slot />
+	</div>
+</div>
+
+<script>
+	const SVG = 'http://www.w3.org/2000/svg';
+	const quiet = matchMedia('(prefers-reduced-motion: reduce)');
+
+	// Un paquet d'ones al llarg de l'eix x: el fotó, com als diagrames de Feynman.
+	const paquet = (() => {
+		const punts = [];
+		for (let x = 0; x <= 200; x += 3) {
+			const y = 16 * Math.sin((2 * Math.PI * x) / 30) * Math.exp(-(((x - 100) / 55) ** 2));
+			punts.push(`${x} ${y.toFixed(1)}`);
+		}
+		return `M${punts.join('L')}`;
+	})();
+
+	const suau = (t: number) => 1 - (1 - t) ** 3; // surt ràpid i frena
+	const entre = (a: number, b: number, t: number) => a + (b - a) * Math.min(Math.max(t, 0), 1);
+
+	// L'excitació, en segons: puja, s'hi està, baixa (i deixa anar el fotó).
+	const PUJA = 0.35;
+	const DALT = 1.6;
+	const BAIXA = 2.0;
+	const NIVELL_EXCITAT = 1.22;
+	const VEL_EXCITAT = 3;
+
+	for (const atom of document.querySelectorAll<HTMLElement>('[data-atom]')) {
+		const RX = Number(atom.dataset.rx);
+		const RY = Number(atom.dataset.ry);
+		const orbites = [...atom.querySelectorAll<SVGEllipseElement>('.orbita')];
+		const electrons = [...atom.querySelectorAll<SVGCircleElement>('.electro[data-vel]')].map((el) => ({
+			el,
+			vel: Number(el.dataset.vel),
+			fase: Number(el.dataset.fase),
+			angle: (Number(el.dataset.angle) * Math.PI) / 180,
+		}));
+		const fugitiu = atom.querySelector<SVGCircleElement>('[data-fugitiu]');
+		const fotons = atom.querySelector<SVGGElement>('.fotons')!;
+		const vius: { el: SVGPathElement; inici: number; x: number; y: number; graus: number }[] = [];
+
+		let nivell = 1;
+		let excitat: number | null = null; // quan va començar l'excitació
+		let emes = false;
+		let abans = 0;
+		let rellotge = 0;
+		let marc = 0;
+
+		/** On és un electró, en les coordenades del dibuix (sense girar l'òrbita). */
+		const posicio = (e: (typeof electrons)[number]) => {
+			const lx = RX * nivell * Math.cos(e.fase);
+			const ly = RY * nivell * Math.sin(e.fase);
+			return {
+				x: lx * Math.cos(-e.angle) - ly * Math.sin(-e.angle),
+				y: lx * Math.sin(-e.angle) + ly * Math.cos(-e.angle),
+			};
+		};
+
+		const fot = (ara: number) => {
+			// Surt cap enfora des de l'electró que queda més amunt i a l'esquerra, que és
+			// on hi ha lloc (l'àtom de la portada és al marge dret). Només dels que són
+			// fora del nucli, si n'hi ha.
+			const fora = electrons.filter((e) => Math.abs(Math.cos(e.fase)) > 0.6);
+			const { x, y } = (fora.length ? fora : electrons)
+				.map(posicio)
+				.reduce((a, b) => (a.x + a.y < b.x + b.y ? a : b));
+			const el = document.createElementNS(SVG, 'path');
+			el.setAttribute('class', 'foto');
+			el.setAttribute('d', paquet);
+			fotons.append(el);
+			vius.push({ el, inici: ara, x, y, graus: (Math.atan2(y, x) * 180) / Math.PI });
+		};
+
+		const pas = (ara: number) => {
+			const dt = abans ? Math.min((ara - abans) / 1000, 0.05) : 0;
+			abans = ara;
+			rellotge += dt;
+
+			let vel = 1;
+			if (excitat !== null) {
+				const t = rellotge - excitat;
+				if (t < PUJA) {
+					nivell = entre(1, NIVELL_EXCITAT, suau(t / PUJA));
+					vel = entre(1, VEL_EXCITAT, suau(t / PUJA));
+				} else if (t < DALT) {
+					nivell = NIVELL_EXCITAT;
+					vel = VEL_EXCITAT;
+				} else if (t < BAIXA) {
+					if (!emes) {
+						fot(rellotge);
+						emes = true;
+						atom.classList.remove('excitat');
+					}
+					const u = (t - DALT) / (BAIXA - DALT);
+					nivell = entre(NIVELL_EXCITAT, 1, u * u);
+					vel = entre(VEL_EXCITAT, 1, u);
+				} else {
+					nivell = 1;
+					excitat = null;
+				}
+			}
+
+			for (const o of orbites) {
+				o.setAttribute('rx', String(RX * nivell));
+				o.setAttribute('ry', String(RY * nivell));
+			}
+			for (const e of electrons) {
+				e.fase += e.vel * vel * dt;
+				e.el.setAttribute('cx', (RX * nivell * Math.cos(e.fase)).toFixed(1));
+				e.el.setAttribute('cy', (RY * nivell * Math.sin(e.fase)).toFixed(1));
+			}
+
+			// L'electró escapat: surt de l'òrbita, s'allunya i s'esvaeix; i torna a començar.
+			if (fugitiu) {
+				const cicle = (rellotge % 3.4) / 2.4;
+				const d = fugitiu.dataset;
+				fugitiu.setAttribute('cx', entre(Number(d.x0), Number(d.x1), cicle).toFixed(1));
+				fugitiu.setAttribute('cy', entre(Number(d.y0), Number(d.y1), cicle).toFixed(1));
+				fugitiu.style.opacity = String(cicle < 0.7 ? 1 : Math.max(0, 1 - (cicle - 0.7) / 0.3));
+			}
+
+			for (const f of [...vius]) {
+				const t = (rellotge - f.inici) / 1.3;
+				if (t >= 1) {
+					f.el.remove();
+					vius.splice(vius.indexOf(f), 1);
+					continue;
+				}
+				const s = 30 + 400 * t;
+				f.el.setAttribute('transform', `translate(${f.x.toFixed(1)} ${f.y.toFixed(1)}) rotate(${f.graus.toFixed(1)}) translate(${s.toFixed(1)} 0)`);
+				f.el.style.opacity = String(t < 0.5 ? 1 : 1 - (t - 0.5) / 0.5);
+			}
+
+			marc = requestAnimationFrame(pas);
+		};
+
+		const engega = () => {
+			if (!marc && !quiet.matches) {
+				abans = 0;
+				marc = requestAnimationFrame(pas);
+			}
+		};
+		const para = () => {
+			cancelAnimationFrame(marc);
+			marc = 0;
+		};
+
+		// Només es mou mentre es veu.
+		new IntersectionObserver(([entrada]) => (entrada.isIntersecting ? engega() : para())).observe(atom);
+		quiet.addEventListener('change', () => (quiet.matches ? para() : engega()));
+
+		if (atom.dataset.excitable !== undefined) {
+			atom.querySelector('.atom-nucli')!.addEventListener('click', () => {
+				if (excitat !== null || quiet.matches) return;
+				excitat = rellotge;
+				emes = false;
+				atom.classList.add('excitat');
+			});
+		}
+	}
+</script>
+
+<style>
+	.atom {
+		position: relative;
+		aspect-ratio: 1;
+	}
+	svg {
+		width: 100%;
+		height: 100%;
+		overflow: visible;
+	}
+	.atom-nucli {
+		position: absolute;
+		inset: calc((100% - var(--nucli)) / 2);
+		display: grid;
+		border-radius: 50%;
+		transition: filter 0.4s;
+	}
+	.atom-nucli > :global(*) {
+		width: 100%;
+		height: 100%;
+	}
+	.atom[data-excitable] .atom-nucli {
+		cursor: pointer;
+		-webkit-tap-highlight-color: transparent;
+	}
+	/* Excitat, el nucli brilla. */
+	.atom.excitat .atom-nucli {
+		filter: drop-shadow(0 0 28px color-mix(in srgb, var(--borgonya) 55%, transparent));
+	}
+
+	.orbita {
+		fill: none;
+		stroke: color-mix(in srgb, var(--borgonya) 45%, transparent);
+		stroke-width: 3.5;
+	}
+	.electro {
+		fill: var(--borgonya);
+		stroke: var(--fons);
+		stroke-width: 5;
+	}
+	.traca {
+		stroke: color-mix(in srgb, var(--borgonya) 45%, transparent);
+		stroke-width: 3.5;
+		stroke-dasharray: 4 14;
+		stroke-linecap: round;
+	}
+	.fotons :global(.foto) {
+		fill: none;
+		stroke: var(--taronja);
+		stroke-width: 5;
+		stroke-linecap: round;
+	}
+</style>

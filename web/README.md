@@ -33,14 +33,15 @@ web/
 │   │   ├── la-nostra-historia/   el llibre (index.astro) i el seu editor (editor.astro)
 │   │   └── api/lnh/              entrar, llegir i desar per a l'editor
 │   ├── lnh/                  La Nostra Història: de LaTeX a HTML, sessions, desar
-│   ├── components/           capçalera, peu, banner, segell de sigles…
+│   ├── components/           capçalera, peu, banner, segell de sigles, l'àtom…
 │   ├── layouts/Base.astro    la closca de totes les pàgines (<head>, capçalera, peu)
-│   └── styles/global.css     colors, tipografia, botons
+│   └── styles/global.css     colors, tipografia, botons, paper mil·limetrat
 ├── public/                   es publica tal qual: marca/, favicon, og.png
 └── eines/
     ├── marca.mjs             copia ../marca dins del web  (npm run marca)
     ├── og.py                 genera public/og.png, la imatge de WhatsApp
     ├── og-lnh.py             el mateix per al llibre: public/lnh/og.png
+    ├── cmu.py                retalla la CMU Serif per al web
     └── lnh-admin.mjs         dona d'alta un admin de l'editor (npm run lnh:admin)
 ```
 
@@ -142,16 +143,23 @@ python eines/og.py     # només si ha canviat el segell
 
 Colors, tipografia i regles d'ús: `../marca/LLEGEIX-ME.md`. Al web:
 
-- **L'estil**: net i amb color. Paper quadriculat de fons, el borgonya de la marca
-  com a tinta i quatre **colors de marcador** (`--groc`, `--blau`, `--taronja`,
-  `--rosa`), un per calaix del phihub, amb una icona de línia (`Icona.astro`).
-- **Colors**: són variables a `src/styles/global.css`. Per canviar el color d'un
-  calaix, canvia'n el `color` a `categories` (`src/data/phihub.ts`).
-- **Tipografia**: Rubik per a tot, i Palatino només per al nom de la marca a la
-  capçalera i al peu.
-- **Marcador**: `<mark>` subratlla una paraula amb una franja groga;
-  `<mark style="--m: var(--rosa)">` amb un altre color.
-- **Mode fosc**: segueix el sistema. El dibuix passa a os i el borgonya ple es manté.
+- **L'estil**: paper de laboratori. Fons blanc, paper mil·limetrat a les capçaleres,
+  títols numerats com els `\section` de LaTeX, amb una ona a sota, i el borgonya de
+  la marca com a única tinta de color. De decoració, un àtom
+  (`components/Atom.astro`): a la portada el segell en fa de nucli, amb els electrons
+  girant (si el cliques, s'excita i deixa anar un fotó); a la pàgina d'error li falta
+  l'electró que s'ha escapat; i a la capçalera de les altres pàgines n'hi ha un de
+  gran que gira a poc a poc (`--atom`, a `global.css`).
+- **Colors**: són variables a `src/styles/global.css`. Cada calaix del phihub té una
+  de les línies d'un gràfic de matplotlib (`--blau`, `--taronja`, `--verd`,
+  `--vermell`: C0–C3), per a línies, vores i fons molt aigualits, mai per a text. Per
+  canviar el color d'un calaix, canvia'n el `color` a `categories` (`src/data/phihub.ts`).
+- **Tipografia**: CMU Serif (la Computer Modern de LaTeX) per als títols, IBM Plex
+  Sans per al text, IBM Plex Mono per a dates i etiquetes, i Palatino només per al
+  nom de la marca. La CMU és a `src/assets/fonts/cmu/`, retallada amb `eines/cmu.py`.
+- **Èmfasi**: `<mark>` dins d'un títol el posa en cursiva i en borgonya.
+- **Mode fosc**: no n'hi ha. El web és sempre clar (`data-theme="light"` a
+  `Base.astro`). La Nostra Història té el seu, a part.
 
 ---
 

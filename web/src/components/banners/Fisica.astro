@@ -1,8 +1,8 @@
 ---
 // El banner de Física UAB, per a les entrades que no tenen un `estil` propi: una
-// fitxa amb una franja del color del seu calaix a dalt.
-//   - normal:  fitxa clara amb les sigles, el tipus, el nom, la descripció i el domini
-//   - gran:    `destacat: true` → tota del color del calaix
+// fitxa amb una línia del color del seu calaix a dalt.
+//   - normal:  fitxa blanca amb les sigles, el tipus, el nom, la descripció i el domini
+//   - gran:    `destacat: true` → tenyida del color del calaix
 //   - aviat:   sense `url` → vora discontínua, no clicable
 import type { Entrada } from '../../data/phihub';
 import { categoria, esAviat, peuDe } from '../../data/phihub';
@@ -58,26 +58,28 @@ const enllac = aviat ? {} : { href: e.url, target: '_blank', rel: 'noopener' };
 		height: 100%;
 		overflow: hidden;
 		padding: 1.6rem 1.4rem 1.2rem;
-		border: 1.5px solid var(--linia);
+		border: 1px solid var(--linia);
 		border-radius: var(--radi);
 		background: var(--superficie);
 		color: var(--text);
 		text-decoration: none;
 		transition:
 			transform 0.2s,
-			box-shadow 0.2s;
+			box-shadow 0.2s,
+			border-color 0.2s;
 	}
 	a.fitxa:hover {
+		border-color: color-mix(in srgb, var(--c) 45%, var(--linia));
 		transform: translateY(-3px);
 		box-shadow: var(--ombra-forta);
 		color: var(--text);
 	}
-	/* La franja del color del calaix. */
+	/* La línia del color del calaix. */
 	.fitxa::before {
 		content: '';
 		position: absolute;
 		inset: 0 0 auto;
-		height: 5px;
+		height: 3px;
 		background: var(--c);
 	}
 
@@ -87,13 +89,9 @@ const enllac = aviat ? {} : { href: e.url, target: '_blank', rel: 'noopener' };
 		gap: 0.75rem;
 		margin-bottom: 0.3rem;
 	}
-	.fitxa-cap .xip {
-		--c: inherit;
-		background: color-mix(in srgb, var(--c) 55%, transparent);
-		color: var(--text);
-	}
 	.fitxa-nom {
-		font-size: 1.35rem;
+		font-family: var(--lletra-titol);
+		font-size: 1.45rem;
 	}
 	.fitxa-text {
 		color: var(--text-suau);
@@ -107,7 +105,7 @@ const enllac = aviat ? {} : { href: e.url, target: '_blank', rel: 'noopener' };
 		gap: 1rem;
 		margin-top: auto;
 		padding-top: 0.9rem;
-		border-top: 1.5px solid var(--linia);
+		border-top: 1px solid var(--linia);
 		color: var(--accent);
 	}
 	.fitxa-peu .mono {
@@ -131,30 +129,14 @@ const enllac = aviat ? {} : { href: e.url, target: '_blank', rel: 'noopener' };
 		border-color: var(--linia-forta);
 		background: transparent;
 	}
-	.aviat-xip {
-		--c: inherit;
-		background: color-mix(in srgb, var(--c) 45%, transparent);
-		color: var(--text);
-	}
 
 	/* ── Gran ── */
 	.gran {
-		background: var(--c);
-		color: var(--tinta);
-	}
-	a.gran:hover {
-		color: var(--tinta);
+		border-color: color-mix(in srgb, var(--c) 30%, var(--linia));
+		background: color-mix(in srgb, var(--c) 6%, var(--superficie));
 	}
 	.gran .fitxa-nom {
-		font-size: clamp(1.7rem, 3.4vw, 2.3rem);
-	}
-	.gran .fitxa-text,
-	.gran .fitxa-peu {
-		color: var(--tinta);
-	}
-	.gran .fitxa-cap .xip {
-		background: var(--superficie);
-		color: var(--tinta);
+		font-size: clamp(1.8rem, 3.4vw, 2.4rem);
 	}
 
 	@media (prefers-reduced-motion: reduce) {

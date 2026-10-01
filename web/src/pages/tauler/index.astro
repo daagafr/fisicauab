@@ -11,7 +11,7 @@ const avisos = (await getCollection('avisos', (a) => !a.data.esborrany)).sort(
 <Base titol="Tauler" descripcio="Avisos, novetats i convocatòries de la comunitat de Física UAB.">
 	<header class="pagina-cap">
 		<div class="contenidor">
-			<p class="xip" style="--c: var(--taronja)">Avisos i novetats</p>
+			<p class="xip">Avisos i novetats</p>
 			<h1>Tauler</h1>
 			<p class="entrada">
 				Què es cou a Física UAB: convocatòries, estrenes, xerrades i coses que val la pena saber.
@@ -29,7 +29,7 @@ const avisos = (await getCollection('avisos', (a) => !a.data.esborrany)).sort(
 								<time class="mono" datetime={dataIso(a.data.data)}>
 									{data(a.data.data)}
 								</time>
-								<span class="xip" style="--c: var(--rosa)">{a.data.etiqueta}</span>
+								<span class="xip">{a.data.etiqueta}</span>
 							</span>
 							<span class="titol">{a.data.titol}</span>
 							<span class="resum">{a.data.resum}</span>
@@ -52,7 +52,7 @@ const avisos = (await getCollection('avisos', (a) => !a.data.esborrany)).sort(
 		display: grid;
 		gap: 0.4rem;
 		padding-block: 1.75rem;
-		border-bottom: 1.5px solid var(--linia);
+		border-bottom: 1px solid var(--linia);
 		color: var(--text);
 		text-decoration: none;
 	}
@@ -63,11 +63,9 @@ const avisos = (await getCollection('avisos', (a) => !a.data.esborrany)).sort(
 		gap: 0.5rem 1.25rem;
 		color: var(--text-suau);
 	}
-	.meta .xip {
-		font-size: 0.75rem;
-	}
 	.titol {
-		font-size: clamp(1.4rem, 3vw, 1.85rem);
+		font-family: var(--lletra-titol);
+		font-size: clamp(1.5rem, 3vw, 1.95rem);
 		font-weight: 700;
 		line-height: 1.2;
 		transition: color 0.2s;

@@ -33,9 +33,10 @@ const calaixos = categories
 		<div class="contenidor">
 			<ul>
 				{
-					calaixos.map((c) => (
+					calaixos.map((c, i) => (
 						<li>
 							<a href={`#${c.id}`} style={`--c: var(--${c.color})`}>
+								<span class="index-num">{i + 1}</span>
 								<Icona nom={c.icona} /> {c.nom}
 								<span class="index-compte">{c.entrades.length}</span>
 							</a>
@@ -47,9 +48,9 @@ const calaixos = categories
 	</nav>
 
 	{
-		calaixos.map((c) => (
+		calaixos.map((c, i) => (
 			<section class="contenidor calaix">
-				<Seccio id={c.id} icona={c.icona} color={c.color}>
+				<Seccio id={c.id} num={i + 1} icona={c.icona} color={c.color}>
 					{c.nom}
 				</Seccio>
 				<p class="calaix-desc">{c.descripcio}</p>
@@ -95,34 +96,49 @@ const calaixos = categories
 		list-style: none;
 		scrollbar-width: none;
 	}
+	/* Cada entrada, com una línia de la llegenda d'un gràfic: el color a l'esquerra. */
 	.index a {
+		position: relative;
 		display: inline-flex;
 		align-items: center;
-		gap: 0.45rem;
-		padding: 0.45rem 0.95rem;
-		border-radius: 999px;
-		background: var(--c);
-		color: var(--tinta);
+		gap: 0.5rem;
+		padding: 0.45rem 0.8rem 0.45rem 1rem;
+		overflow: hidden;
+		border: 1px solid var(--linia);
+		border-radius: 6px;
+		background: var(--superficie);
+		color: var(--text);
 		font-size: 0.95rem;
-		font-weight: 600;
+		font-weight: 550;
 		text-decoration: none;
 		white-space: nowrap;
-		transition: transform 0.15s;
+		transition:
+			border-color 0.15s,
+			transform 0.15s;
+	}
+	.index a::before {
+		content: '';
+		position: absolute;
+		inset: 0 auto 0 0;
+		width: 3px;
+		background: var(--c);
 	}
 	.index a:hover {
+		border-color: color-mix(in srgb, var(--c) 45%, var(--linia));
 		transform: translateY(-2px);
-		color: var(--tinta);
+		color: var(--text);
+	}
+	.index a :global(.icona) {
+		color: color-mix(in srgb, var(--c) 75%, var(--tinta));
+	}
+	.index-num {
+		color: var(--accent);
+		font-family: var(--lletra-titol);
+		font-weight: 700;
 	}
 	.index-compte {
-		display: grid;
-		place-items: center;
-		min-width: 1.4rem;
-		height: 1.4rem;
-		padding: 0 0.3rem;
-		border-radius: 999px;
-		background: rgb(255 255 255 / 0.6);
-		font-size: 0.75rem;
-		font-weight: 700;
+		color: var(--text-suau);
+		font: 500 0.75rem var(--mono);
 	}
 
 	.calaix {
@@ -167,8 +183,8 @@ const calaixos = categories
 		justify-items: center;
 		gap: 0.9rem;
 		padding: clamp(2rem, 5vw, 3.5rem) 1.25rem;
-		border: 1.5px dashed var(--linia-forta);
-		border-radius: 24px;
+		border: 1px dashed var(--linia-forta);
+		border-radius: var(--radi);
 		text-align: center;
 	}
 	.falta h2 {

@@ -34,7 +34,7 @@ const onedrive = entrades.find((e) => e.id === 'drive');
 			</ul>
 			{
 				onedrive?.url && (
-					<a class="boto boto-groc boto-petit" href={onedrive.url} target="_blank" rel="noopener">
+					<a class="boto boto-petit" href={onedrive.url} target="_blank" rel="noopener">
 						OneDrive <Fletxa sortida />
 					</a>
 				)
@@ -59,7 +59,7 @@ const onedrive = entrades.find((e) => e.id === 'drive');
 				</ul>
 				{
 					onedrive?.url && (
-						<a class="boto boto-groc" href={onedrive.url} target="_blank" rel="noopener">
+						<a class="boto" href={onedrive.url} target="_blank" rel="noopener">
 							OneDrive <Fletxa sortida />
 						</a>
 					)
@@ -74,9 +74,9 @@ const onedrive = entrades.find((e) => e.id === 'drive');
 		position: sticky;
 		top: 0;
 		z-index: 50;
-		background: color-mix(in srgb, var(--fons) 90%, transparent);
-		backdrop-filter: blur(10px) saturate(1.2);
-		-webkit-backdrop-filter: blur(10px) saturate(1.2);
+		background: color-mix(in srgb, var(--fons) 86%, transparent);
+		backdrop-filter: blur(10px) saturate(1.4);
+		-webkit-backdrop-filter: blur(10px) saturate(1.4);
 		border-bottom: 1px solid var(--linia);
 	}
 	.fila {
@@ -128,19 +128,24 @@ const onedrive = entrades.find((e) => e.id === 'drive');
 	}
 	.nav-ample a:not(.boto) {
 		display: block;
-		padding: 0.4rem 0.85rem;
-		border-radius: 999px;
+		padding: 0.4rem 0.8rem;
+		border-radius: 6px;
 		color: var(--text);
-		font-weight: 600;
+		font-weight: 550;
 		text-decoration: none;
-		transition: background-color 0.15s;
+		transition:
+			background-color 0.15s,
+			color 0.15s;
 	}
 	.nav-ample a:not(.boto):hover {
-		background: color-mix(in srgb, var(--groc) 45%, transparent);
+		background: var(--fons-suau);
+		color: var(--accent);
 	}
+	/* La pàgina on ets, subratllada en borgonya. */
 	.nav-ample a[aria-current='page'] {
-		background: var(--groc);
-		color: var(--tinta);
+		color: var(--accent);
+		box-shadow: inset 0 -2px 0 var(--accent);
+		border-radius: 0;
 	}
 
 	/* ── Mòbil ── */
@@ -201,7 +206,7 @@ const onedrive = entrades.find((e) => e.id === 'drive');
 		top: 100%;
 		padding: 0.75rem var(--marge) 1.5rem;
 		background: var(--fons);
-		border-bottom: 2px solid var(--linia);
+		border-bottom: 1px solid var(--linia);
 		box-shadow: var(--ombra);
 	}
 	.nav-mobil ul {
@@ -213,7 +218,8 @@ const onedrive = entrades.find((e) => e.id === 'drive');
 		padding: 0.8rem 0;
 		border-bottom: 1px solid var(--linia);
 		color: var(--text);
-		font-size: 1.15rem;
+		font-family: var(--lletra-titol);
+		font-size: 1.3rem;
 		font-weight: 700;
 		text-decoration: none;
 	}

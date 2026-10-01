@@ -5,6 +5,7 @@ import Banner from '../components/Banner.astro';
 import Fletxa from '../components/Fletxa.astro';
 import Icona from '../components/Icona.astro';
 import Marca from '../components/Marca.astro';
+import Atom from '../components/Atom.astro';
 import { categories, destacats, entradesDe, entrades } from '../data/phihub';
 import { getCollection } from 'astro:content';
 import { data, dataIso } from '../utils';
@@ -21,7 +22,7 @@ const onedrive = entrades.find((e) => e.id === 'drive');
 	<section class="hero">
 		<div class="contenidor hero-graella">
 			<div class="hero-text">
-				<p class="xip" style="--c: var(--blau)">La web de la gent de física de la UAB</p>
+				<p class="xip">La web de la gent de física de la UAB</p>
 				<h1>Tot Física UAB, <mark>en un sol lloc</mark>.</h1>
 				<p class="hero-entrada">
 					El OneDrive amb els apunts, els clubs, els projectes que fa la gent de la carrera i la
@@ -31,7 +32,7 @@ const onedrive = entrades.find((e) => e.id === 'drive');
 					<a class="boto boto-ple" href="/phihub">Entra al phihub <Fletxa /></a>
 					{
 						onedrive?.url && (
-							<a class="boto boto-groc" href={onedrive.url} target="_blank" rel="noopener">
+							<a class="boto" href={onedrive.url} target="_blank" rel="noopener">
 								OneDrive <Fletxa sortida />
 							</a>
 						)
@@ -39,13 +40,16 @@ const onedrive = entrades.find((e) => e.id === 'drive');
 				</div>
 			</div>
 
-			<div class="hero-segell">
-				<img
-					src="/marca/segell.svg"
-					width="1000"
-					height="1000"
-					alt="Segell de Física UAB: la gallina en flames i glaçada amb la pinya, envoltada pel nom."
-				/>
+			<div class="hero-atom">
+				<Atom excitable>
+					<img
+						class="hero-segell"
+						src="/marca/segell.svg"
+						width="1000"
+						height="1000"
+						alt="Segell de Física UAB: la gallina en flames i glaçada amb la pinya, envoltada pel nom."
+					/>
+				</Atom>
 			</div>
 		</div>
 	</section>
@@ -63,18 +67,23 @@ const onedrive = entrades.find((e) => e.id === 'drive');
 
 	<!-- ── Els calaixos del phihub ────────────────────────────────────── -->
 	<section class="contenidor seccio">
-		<Seccio enllac={{ text: 'Tot el phihub', href: '/phihub' }}>
-			Què hi <mark style="--m: var(--blau)">trobaràs</mark>
+		<Seccio num={1} enllac={{ text: 'Tot el phihub', href: '/phihub' }}>
+			Què hi <mark>trobaràs</mark>
 		</Seccio>
 		<ul class="calaixos">
 			{
-				categories.map((c) => {
+				categories.map((c, i) => {
 					const n = entradesDe(c.id).length;
 					return (
 						<li>
 							<a class="calaix" href={`/phihub#${c.id}`} style={`--c: var(--${c.color})`}>
-								<span class="calaix-icona">
-									<Icona nom={c.icona} />
+								<span class="calaix-cap">
+									<span class="calaix-icona">
+										<Icona nom={c.icona} />
+									</span>
+									<span class="calaix-sub" aria-hidden="true">
+										({'abcdefgh'[i]})
+									</span>
 								</span>
 								<span class="calaix-nom">{c.nom}</span>
 								<span class="calaix-text">{c.descripcio}</span>
@@ -91,15 +100,15 @@ const onedrive = entrades.find((e) => e.id === 'drive');
 
 	<!-- ── Novetats ───────────────────────────────────────────────────── -->
 	<section class="contenidor seccio">
-		<Seccio enllac={{ text: 'Tot el tauler', href: '/tauler' }}>
-			<mark style="--m: var(--taronja)">Novetats</mark>
-		</Seccio>
+		<Seccio num={2} enllac={{ text: 'Tot el tauler', href: '/tauler' }}>Novetats</Seccio>
 		<ul class="avisos">
 			{
 				avisos.map((a) => (
 					<li>
 						<a href={`/tauler/${a.id}`}>
-							<time datetime={dataIso(a.data.data)}>{data(a.data.data)}</time>
+							<time class="mono" datetime={dataIso(a.data.data)}>
+								{data(a.data.data)}
+							</time>
 							<span class="avis-titol">{a.data.titol}</span>
 							<span class="avis-resum">{a.data.resum}</span>
 						</a>
@@ -114,13 +123,14 @@ const onedrive = entrades.find((e) => e.id === 'drive');
 		<div class="crida">
 			<Marca class="crida-marca" />
 			<div>
+				<p class="crida-etiqueta">Problema obert</p>
 				<h2>Tens un projecte?</h2>
 				<p>
 					Un club, una app, un joc, uns apunts o una web. Si l’ha fet algú de física, té lloc al
 					phihub.
 				</p>
 			</div>
-			<a class="boto crida-boto" href="/comunitat#participa">Com afegir-lo <Fletxa /></a>
+			<a class="boto boto-ple crida-boto" href="/comunitat#participa">Com afegir-lo <Fletxa /></a>
 		</div>
 	</section>
 </Base>
@@ -133,16 +143,16 @@ const onedrive = entrades.find((e) => e.id === 'drive');
 		overflow: hidden;
 		padding-block: clamp(2.5rem, 7vw, 5rem);
 	}
+	/* Paper mil·limetrat que s'esvaeix cap avall. */
 	.hero::before {
 		content: '';
 		position: absolute;
 		inset: 0;
 		z-index: -1;
-		background-image:
-			linear-gradient(var(--quadricula) 1px, transparent 1px),
-			linear-gradient(90deg, var(--quadricula) 1px, transparent 1px);
-		background-size: 26px 26px;
-		mask-image: linear-gradient(to bottom, #000 55%, transparent);
+		background-image: var(--milimetrat);
+		background-size: var(--milimetrat-mida);
+		background-position: -1px -1px;
+		mask-image: linear-gradient(to bottom, #000 50%, transparent);
 	}
 	.hero-graella {
 		display: grid;
@@ -151,15 +161,15 @@ const onedrive = entrades.find((e) => e.id === 'drive');
 	}
 	@media (min-width: 56rem) {
 		.hero-graella {
-			grid-template-columns: 1.25fr 1fr;
-			gap: 4rem;
+			grid-template-columns: 1.3fr 1fr;
+			gap: 3rem;
 		}
 	}
 	.hero h1 {
 		margin-top: 1.25rem;
-		font-size: clamp(2.6rem, 6.5vw, 4.6rem);
+		font-size: clamp(2.7rem, 6.2vw, 4.6rem);
 		line-height: 1.04;
-		letter-spacing: -0.035em;
+		letter-spacing: -0.02em;
 	}
 	.hero-entrada {
 		max-width: 32rem;
@@ -175,25 +185,25 @@ const onedrive = entrades.find((e) => e.id === 'drive');
 		margin-top: 2rem;
 	}
 
-	.hero-segell {
-		width: min(64vw, 18rem);
+	/* El segell fa de nucli d'un àtom. */
+	.hero-atom {
+		width: min(84vw, 21rem);
 		justify-self: center;
 		order: -1;
 	}
 	@media (min-width: 56rem) {
-		.hero-segell {
+		.hero-atom {
 			order: 0;
-			width: min(100%, 25rem);
+			width: min(100%, 30rem);
 			justify-self: end;
 		}
 	}
-	.hero-segell img {
-		width: 100%;
+	.hero-segell {
 		height: auto;
-		filter: drop-shadow(0 18px 28px rgb(74 12 40 / 0.25));
+		filter: drop-shadow(0 14px 22px rgb(74 12 40 / 0.18));
 	}
 	@media (prefers-reduced-motion: no-preference) {
-		.hero-segell img {
+		.hero-segell {
 			animation: apareix 0.7s cubic-bezier(0.2, 0.8, 0.25, 1.1) 0.1s both;
 		}
 	}
@@ -222,7 +232,7 @@ const onedrive = entrades.find((e) => e.id === 'drive');
 		margin-top: var(--espai);
 	}
 
-	/* ── Els calaixos ── */
+	/* ── Els calaixos: quatre subfigures, (a)–(d), cadascuna amb la línia del seu color ── */
 	.calaixos {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
@@ -232,52 +242,77 @@ const onedrive = entrades.find((e) => e.id === 'drive');
 		list-style: none;
 	}
 	.calaix {
+		position: relative;
 		display: grid;
 		align-content: start;
-		justify-items: start;
-		gap: 0.4rem;
+		gap: 0.45rem;
 		height: 100%;
-		padding: 1.4rem;
+		overflow: hidden;
+		padding: 1.5rem 1.4rem 1.3rem;
+		border: 1px solid var(--linia);
 		border-radius: var(--radi);
-		background: var(--c);
-		color: var(--tinta);
+		background: var(--superficie);
+		color: var(--text);
 		text-decoration: none;
 		transition:
 			transform 0.2s,
-			box-shadow 0.2s;
+			box-shadow 0.2s,
+			border-color 0.2s;
+	}
+	.calaix::before {
+		content: '';
+		position: absolute;
+		inset: 0 0 auto;
+		height: 3px;
+		background: var(--c);
 	}
 	.calaix:hover {
-		transform: translateY(-3px);
+		border-color: color-mix(in srgb, var(--c) 45%, var(--linia));
 		box-shadow: var(--ombra-forta);
-		color: var(--tinta);
+		transform: translateY(-3px);
+		color: var(--text);
+	}
+	.calaix-cap {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		margin-bottom: 0.5rem;
 	}
 	.calaix-icona {
 		display: grid;
 		place-items: center;
 		width: 2.6rem;
 		height: 2.6rem;
-		margin-bottom: 0.4rem;
-		border-radius: 12px;
-		background: rgb(255 255 255 / 0.55);
+		border: 1px solid color-mix(in srgb, var(--c) 35%, transparent);
+		border-radius: 8px;
+		background: color-mix(in srgb, var(--c) 9%, var(--superficie));
+		color: color-mix(in srgb, var(--c) 75%, var(--tinta));
 		font-size: 1.1rem;
 	}
+	.calaix-sub {
+		color: var(--text-suau);
+		font-family: var(--lletra-titol);
+		font-size: 1.05rem;
+		font-weight: 500;
+	}
 	.calaix-nom {
-		font-size: 1.25rem;
+		font-family: var(--lletra-titol);
+		font-size: 1.4rem;
 		font-weight: 700;
-		letter-spacing: -0.015em;
+		line-height: 1.2;
 	}
 	.calaix-text {
+		color: var(--text-suau);
 		font-size: 0.97rem;
-		line-height: 1.45;
-		opacity: 0.85;
+		line-height: 1.5;
 	}
 	.calaix-compte {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.4rem;
-		margin-top: 0.5rem;
-		font-size: 0.92rem;
-		font-weight: 600;
+		margin-top: 0.6rem;
+		color: color-mix(in srgb, var(--c) 70%, var(--tinta));
+		font: 500 0.82rem var(--mono);
 	}
 	.calaix-compte :global(.fletxa) {
 		width: 0.95rem;
@@ -299,64 +334,74 @@ const onedrive = entrades.find((e) => e.id === 'drive');
 	.avisos a {
 		display: grid;
 		align-content: start;
-		gap: 0.35rem;
+		gap: 0.4rem;
 		height: 100%;
 		padding: 1.4rem;
-		border: 1.5px solid var(--linia);
+		border: 1px solid var(--linia);
 		border-radius: var(--radi);
 		background: var(--superficie);
 		color: var(--text);
 		text-decoration: none;
 		transition:
 			border-color 0.2s,
+			box-shadow 0.2s,
 			transform 0.2s;
 	}
 	.avisos a:hover {
 		border-color: var(--linia-forta);
+		box-shadow: var(--ombra);
 		transform: translateY(-3px);
 		color: var(--text);
 	}
 	.avisos time {
 		color: var(--text-suau);
-		font-size: 0.88rem;
 	}
 	.avis-titol {
-		font-size: 1.25rem;
+		font-family: var(--lletra-titol);
+		font-size: 1.4rem;
 		font-weight: 700;
-		letter-spacing: -0.015em;
-		line-height: 1.25;
+		line-height: 1.2;
+	}
+	.avisos a:hover .avis-titol {
+		color: var(--accent);
 	}
 	.avis-resum {
 		color: var(--text-suau);
 	}
 
-	/* ── Crida ── */
+	/* ── Crida: un problema obert, com els de les llistes d'exercicis ── */
 	.crida {
 		display: grid;
 		gap: 1.5rem 2.5rem;
 		align-items: center;
-		padding: clamp(1.75rem, 5vw, 2.75rem);
-		border-radius: 24px;
-		background: var(--rosa);
-		color: var(--tinta);
+		padding: clamp(1.75rem, 5vw, 2.5rem);
+		border: 1px solid color-mix(in srgb, var(--borgonya) 22%, transparent);
+		border-left: 4px solid var(--borgonya);
+		border-radius: var(--radi);
+		background: color-mix(in srgb, var(--borgonya) 4%, var(--superficie));
 	}
 	.crida :global(.crida-marca) {
-		width: 6.5rem;
+		width: 6rem;
 		height: auto;
 		color: var(--borgonya);
 	}
-	.crida h2 {
-		font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+	.crida-etiqueta {
+		margin-bottom: 0.4rem;
+		color: var(--accent);
+		font: 500 0.75rem var(--mono);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
 	}
-	.crida p {
+	.crida h2 {
+		font-size: clamp(1.7rem, 3.2vw, 2.3rem);
+	}
+	.crida p:not(.crida-etiqueta) {
 		max-width: 34rem;
 		margin-top: 0.5rem;
+		color: var(--text-suau);
 		font-size: 1.08rem;
 	}
 	.crida-boto {
-		--text: var(--tinta);
-		--superficie: #fffdf8;
-		--linia-forta: transparent;
 		justify-self: start;
 	}
 	@media (min-width: 56rem) {

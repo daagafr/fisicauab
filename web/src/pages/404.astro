@@ -1,14 +1,18 @@
 ---
 import Base from '../layouts/Base.astro';
-import Marca from '../components/Marca.astro';
+import Atom from '../components/Atom.astro';
 import Fletxa from '../components/Fletxa.astro';
 ---
 
 <Base titol="No trobada">
 	<section class="contenidor error">
-		<Marca class="error-marca" />
-		<p class="xip" style="--c: var(--rosa)">Error 404</p>
-		<h1>Aquesta pàgina <mark>no existeix</mark>.</h1>
+		<div class="error-atom">
+			<Atom nucli={250} fuig>
+				<img src="/marca/icona.svg" width="1000" height="1000" alt="" />
+			</Atom>
+		</div>
+		<p class="xip">Error 404</p>
+		<h1>Aquesta pàgina s’ha <mark>ionitzat</mark>.</h1>
 		<p class="entrada">
 			O ha sortit del forn i del congelador alhora i no n’ha quedat res. Torna a l’inici o busca-ho
 			al phihub.
@@ -28,11 +32,10 @@ import Fletxa from '../components/Fletxa.astro';
 		padding-top: clamp(3rem, 10vw, 6rem);
 		text-align: center;
 	}
-	.error :global(.error-marca) {
-		width: 11rem;
-		height: auto;
-		margin-bottom: 1rem;
-		color: var(--marca-color);
+	/* A l'àtom li falta un electró: s'ha escapat cap a la dreta. */
+	.error-atom {
+		width: 15rem;
+		margin-bottom: 1.5rem;
 	}
 	h1 {
 		font-size: clamp(2rem, 5vw, 3rem);

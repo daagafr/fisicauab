@@ -4,7 +4,11 @@
 //   <Base titol="Phihub" descripcio="...">…</Base>
 //
 // Sense `titol`, la pestanya diu només «Física UAB».
-import '@fontsource-variable/rubik';
+//
+// Sempre en clar: data-theme="light" apaga també el mode fosc dels banners.
+import '@fontsource-variable/ibm-plex-sans';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
 import '@fontsource/eb-garamond/700.css'; // només per al nom de la marca on no hi ha Palatino
 import '../styles/global.css';
 import { lloc } from '../config/lloc';
@@ -24,7 +28,7 @@ const imatgeAbs = new URL(imatge, lloc.url);
 ---
 
 <!doctype html>
-<html lang={lloc.idioma}>
+<html lang={lloc.idioma} data-theme="light">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -34,7 +38,8 @@ const imatgeAbs = new URL(imatge, lloc.url);
 
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-		<meta name="theme-color" content="#70143D" />
+		<meta name="color-scheme" content="light" />
+		<meta name="theme-color" content="#ffffff" />
 
 		<meta property="og:type" content="website" />
 		<meta property="og:site_name" content={lloc.nom} />

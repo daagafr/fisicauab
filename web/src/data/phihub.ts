@@ -31,8 +31,8 @@ export interface Categoria {
 /** Els banners fets a mida. Cadascun és un fitxer a src/components/banners/. */
 export type Estil = 'onedrive' | 'club' | 'instagram' | 'mineuab' | 'niniapp' | 'dlv' | 'lnh';
 
-/** Els colors de marcador de la web (src/styles/global.css). */
-export type Color = 'groc' | 'blau' | 'taronja' | 'rosa';
+/** Els colors dels calaixos: les línies d'un gràfic de matplotlib (src/styles/global.css). */
+export type Color = 'blau' | 'taronja' | 'verd' | 'vermell';
 
 export interface Compte {
 	nom: string;
@@ -63,28 +63,28 @@ export const categories: Categoria[] = [
 		id: 'onedrive',
 		nom: 'El OneDrive',
 		icona: 'nuvol',
-		color: 'groc',
+		color: 'blau',
 		descripcio: 'Apunts, exàmens i material de les assignatures, compartits d’una promoció a la següent.',
 	},
 	{
 		id: 'clubs',
 		nom: 'Clubs i associacions',
 		icona: 'persones',
-		color: 'blau',
+		color: 'taronja',
 		descripcio: 'On la física passa fora de l’aula.',
 	},
 	{
 		id: 'projectes',
 		nom: 'Projectes',
 		icona: 'eina',
-		color: 'taronja',
+		color: 'verd',
 		descripcio: 'Coses que ha fet la gent de física: apps, jocs, servidors…',
 	},
 	{
 		id: 'hemeroteca',
 		nom: 'Hemeroteca',
 		icona: 'diari',
-		color: 'rosa',
+		color: 'vermell',
 		descripcio: 'La memòria col·lectiva de la carrera: el que s’ha dit i no s’ha d’oblidar.',
 	},
 ];
