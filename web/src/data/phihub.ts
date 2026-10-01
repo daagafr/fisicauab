@@ -16,6 +16,8 @@
 //    projecte (src/components/banners/). Sense `estil`, surt el banner de Física UAB.
 //  - Els Instagram no van barrejats amb els webs: van en un banner d'`estil:
 //    'instagram'`, amb la llista de `comptes`.
+//  - `enllacos` i `apartat`: més enllaços, per als banners que en porten més d'un
+//    (ara, el mod de Rodalies). L'`url` continua sent el principal.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type CategoriaId = 'onedrive' | 'clubs' | 'projectes' | 'hemeroteca';
@@ -29,10 +31,16 @@ export interface Categoria {
 }
 
 /** Els banners fets a mida. Cadascun és un fitxer a src/components/banners/. */
-export type Estil = 'onedrive' | 'club' | 'instagram' | 'mineuab' | 'niniapp' | 'dlv' | 'lnh' | 'frasari';
+export type Estil = 'onedrive' | 'club' | 'instagram' | 'mineuab' | 'niniapp' | 'dlv' | 'lnh' | 'frasari' | 'rodalies' | 'calculadora';
 
 /** Els colors dels calaixos: les línies d'un gràfic de matplotlib (src/styles/global.css). */
 export type Color = 'blau' | 'taronja' | 'verd' | 'vermell';
+
+export interface Enllac {
+	text: string;
+	url: string;
+	nota?: string; // surt petit al costat: «alternativa»…
+}
 
 export interface Compte {
 	nom: string;
@@ -56,6 +64,8 @@ export interface Entrada {
 	ample?: boolean;
 	estil?: Estil;
 	comptes?: Compte[]; // només per a `estil: 'instagram'`
+	enllacos?: Enllac[]; // altres llocs on és el mateix (el principal és `url`)
+	apartat?: { titol: string; text?: string; enllacos: Enllac[] }; // un bloc d'enllaços a part
 }
 
 export const categories: Categoria[] = [
@@ -159,6 +169,43 @@ export const entrades: Entrada[] = [
 		tipus: 'App',
 		cta: 'Accedeix a l’app',
 		estil: 'niniapp',
+	},
+	{
+		id: 'rodalies',
+		nom: 'Mod de Rodalies a Minecraft i més',
+		categoria: 'projectes',
+		descripcio:
+			'Rètols d’estació, logos de Rodalies i Renfe i senyals de via per fer a Minecraft estacions i línies com les de debò.',
+		url: 'https://www.curseforge.com/minecraft/mc-mods/rodalies-decorations',
+		sigles: 'R',
+		tipus: 'Mod de Minecraft',
+		etiqueta: 'curseforge.com',
+		cta: 'Descarrega’l a CurseForge',
+		imatge: '/phihub/rodalies-icona.png',
+		ample: true,
+		estil: 'rodalies',
+		enllacos: [{ text: 'Modrinth', url: 'https://modrinth.com/mod/rodalies-decorations' }],
+		apartat: {
+			titol: 'Construccions amb el mod',
+			text: 'Estacions, vies i trens fets amb el mod, per descarregar-los i posar-los al teu món.',
+			enllacos: [
+				{ text: 'Create Mod', url: 'https://createmod.com/author/anty48' },
+				{ text: 'BuildPaste', url: 'https://buildpaste.net/profile/io7uXbS485OjMq431nRknR25EoU2', nota: 'alternativa' },
+			],
+		},
+	},
+	{
+		id: 'calculadora',
+		nom: 'Calculadora de laboratori',
+		categoria: 'projectes',
+		descripcio:
+			'Mitjana i incertesa de mesures repetides, propagació d’incerteses i un formulari, amb les xifres significatives ben posades. Per a les pràctiques.',
+		url: 'https://physics-calc-cl7amvytg2hasqmbnqcnty.streamlit.app/',
+		sigles: 'CL',
+		tipus: 'Calculadora',
+		etiqueta: 'streamlit.app',
+		cta: 'Obre la calculadora',
+		estil: 'calculadora',
 	},
 	{
 		// TODO: nom definitiu, descripció i enllaç.

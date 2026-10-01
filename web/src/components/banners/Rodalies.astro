@@ -1,0 +1,259 @@
+---
+// Mod de Rodalies a Minecraft — recrea una andana del mod: el paviment de rajoles
+// grises, el rètol d'estació (placa blanca, el quadrat taronja amb la R i el nom en
+// lletra de píxels, la franja fosca a sota) i captures del joc. Les captures i la
+// icona són del mod (public/phihub/rodalies-*). La lletra de píxels només va al
+// rètol: en petit, la C s'hi confon amb la O.
+//
+// No és un sol enllaç: el principal (CurseForge), Modrinth i, a part, les
+// construccions fetes amb el mod (`enllacos` i `apartat` a phihub.ts).
+import '@fontsource/pixelify-sans/500.css';
+import '@fontsource/pixelify-sans/600.css';
+import type { Entrada } from '../../data/phihub';
+
+interface Props {
+	entrada: Entrada;
+}
+const { entrada: e } = Astro.props;
+const fora = { target: '_blank', rel: 'noopener' };
+---
+
+<div class="rd">
+	<div class="rd-dins">
+		<div class="rd-text">
+			<p class="rd-tipus">{e.tipus} · Forge i NeoForge</p>
+			<h3 class="rd-retol">
+				<img class="rd-r" src={e.imatge} alt="" width="128" height="128" loading="lazy" />
+				<span>{e.nom}</span>
+			</h3>
+			<p class="rd-desc">{e.descripcio}</p>
+
+			<div class="rd-accions">
+				<a class="rd-boto ple" href={e.url} {...fora}>
+					{e.cta} <span aria-hidden="true">↗</span>
+					<span class="visualment-amagat">(s’obre en una pestanya nova)</span>
+				</a>
+				{
+					e.enllacos?.map((l) => (
+						<a class="rd-boto" href={l.url} {...fora}>
+							{l.text} <span aria-hidden="true">↗</span>
+							<span class="visualment-amagat">(s’obre en una pestanya nova)</span>
+						</a>
+					))
+				}
+			</div>
+
+			{
+				e.apartat && (
+					<div class="rd-apartat">
+						<h4 class="rd-apartat-titol">{e.apartat.titol}</h4>
+						{e.apartat.text && <p class="rd-apartat-text">{e.apartat.text}</p>}
+						<ul>
+							{e.apartat.enllacos.map((l) => (
+								<li>
+									<a href={l.url} {...fora}>
+										{l.text} <span aria-hidden="true">↗</span>
+										<span class="visualment-amagat">(s’obre en una pestanya nova)</span>
+									</a>
+									{l.nota && <span class="rd-nota">{l.nota}</span>}
+								</li>
+							))}
+						</ul>
+					</div>
+				)
+			}
+		</div>
+
+		<div class="rd-fotos" aria-hidden="true">
+			<img class="gran" src="/phihub/rodalies-447.jpg" alt="" width="1100" height="602" loading="lazy" />
+			<img src="/phihub/rodalies-estacio.jpg" alt="" width="900" height="506" loading="lazy" />
+			<img src="/phihub/rodalies-civia.jpg" alt="" width="900" height="506" loading="lazy" />
+		</div>
+	</div>
+</div>
+
+<style>
+	.rd {
+		--taronja: #e2701e;
+		--taronja-fosc: #c25b10;
+		--placa: #f6f6f3;
+		--franja: #2a2e33;
+		--tinta: #1f2226;
+		--gris: #585e66;
+		--rajola: #e3e3df;
+		--junta: rgb(31 34 38 / 0.07);
+		--pixel: 'Pixelify Sans', 'Silkscreen', ui-monospace, monospace;
+
+		height: 100%;
+		container-type: inline-size;
+		overflow: hidden;
+		border: 1px solid #d4d4cf;
+		border-radius: 10px;
+		/* Les rajoles de l'andana. */
+		background:
+			linear-gradient(var(--junta) 1px, transparent 1px) -1px -1px / 44px 44px,
+			linear-gradient(90deg, var(--junta) 1px, transparent 1px) -1px -1px / 44px 44px,
+			var(--rajola);
+		color: var(--tinta);
+		font-family: 'IBM Plex Sans Variable', system-ui, sans-serif;
+	}
+	.rd-dins {
+		display: grid;
+		gap: 1.5rem;
+		padding: 1.5rem;
+	}
+	@container (min-width: 46rem) {
+		.rd-dins {
+			grid-template-columns: 1.05fr 1fr;
+			gap: 2rem;
+			padding: 2rem;
+		}
+	}
+
+	.rd-tipus {
+		margin: 0 0 0.8rem;
+		color: var(--gris);
+		font: 500 0.85rem var(--pixel);
+		letter-spacing: 0.02em;
+	}
+
+	/* El rètol d'estació. */
+	.rd-retol {
+		display: flex;
+		align-items: center;
+		gap: 0.8rem;
+		margin: 0;
+		padding: 0.55rem 1rem 0.55rem 0.55rem;
+		border-bottom: 7px solid var(--franja);
+		background: var(--placa);
+		box-shadow: 0 1px 0 rgb(0 0 0 / 0.08), 0 10px 20px -12px rgb(0 0 0 / 0.45);
+		font: 600 clamp(1.3rem, 4.2cqi, 1.75rem) / 1.15 var(--pixel);
+		letter-spacing: 0.01em;
+		text-wrap: balance;
+	}
+	.rd-r {
+		flex: none;
+		width: 2.6rem;
+		height: 2.6rem;
+		image-rendering: pixelated;
+	}
+
+	.rd-desc {
+		margin: 1.1rem 0 0;
+		color: var(--gris);
+		line-height: 1.55;
+	}
+
+	.rd-accions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+		margin-top: 1.25rem;
+	}
+	/* Botons quadrats, amb l'ombra dura dels blocs. */
+	.rd-boto {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45em;
+		padding: 0.6rem 1rem;
+		border: 2px solid var(--franja);
+		background: var(--placa);
+		box-shadow: 3px 3px 0 var(--franja);
+		color: var(--tinta);
+		font-size: 0.95rem;
+		font-weight: 650;
+		line-height: 1.1;
+		text-decoration: none;
+		transition:
+			transform 0.12s,
+			box-shadow 0.12s;
+	}
+	.rd-boto.ple {
+		border-color: var(--taronja-fosc);
+		background: var(--taronja);
+		box-shadow: 3px 3px 0 var(--taronja-fosc);
+		color: #fff;
+	}
+	.rd-boto:hover {
+		transform: translate(-1px, -1px);
+		box-shadow: 4px 4px 0 var(--franja);
+		color: var(--tinta);
+	}
+	.rd-boto.ple:hover {
+		box-shadow: 4px 4px 0 var(--taronja-fosc);
+		color: #fff;
+	}
+	.rd-boto:active {
+		transform: translate(2px, 2px);
+		box-shadow: 1px 1px 0 var(--franja);
+	}
+
+	/* Les construccions: un bloc a part, separat amb la línia de la vora de l'andana. */
+	.rd-apartat {
+		margin-top: 1.5rem;
+		padding-top: 1.1rem;
+		border-top: 4px dashed rgb(31 34 38 / 0.25);
+	}
+	.rd-apartat-titol {
+		margin: 0;
+		font-size: 1.05rem;
+		font-weight: 700;
+	}
+	.rd-apartat-text {
+		margin: 0.35rem 0 0;
+		color: var(--gris);
+		font-size: 0.95rem;
+	}
+	.rd-apartat ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem 1.4rem;
+		margin: 0.7rem 0 0;
+		padding: 0;
+		list-style: none;
+	}
+	.rd-apartat li {
+		display: inline-flex;
+		align-items: baseline;
+		gap: 0.45rem;
+	}
+	.rd-apartat a {
+		color: var(--taronja-fosc);
+		font-weight: 650;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 0.2em;
+	}
+	.rd-apartat a:hover {
+		color: var(--tinta);
+	}
+	.rd-nota {
+		color: var(--gris);
+		font-size: 0.82rem;
+	}
+
+	/* Les captures, enganxades com fotos. */
+	.rd-fotos {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.6rem;
+		align-content: center;
+	}
+	.rd-fotos img {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 16 / 9;
+		object-fit: cover;
+		border: 3px solid var(--placa);
+		box-shadow: 0 1px 0 rgb(0 0 0 / 0.08), 0 8px 18px -10px rgb(0 0 0 / 0.5);
+	}
+	.rd-fotos .gran {
+		grid-column: 1 / -1;
+		aspect-ratio: 1100 / 602;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.rd-boto {
+			transition: none;
+		}
+	}
+</style>

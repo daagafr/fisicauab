@@ -91,6 +91,8 @@ colors, tipografies, logos i fotos. Són a `src/components/banners/`:
 | `dlv` | `Dlv.astro` | la capçalera del diccionari (`dlv.css`, logo DLV, segell RAV) |
 | `lnh` | `Lnh.astro` | la portada de La Nostra Història (pergamí, marc granat, lotus) |
 | `frasari` | `Frasari.astro` | la pissarra del Frasari, amb una frase de les bones |
+| `rodalies` | `Rodalies.astro` | una andana del mod: el rètol d'estació i captures del joc. Porta més d'un enllaç (`enllacos` i `apartat`) |
+| `calculadora` | `Calculadora.astro` | l'app de Streamlit en tema clar (barra lateral, pestanyes, resultat en verd) |
 | — | `Fisica.astro` | el de Física UAB, per a tot el que no en té de propi |
 
 Per fer-ne un de nou: copia'n un de semblant, posa'l a `components/Banner.astro` i
